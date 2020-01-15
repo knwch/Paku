@@ -30,7 +30,11 @@ let userSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    brith: {
+    photo_user: {
+        data: Buffer,
+        contentType
+    },
+    birth: {
         type: String,
         required: true 
     },
@@ -70,4 +74,4 @@ let userSchema = new mongoose.Schema({
 });
 
 // create the model for users and expose it to our app
-const User = module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

@@ -9,6 +9,10 @@ const postSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
+    photo: [{
+        data: Buffer,
+        contentType: String
+    }],
     detail: {
         point: {
             type: String,
@@ -55,7 +59,6 @@ const postSchema = new mongoose.Schema({
             }
         }]
     },
-
     date: {
         open: {
             type: String,
@@ -92,4 +95,4 @@ const postSchema = new mongoose.Schema({
     }
 });
 
-const Post = module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Post', postSchema);
