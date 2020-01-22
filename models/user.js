@@ -6,11 +6,15 @@ let userSchema = new mongoose.Schema({
     username: {
         type: String,
         trim: true,
+        min: 2,
+        max: 30,
         required: true,
         unique: true
     },
     password: {
         type: String,
+        min: 2,
+        max: 30,
         required: true
     },
     name: {
@@ -53,6 +57,10 @@ let userSchema = new mongoose.Schema({
         type: Number,
         trim: true,
         require: true
+    },
+    photo_card: {
+        data: Buffer,
+        contentType
     },
     status: {
         type: String,
