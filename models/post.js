@@ -73,6 +73,11 @@ const postSchema = new mongoose.Schema({
         type: ObjectId,
         ref: 'User'
     },
+    price: {
+        type: Number,
+        min: 0,
+        required: true
+    },
     rate: {
         type: Number,
         default: 0
