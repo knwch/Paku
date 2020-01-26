@@ -6,13 +6,15 @@ const { ObjectId } = mongoose.Schema;
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
-        trim: true,
         required: true
     },
+    photo: [{
+        data: Buffer,
+        contentType: String
+    }],
     detail: {
         point: {
             type: String,
-            trim: true,
             required: true
         },
         typeofpark: {
@@ -22,7 +24,6 @@ const postSchema = new mongoose.Schema({
         numberofcar: {
             type: Number,
             min: 1,
-            trim: true,
             required: true
         },
         typeofcar: {
@@ -39,23 +40,19 @@ const postSchema = new mongoose.Schema({
         rule: [{
             text: {
                 type: String,
-                trim: true
             }
         }],
         nearby: [{
             text: {
                 type: String,
-                trim: true
             }
         }],
         facility: [{
             text: {
                 type: String,
-                trim: true
             }
         }]
     },
-
     date: {
         open: {
             type: String,
@@ -69,6 +66,11 @@ const postSchema = new mongoose.Schema({
     postedBy: {
         type: ObjectId,
         ref: 'User'
+    },
+    price: {
+        type: Number,
+        min: 0,
+        required: true
     },
     rate: {
         type: Number,
@@ -92,4 +94,4 @@ const postSchema = new mongoose.Schema({
     }
 });
 
-const Post = module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Post', postSchema);
