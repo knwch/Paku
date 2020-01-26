@@ -5,7 +5,6 @@ let mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     username: {
         type: String,
-        trim: true,
         min: 2,
         max: 30,
         required: true,
@@ -20,24 +19,21 @@ let userSchema = new mongoose.Schema({
     name: {
         fname:{
             type: String,
-            trim: true,
             required: true
         },
         lname:{
             type: String,
-            trim: true,
             required: true 
         }
     },
     email: {
         type: String,
-        trim: true,
         required: true
     },
-    photo_user: {
-        data: Buffer,
-        contentType
-    },
+    // photo_user: {
+    //     data: Buffer,
+    //     contentType
+    // },
     birth: {
         type: String,
         required: true 
@@ -45,23 +41,20 @@ let userSchema = new mongoose.Schema({
     age: {
         type: Number,
         min: 18,
-        trim: true,
         required: true
     },
     phone: {
         type: String,
-        trim: true,
         required: true
     },
     card: {
         type: Number,
-        trim: true,
         require: true
     },
-    photo_card: {
-        data: Buffer,
-        contentType
-    },
+    // photo_card: {
+    //     data: Buffer,
+    //     contentType
+    // },
     status: {
         type: String,
         default: "renter"
@@ -82,4 +75,4 @@ let userSchema = new mongoose.Schema({
 });
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+module.exports = User = mongoose.model('users', userSchema);

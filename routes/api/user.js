@@ -17,16 +17,21 @@ const User = require('../../models/user');
 // @route GET api/users/test
 // @desc Test users route
 // @access Public
-router.get('/test', (req, res) => res.json({ msg : 'Tests user system' }));
+router.get('/test', (req, res) => { 
+    // console.log('Test');
+    res.json({ msg : 'Tests user system' })
+});
 
 // @route   POST api/users/register
 // @desc    Register user
 // @access  Public
 router.post('/register', (req, res) => {
+    // console.log('register');
     const { errors, isValid } = validateRegisterInput(req.body);
 
     // Check Validation
     if (!isValid) {
+        // console.log(isValid);
         return res.status(400).json(errors);
     }
 
@@ -44,18 +49,18 @@ router.post('/register', (req, res) => {
                 lname: req.body.lname
             },
             email: req.body.email,
-            photo_user: {
-                data: fs.readFileSync(req.body.photo_user.path),
-                contentType: req.body.photo_user.type
-            },
-            birth: req.body.date,
+            // photo_user: {
+            //     data: fs.readFileSync(req.body.photo_user.path),
+            //     contentType: req.body.photo_user.type
+            // },
+            birth: req.body.birth,
             age: req.body.age,
             phone: req.body.phone,
             card: req.body.card,
-            photo_card: {
-                data: fs.readFileSync(req.body.photo_card.path),
-                contentType: req.body.photo_card.type
-            }
+            // photo_card: {
+            //     data: fs.readFileSync(req.body.photo_card.path),
+            //     contentType: req.body.photo_card.type
+            // }
         });
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -65,19 +70,24 @@ router.post('/register', (req, res) => {
                 newUser.save()
                     .then((user) => {
                         res.json(user);
+                        // console.log(res.user);
                     })
                     .catch((err) => {
                         console.log(err);
                     });
             })
         })
-    });
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 });
 
 // @route   GET api/users/login
 // @desc    Login User / Returning JWT Token
 // @access  Public
 router.post('/login', (req, res) => {
+    // console.log('login');
     const { errors, isValid } = validateLoginInput(req.body);
 
     // Check Validation
@@ -91,7 +101,7 @@ router.post('/login', (req, res) => {
     // Find user by username
     User.findOne({ username }).then((user) => {
         // Check for user
-        if (!uesr) {
+        if (!user) {
             errors.username = `User not found`;
             return res.status(404).json(errors);
         }
@@ -100,7 +110,8 @@ router.post('/login', (req, res) => {
         bcrypt.compare(password, user.password).then((isMath) => {
             if (isMath) {
                 // User Matched
-                const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
+                // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
+                const payload = { id:user.id, name: user.name, email: user.email };
 
                 // Sign Token
                 jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
@@ -115,6 +126,9 @@ router.post('/login', (req, res) => {
             }
         });
     })
+    .catch((err) => {
+        console.log(err);
+    });
 });
 
 // @route   GET api/users/current

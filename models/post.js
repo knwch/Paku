@@ -6,7 +6,6 @@ const { ObjectId } = mongoose.Schema;
 const postSchema = new mongoose.Schema({
     title: {
         type: String,
-        trim: true,
         required: true
     },
     photo: [{
@@ -16,7 +15,6 @@ const postSchema = new mongoose.Schema({
     detail: {
         point: {
             type: String,
-            trim: true,
             required: true
         },
         typeofpark: {
@@ -26,7 +24,6 @@ const postSchema = new mongoose.Schema({
         numberofcar: {
             type: Number,
             min: 1,
-            trim: true,
             required: true
         },
         typeofcar: {
@@ -43,19 +40,16 @@ const postSchema = new mongoose.Schema({
         rule: [{
             text: {
                 type: String,
-                trim: true
             }
         }],
         nearby: [{
             text: {
                 type: String,
-                trim: true
             }
         }],
         facility: [{
             text: {
                 type: String,
-                trim: true
             }
         }]
     },
