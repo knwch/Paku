@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
+import { Icon, Input, Button } from 'semantic-ui-react';
 
 class LoginForm extends Component {
 
@@ -8,7 +9,7 @@ class LoginForm extends Component {
     this.validator = new SimpleReactValidator({
       element: message => <small className="text-danger font-weight-bold">{message}</small>,
       messages: {
-        required:'โปรดระบุ:attribute',
+        required: 'โปรดระบุ:attribute',
       }
     });
   };
@@ -32,14 +33,20 @@ class LoginForm extends Component {
         <h4 className="mb-4">เข้าสู่ระบบ</h4>
         <form>
           <div className="form-group col-md-12 text-left">
-            <input type="text" className="form-control" onChange={handleChange('username')} defaultValue={values.username} placeholder="ชื่อผู้ใช้" />
+            <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
+              <Icon name='user' />
+              <input type="text" className="form-control" onChange={handleChange('username')} defaultValue={values.username} />
+            </Input>
             {this.validator.message('ชื่อผู้ใช้', values.username, 'required')}
           </div>
           <div className="form-group col-md-12 text-left">
-            <input type="text" className="form-control" onChange={handleChange('password')} defaultValue={values.password} placeholder="รหัสผ่าน" />
+            <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
+              <Icon name='lock' />
+              <input type="text" className="form-control" onChange={handleChange('password')} defaultValue={values.password} />
+            </Input>
             {this.validator.message('รหัสผ่าน', values.password, 'required')}
           </div>
-          <button onClick={this.continue} className="btn btn-primary">เข้าสู่ระบบ</button>
+          <Button onClick={this.continue} >เข้าสู่ระบบ</Button>
         </form>
       </div>
     );
