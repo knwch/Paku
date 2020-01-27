@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Icon, Input, Button } from 'semantic-ui-react';
+import { Icon, Input, Button, Label } from 'semantic-ui-react';
 import moment from 'moment';
 
 class RegistFormStep2 extends Component {
@@ -8,7 +8,7 @@ class RegistFormStep2 extends Component {
   constructor() {
     super();
     this.validator = new SimpleReactValidator({
-      element: message => <small className="text-danger font-weight-bold">{message}</small>,
+      element: message => <Label basic color='red' pointing>{message}</Label>,
       messages: {
         required: 'โปรดระบุ:attribute',
         date: 'โปรดระบุวันเกิด',

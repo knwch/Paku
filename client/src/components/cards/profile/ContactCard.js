@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Card, Icon, Image, Divider } from 'semantic-ui-react';
 
 class ContactCard extends Component {
 
@@ -6,7 +7,7 @@ class ContactCard extends Component {
         super(props);
         this.state = {
             name: "Name Name",
-            telephone: "aaaaaaaa",
+            telephone: "0915466421",
             email: "ccc",
             rating: "123"
         };
@@ -14,18 +15,24 @@ class ContactCard extends Component {
 
     render() {
         return (
-            <div className="Card">
-                <div className="card mb-4">
-                    <div className="card-body p-0 pt-2">
-                        <div className="border-bottom">
-                            <img className="mb-2" src={require('../../../components/imgs/Logo.png')} width="50" /><br />
-                        </div>
-                        <text className="card-text"> {this.state.telephone} </text><br />
-                        <text className="card-text"> {this.state.email} </text><br />
-                        <text className="card-text"> {this.state.rating} </text>
-                    </div>
-                </div>
-            </div>
+            <Card fluid>
+                <Card.Content>
+                    <Image src={require('../../imgs/Logo.png')} size='small' centered wrapped />
+                    <Divider />
+                    <Card.Description textAlign='left' className='pb-1'>
+                        <Icon name='yellow star' />
+                        4.59
+                    </Card.Description>
+                    <Card.Description textAlign='left' className='pb-1'>
+                        <Icon name='phone' flipped='horizontally' />
+                        {this.state.telephone}
+                    </Card.Description>
+                    <Card.Description textAlign='left' className='pb-1'>
+                        <Icon name='mail' />
+                        abcd@mail.co
+                    </Card.Description>
+                </Card.Content>
+            </Card>
         );
     }
 }

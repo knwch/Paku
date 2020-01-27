@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Icon, Input, Button } from 'semantic-ui-react';
+import { Icon, Input, Button, Label } from 'semantic-ui-react';
 
 class RegistFormStep1 extends Component {
 
   constructor() {
     super();
     this.validator = new SimpleReactValidator({
-      element: message => <small className="text-danger font-weight-bold">{message}</small>,
+      
+      element: message => <Label basic color='red' pointing>{message}</Label>,
       messages: {
         required: 'โปรดระบุ:attribute',
         alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
@@ -42,7 +43,7 @@ class RegistFormStep1 extends Component {
               <Icon name='user' />
               <input type="text" className="form-control" onChange={handleChange('username')} defaultValue={values.username} />
             </Input>
-            {/* {this.validator.message('ชื่อผู้ใช้', values.username, 'required|alpha_num')} */}
+            {this.validator.message('ชื่อผู้ใช้', values.username, 'required|alpha_num')}
           </div>
           <div className="form-group text-left">
             <Input fluid iconPosition='left' placeholder='สร้างรหัสผ่าน'>
