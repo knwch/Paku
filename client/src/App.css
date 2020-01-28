@@ -11,6 +11,21 @@
   height:0;
 }
 
+.btn-paku {
+  background-color: #ffce20 !important;
+  color: #2c2c2c !important;
+}
+
+.btn-paku-light {
+  background-color: #635b5a !important;
+  color: #ffce20 !important;
+}
+
+.btn-paku-light:hover {
+  background-color: #595250 !important;
+  color: #ffce20 !important;
+}
+
 .logo-paku {
   width: 2rem;
 }

@@ -8,6 +8,11 @@ class Login extends Component {
     password: ''
   };
 
+  handleSubmit(e) {
+    alert('A name was submitted: ' + this.state.username);
+    e.preventDefault();
+  }
+
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };

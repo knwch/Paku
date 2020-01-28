@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Menu, Container, Button } from 'semantic-ui-react';
 
 class Navbar extends Component {
     render() {
