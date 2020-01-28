@@ -137,10 +137,7 @@ router.post('/login', (req, res) => {
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.json({ 
         id: req.user.id,
-        name: {
-            fname: req.user.fname,
-            lname: req.user.lname
-        },
+        name: req.body.name,
         email: req.user.email
     })
 });
