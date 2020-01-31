@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { Responsive, Container } from 'semantic-ui-react';
 import RegistFormStep1 from '../components/forms/registerforms/RegistFormStep1';
 import RegistFormStep2 from '../components/forms/registerforms/RegistFormStep2';
-import RegistConfirm from '../components/forms/registerforms/RegistConfirm';
 import RegistSuccess from '../components/forms/registerforms/RegistSuccess';
 
 class Register extends Component {
@@ -68,40 +68,36 @@ class Register extends Component {
     switch (step) {
       case 1:
         return (
-          <div className="container-fluid">
-            <RegistFormStep1
-              nextStep={this.nextStep}
-              handleChange={this.handleChange}
-              values={values}
-            />
-          </div>
+          <Responsive>
+            <Container fluid>
+              <RegistFormStep1
+                nextStep={this.nextStep}
+                handleChange={this.handleChange}
+                values={values}
+              />
+            </Container>
+          </Responsive>
         );
       case 2:
         return (
-          <div className="container-fluid">
-            <RegistFormStep2
-              nextStep={this.nextStep}
-              prevStep={this.prevStep}
-              handleChange={this.handleChange}
-              values={values}
-            />
-          </div>
+          <Responsive>
+            <Container fluid>
+              <RegistFormStep2
+                nextStep={this.nextStep}
+                prevStep={this.prevStep}
+                handleChange={this.handleChange}
+                values={values}
+              />
+            </Container>
+          </Responsive>
         );
       case 3:
         return (
-          <div className="container-fluid">
-            <RegistConfirm
-              nextStep={this.nextStep}
-              prevStep={this.prevStep}
-              values={values}
-            />
-          </div>
-        );
-      case 4:
-        return (
-          <div className="container-fluid">
-            <RegistSuccess />
-          </div>
+          <Responsive>
+            <Container fluid>
+              <RegistSuccess />
+            </Container>
+          </Responsive>
         );
     }
 

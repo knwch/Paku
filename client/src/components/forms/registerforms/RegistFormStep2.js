@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Icon, Input, Button, Label, Form, Checkbox } from 'semantic-ui-react';
+import { Icon, Input, Button, Label, Form, Checkbox, Grid } from 'semantic-ui-react';
 import moment from 'moment';
 
 class RegistFormStep2 extends Component {
@@ -45,81 +45,88 @@ class RegistFormStep2 extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <div className="col-md-5 ml-auto mr-auto">
-        <h4 className="mb-4">ลงทะเบียน</h4>
-        <Form className="text-left">
+      <Grid className='mb-4' centered>
+        <Grid.Column mobile={14} tablet={7} computer={6}>
 
-          <Form.Field>
-            <div>วันเกิด</div>
-            <small>ผู้ลงทะเบียนจะต้องมีอายุ 18 ปีบริบูรณ์ขึ้นไป ผู้อื่นที่จะใช้ Paku จะไม่เห็นวันเกิดคุณ</small>
-            <Input fluid iconPosition='left' placeholder='วันเกิด'>
-              <Icon name='birthday' />
-              <input type="date" className="form-control" onChange={handleChange('birth')} defaultValue={values.birth} />
-            </Input>
-            {this.validator.message('วันเกิด', values.birth && moment(values.birth, 'YYYY-DD-MM'), 'required|date')}
-          </Form.Field>
+          <h4 className="text-center mb-4">ลงทะเบียน</h4>
+          <Form className="text-left">
 
-          <Form.Field>
-            <div>บัตรประชาชน</div>
-            <small>เพื่อทำการยืนยันตัวตนของคุณ คุณสามารถดูตัวอย่างการอัพโหลดได้ที่นี่</small>
-            <Input fluid iconPosition='left' placeholder='เลขบัตรประชาชน' maxLength="13">
-              <Icon name='vcard' />
-              <input type="text" className="form-control" onChange={handleChange('card')} defaultValue={values.card} />
-            </Input>
-            {this.validator.message('เลขบัตรประชาชน', values.card, 'required|size:13,string')}
-          </Form.Field>
-
-          <Form.Group widths='equal'>
             <Form.Field>
-              <Button
-                className='btn-paku-light'
-                content="Choose File"
-                labelPosition="left"
-                icon="bordered file"
-                onClick={() => this.fileInputRef.current.click()}
-                fluid />
-              <input
-                ref={this.fileInputRef}
-                type="file"
-                hidden
-                onChange={this.fileChange}
-              />
+              <div>วันเกิด</div>
+              <small>ผู้ลงทะเบียนจะต้องมีอายุ 18 ปีบริบูรณ์ขึ้นไป ผู้อื่นที่จะใช้ Paku จะไม่เห็นวันเกิดคุณ</small>
+              <Input fluid iconPosition='left' placeholder='วันเกิด'>
+                <Icon name='birthday' />
+                <input type="date" className="form-control" onChange={handleChange('birth')} defaultValue={values.birth} />
+              </Input>
+              {/* {this.validator.message('วันเกิด', values.birth && moment(values.birth, 'YYYY-DD-MM'), 'required|date')} */}
             </Form.Field>
+
             <Form.Field>
-              <Button
-                className='btn-paku-light'
-                content="Choose File"
-                labelPosition="left"
-                icon="file"
-                onClick={() => this.fileInputRef.current.click()}
-                fluid />
-              <input
-                ref={this.fileInputRef}
-                type="file"
-                hidden
-                onChange={this.fileChange}
-              />
+              <div>บัตรประชาชน</div>
+              <small>เพื่อทำการยืนยันตัวตนของคุณ คุณสามารถดูตัวอย่างการอัพโหลดได้ที่นี่</small>
+              <Input fluid iconPosition='left' placeholder='เลขบัตรประชาชน' maxLength="13">
+                <Icon name='vcard' />
+                <input type="text" className="form-control" onChange={handleChange('card')} defaultValue={values.card} />
+              </Input>
+              {/* {this.validator.message('เลขบัตรประชาชน', values.card, 'required|size:13,string')} */}
             </Form.Field>
-          </Form.Group>
 
-          <Form.Field>
-            <Checkbox label='I agree to the Terms and Conditions' />
-          </Form.Field>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <Button
+                  className='btn-paku-light'
+                  content="Choose File"
+                  labelPosition="left"
+                  icon="bordered file"
+                  onClick={() => this.fileInputRef.current.click()}
+                  fluid />
+                <input
+                  ref={this.fileInputRef}
+                  type="file"
+                  hidden
+                  onChange={this.fileChange}
+                />
+              </Form.Field>
+              <Form.Field>
+                <Button
+                  className='btn-paku-light'
+                  content="Choose File"
+                  labelPosition="left"
+                  icon="file"
+                  onClick={() => this.fileInputRef.current.click()}
+                  fluid />
+                <input
+                  ref={this.fileInputRef}
+                  type="file"
+                  hidden
+                  onChange={this.fileChange}
+                />
+              </Form.Field>
+            </Form.Group>
 
-          <Button onClick={this.back} className='btn-paku' animated>
-            <Button.Content visible>ย้อนกลับ</Button.Content>
-            <Button.Content hidden>
-              <Icon name='arrow left' />
-            </Button.Content>
-          </Button>
-          <Button onClick={this.continue} className='btn-paku' animated>
-            <Button.Content visible>ถัดไป</Button.Content>
-            <Button.Content hidden>
-              <Icon name='arrow right' />
-            </Button.Content>
-          </Button>
-        </Form>
-      </div>
+            <Form.Field>
+              <Checkbox label='I agree to the Terms and Conditions' />
+            </Form.Field>
+
+            <div className='d-flex justify-content-end'>
+              <Button onClick={this.back} className='btn-paku' animated>
+                <Button.Content visible>ย้อนกลับ</Button.Content>
+                <Button.Content hidden>
+                  <Icon name='arrow left' />
+                </Button.Content>
+              </Button>
+              <Button onClick={this.continue} className='btn-paku' animated>
+                <Button.Content visible>ยืนยัน</Button.Content>
+                <Button.Content hidden>
+                  <Icon name='arrow right' />
+                </Button.Content>
+              </Button>
+            </div>
+
+          </Form>
+
+        </Grid.Column>
+      </Grid>
     );
   }
 }

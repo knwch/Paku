@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Icon, Input, Button, Form, Label } from 'semantic-ui-react';
+import { Icon, Input, Button, Form, Label, Grid } from 'semantic-ui-react';
 
 class LoginForm extends Component {
 
@@ -28,35 +28,39 @@ class LoginForm extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <div className="col-md-5 ml-auto mr-auto">
-        <h4 className="mb-4">เข้าสู่ระบบ</h4>
-        <Form>
+      <Grid className='mb-4' centered>
+        <Grid.Column mobile={14} tablet={7} computer={6}>
+          <h4 className="text-center mb-4">เข้าสู่ระบบ</h4>
+          <Form>
 
-          <Form.Field className="text-left">
-            <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
-              <Icon name='user' />
-              <input type="text" className="form-control" onChange={handleChange('username')} defaultValue={values.username} />
-            </Input>
-            {this.validator.message('ชื่อผู้ใช้', values.username, 'required')}
-          </Form.Field>
+            <Form.Field className="text-left">
+              <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
+                <Icon name='user' />
+                <input type="text" className="form-control" onChange={handleChange('username')} defaultValue={values.username} />
+              </Input>
+              {this.validator.message('ชื่อผู้ใช้', values.username, 'required')}
+            </Form.Field>
 
-          <Form.Field className="text-left">
-            <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
-              <Icon name='lock' />
-              <input type="text" className="form-control" onChange={handleChange('password')} defaultValue={values.password} />
-            </Input>
-            {this.validator.message('รหัสผ่าน', values.password, 'required')}
-          </Form.Field>
+            <Form.Field className="text-left">
+              <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
+                <Icon name='lock' />
+                <input type="text" className="form-control" onChange={handleChange('password')} defaultValue={values.password} />
+              </Input>
+              {this.validator.message('รหัสผ่าน', values.password, 'required')}
+            </Form.Field>
 
-          <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
-            <Button.Content visible>เข้าสู่ระบบ</Button.Content>
-            <Button.Content hidden>
-              <Icon name='arrow right' />
-            </Button.Content>
-          </Button>
+            <div className='text-center'>
+              <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                <Button.Content visible>เข้าสู่ระบบ</Button.Content>
+                <Button.Content hidden>
+                  <Icon name='arrow right' />
+                </Button.Content>
+              </Button>
+            </div>
 
-        </Form>
-      </div>
+          </Form>
+        </Grid.Column>
+      </Grid>
     );
   }
 }
