@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import LoginForm from '../components/forms/loginforms/LoginForm';
 import SimpleReactValidator from 'simple-react-validator';
 import { Responsive, Container, Icon, Input, Button, Form, Label, Grid } from 'semantic-ui-react';
 
