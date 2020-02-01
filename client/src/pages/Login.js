@@ -8,7 +8,8 @@ class Login extends Component {
     super();
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errors: {}
     };
 
     this.validator = new SimpleReactValidator({
