@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ProfileDetailCard from '../components/cards/profile/ProfileDetailCard';
-import ContactCard from '../components/cards/profile/ContactCard';
+import ProfileDetailCard from '../cards/profile/ProfileDetailCard';
+import ContactCard from '../cards/profile/ContactCard';
 
 class Profile extends Component {
     render() {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Responsive, Container } from 'semantic-ui-react';
-import RegistFormStep1 from '../components/forms/registerforms/RegistFormStep1';
-import RegistFormStep2 from '../components/forms/registerforms/RegistFormStep2';
-import RegistSuccess from '../components/forms/registerforms/RegistSuccess';
+import RegistFormStep1 from '../forms/registerforms/RegistFormStep1';
+import RegistFormStep2 from '../forms/registerforms/RegistFormStep2';
+import RegistSuccess from '../forms/registerforms/RegistSuccess';
 
 class Register extends Component {
 

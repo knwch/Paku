@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import RecommendCard from '../components/cards/RecommendCard';
-import SearchBox from '../components/SearchBox';
+import RecommendCard from '../cards/RecommendCard';
+import SearchBox from '../SearchBox';
 import { Grid } from 'semantic-ui-react';
 
 class Home extends Component {

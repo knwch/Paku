@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import BookingForm from '../components/forms/bookingforms/BookingForm';
-import PostDetailCard from '../components/cards/PostDetailCard';
+import BookingForm from '../forms/bookingforms/BookingForm';
+import PostDetailCard from '../cards/PostDetailCard';
 
 class Book extends Component {
 

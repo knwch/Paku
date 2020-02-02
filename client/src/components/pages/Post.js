@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import PostFormStep1 from '../components/forms/postforms/PostFormStep1';
-import PostFormStep2 from '../components/forms/postforms/PostFormStep2';
-import PostFormStep3 from '../components/forms/postforms/PostFormStep3';
-import PostConfirm from '../components/forms/postforms/PostConfirm';
-import PostSuccess from '../components/forms/postforms/PostSuccess';
+import PostFormStep1 from '../forms/postforms/PostFormStep1';
+import PostFormStep2 from '../forms/postforms/PostFormStep2';
+import PostFormStep3 from '../forms/postforms/PostFormStep3';
+import PostConfirm from '../forms/postforms/PostConfirm';
+import PostSuccess from '../forms/postforms/PostSuccess';
 
 class Post extends Component {
     // render() {

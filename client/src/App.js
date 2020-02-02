@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./rudex/store";
+import store from "./redux/store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./actions/authActions";
+import { setCurrentUser, logoutUser } from "./redux/actions/authActions";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Post from "./pages/Post";
-import Rent from "./pages/Rent";
-import Book from "./pages/Book";
-import Owner from "./pages/Owner";
-import Profile from "./pages/Profile";
-import Support from "./pages/Support";
+import Home from "./components/pages/Home";
+import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
+import Post from "./components/pages/Post";
+import Rent from "./components/pages/Rent";
+import Book from "./components/pages/Book";
+import Owner from "./components/pages/Owner";
+import Profile from "./components/pages/Profile";
+import Support from "./components/pages/Support";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 

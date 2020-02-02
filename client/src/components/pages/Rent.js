@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import MapContainer from '../components/Map/MapContainer';
-import NearbyCard from '../components/cards/NearbyCard';
+import MapContainer from '../Map/MapContainer';
+import NearbyCard from '../cards/NearbyCard';
 import { Grid, Responsive, Container } from 'semantic-ui-react';
 
 class Rent extends Component {
