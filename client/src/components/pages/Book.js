@@ -15,6 +15,10 @@ class Book extends Component {
         type: '',
     };
 
+    componentDidMount(){
+        document.title = "🐤 Paku"
+    }
+
     handleChange = input => e => {
         this.setState({ [input]: e.target.value });
     };

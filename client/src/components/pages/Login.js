@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { Responsive, Container, Icon, Input, Button, Form, Label, Grid } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { loginUser } from '../../redux/actions/authActions';
 
 class Login extends Component {
 
   constructor() {
     super();
     this.state = {
-      email: '',
+      username: '',
       password: '',
       errors: {}
     };
-
+    
+    this.onSubmit = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
       element: message => <Label basic color='red' pointing>{message}</Label>,
       messages: {
@@ -20,22 +24,55 @@ class Login extends Component {
     });
   }
 
+  componentDidMount() {
+    document.title = '🐤 Login';
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
 
-  continue = e => {
-    if (this.validator.allValid()) {
-      e.preventDefault();
-    } else {
-      this.validator.showMessages();
-      // rerender to show messages for the first time
-      // you can use the autoForceUpdate option to do this automatically`
-      this.forceUpdate();
-    }
-  };
+  onSubmit = e => {
+    e.preventDefault();
+
+    const userData = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
+    this.props.loginUser(userData);
+  }
+  // onSubmit(e) {
+  //   if (this.validator.allValid()) {
+  //     e.preventDefault();
+  //   } else {
+  //     this.validator.showMessages();
+  //     // rerender to show messages for the first time
+  //     // you can use the autoForceUpdate option to do this automatically`
+  //     this.forceUpdate();
+  //   }
+  //   const userData = {
+  //     username: this.state.usesrname,
+  //     password: this.state.password
+  //   }
+
+  //   this.props.loginUser(userData);
+  // };
 
   render() {
+    const errors = this.state.errors;
     return (
       <Responsive>
         <Container fluid>
@@ -59,9 +96,9 @@ class Login extends Component {
                   </Input>
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
                 </Form.Field>
-
+                
                 <div className='text-center'>
-                  <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                  <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
                     <Button.Content visible>เข้าสู่ระบบ</Button.Content>
                     <Button.Content hidden>
                       <Icon name='arrow right' />
@@ -78,4 +115,9 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  errors: state.errors,
+  auth: state.auth
+})
+
+export default connect(mapStateToProps, { loginUser })(withRouter(Login));

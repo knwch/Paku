@@ -103,6 +103,7 @@ router.post('/login', (req, res) => {
         // Check for user
         if (!user) {
             errors.username = `User not found`;
+            console.log(errors);
             return res.status(404).json(errors);
         }
 
@@ -112,7 +113,7 @@ router.post('/login', (req, res) => {
                 // User Matched
                 // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
                 const payload = { id:user.id, name: user.name, email: user.email };
-
+                console.log('succeess');
                 // Sign Token
                 jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
                     res.json({ 
@@ -122,6 +123,7 @@ router.post('/login', (req, res) => {
                 });
             } else {
                 errors.password = `Password incorrect`;
+                console.log(errors);
                 return res.status(400).json(errors);
             }
         });

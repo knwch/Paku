@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import jwt_decode from "jwt-decode";
@@ -36,6 +36,7 @@ if (localStorage.jwtToken) {
     // Logout user
     store.dispatch(logoutUser());
     // TODO: Clear current Profile
+    // Redirect to login
     window.location.href = "/login";
   }
 }
@@ -47,15 +48,17 @@ class App extends Component {
         <Router>
           <div className="App">
             <Navbar />
-            <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/post" component={Post} />
-            <Route path="/rent" component={Rent} />
-            <Route path="/book" component={Book} />
-            <Route path="/owner" component={Owner} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/support" component={Support} />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/post" component={Post} />
+              <Route exact path="/rent" component={Rent} />
+              <Route exact path="/book" component={Book} />
+              <Route exact path="/owner" component={Owner} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/support" component={Support} />
+            </Switch>
             <Footer />
           </div>
         </Router>

@@ -4,6 +4,10 @@ import SearchBox from '../SearchBox';
 import { Grid } from 'semantic-ui-react';
 
 class Home extends Component {
+  componentDidMount(){
+    document.title = "🐤 Paku"
+  }
+  
   render() {
     return (
       <div>

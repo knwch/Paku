@@ -4,6 +4,10 @@ import ProfileDetailCard from '../cards/profile/ProfileDetailCard';
 import ContactCard from '../cards/profile/ContactCard';
 
 class Profile extends Component {
+    componentDidMount(){
+        document.title = "🐤 Profile"
+    }
+
     render() {
         return (
             <div className="container-fluid">

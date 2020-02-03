@@ -4,6 +4,10 @@ import NearbyCard from '../cards/NearbyCard';
 import { Grid, Responsive, Container } from 'semantic-ui-react';
 
 class Rent extends Component {
+    componentDidMount(){
+        document.title = "🐤 Paku"
+    }
+    
     render() {
         return (
             <Responsive>

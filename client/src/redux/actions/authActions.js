@@ -29,9 +29,9 @@ export const loginUser = userData => dispatch => {
             // Set token to Auth header
             setAuthToken(token);
             // Decode token to get user data
-            const decode = jwt_decode(token);
+            const decoded = jwt_decode(token);
             // Set current user 
-            dispatch(setCurrentUser(decode));
+            dispatch(setCurrentUser(decoded));
         })
         .catch((err) => {
             dispatch({

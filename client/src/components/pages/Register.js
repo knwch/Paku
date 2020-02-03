@@ -40,6 +40,10 @@ class Register extends Component {
     this.setState({ [input]: e.target.value });
   };
 
+  componentDidMount(){
+    document.title = "🐤 register"
+  }
+  
   render() {
     const { step } = this.state;
     const { username,

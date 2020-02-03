@@ -6,6 +6,9 @@ import PostConfirm from '../forms/postforms/PostConfirm';
 import PostSuccess from '../forms/postforms/PostSuccess';
 
 class Post extends Component {
+    componentDidMount(){
+        document.title = "🐤 Paku"
+    }
     // render() {
     //     return (
     //         <div className="container-fluid">
