@@ -12,7 +12,7 @@ let userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        min: 2,
+        min: 6,
         max: 30,
         required: true
     },
@@ -38,18 +38,17 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true 
     },
-    age: {
-        type: Number,
-        min: 18,
-        required: true
-    },
+    // age: {
+    //     type: Number,
+    //     min: 18,
+    //     required: true
+    // },
     phone: {
         type: String,
         required: true
     },
     card: {
         type: Number,
-        require: true
     },
     // photo_card: {
     //     data: Buffer,

@@ -13,9 +13,9 @@ module.exports = validateRegisterInput = (data) => {
     data.lname = !isEmpty(data.lname) ? data.lname : '';
     data.email = !isEmpty(data.email) ? data.email : '';
     data.birth = !isEmpty(data.birth) ? data.birth : '';
-    data.age = !isEmpty(data.age) ? data.age : '';
+    // data.age = !isEmpty(data.age) ? data.age : '';
     data.phone = !isEmpty(data.phone) ? data.phone : '';
-    data.card = !isEmpty(data.card) ? data.card : '';
+    // data.card = !isEmpty(data.card) ? data.card : '';
     
     // console.log(data);
 
@@ -46,24 +46,27 @@ module.exports = validateRegisterInput = (data) => {
     if (Validator.isEmpty(data.birth)) {
         errors.birth = `Birthday field is required`;
     }
-    if (Validator.isEmpty(data.age)) {
-        errors.age = `Age field is required`;
-    }
-    if (!Validator.isNumeric(data.age)) {
-        errors.age = `Age must be Intger`;
-    }
+    // if (Validator.isEmpty(data.age)) {
+    //     errors.age = `Age field is required`;
+    // }
+    // if (!Validator.isNumeric(data.age)) {
+    //     errors.age = `Age must be Intger`;
+    // }
     if (Validator.isEmpty(data.phone)) {
         errors.phone = `Phone field is required`;
     }
-    if (!Validator.isMobilePhone(data.phone, 'th-TH')) {
-        errors.phone = `Phone number must be phone number of thailand`;
+    if (!Validator.isNumeric(data.phone)) {
+        errors.age = `Phone must be Intger`;
     }
-    if (Validator.isEmpty(data.card)) {
-        errors.card = `Card field is requierd`;
-    }
-    if (!Validator.isNumeric(data.card)) {
-        errors.card = `Card must be Integer`;
-    }
+    // if (!Validator.isMobilePhone(data.phone, 'th-TH')) {
+    //     errors.phone = `Phone number must be phone number of thailand`;
+    // }
+    // if (Validator.isEmpty(data.card)) {
+    //     errors.card = `Card field is requierd`;
+    // }
+    // if (!Validator.isNumeric(data.card)) {
+    //     errors.card = `Card must be Integer`;
+    // }
     if (Validator.isEmpty(data.password)) {
         errors.password = `Password field is required`;
     }

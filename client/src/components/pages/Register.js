@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { registerUser } from '../../redux/actions/authActions';
 
 class Register extends Component {
-
-
   constructor() {
     super();
     this.state = {
@@ -16,9 +17,12 @@ class Register extends Component {
       lastname: '',
       telephone: '',
       email: '',
-      birth: ''
+      birth: '',
+      checkinfo: false,
+      errors: {}
     };
 
+    this.onChange = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
       element: message => <Label basic color='red' pointing>{message}</Label>,
       messages: {
@@ -33,6 +37,19 @@ class Register extends Component {
     });
 
   };
+
+  componentDidMount() {
+    document.title = "🐤 register"
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
 
   // // Proceed to next step
   // nextStep = () => {
@@ -50,10 +67,21 @@ class Register extends Component {
   //   });
   // };
 
-  continue = e => {
+  onSubmit = e => {
     if (this.validator.allValid()) {
       e.preventDefault();
+      const newUser = {
+        username: this.state.username,
+        password: this.state.password,
+        password2: this.state.confirmpassword,
+        fname: this.state.firstname,
+        lname: this.state.lastname,
+        email: this.state.email,
+        birth: this.state.birth,
+        phone: this.state.telephone
+      }
 
+      this.props.registerUser(newUser, this.props.history);
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -66,10 +94,6 @@ class Register extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
-
-  componentDidMount() {
-    document.title = "🐤 register"
-  }
 
   render() {
     const errors = this.state.errors;
@@ -88,7 +112,7 @@ class Register extends Component {
                     <Icon name='user' />
                     <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
-                  {/* {this.validator.message('ชื่อผู้ใช้', values.username, 'required|alpha_num')} */}
+                  {/* {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num')} */}
                 </Form.Field>
 
                 <Form.Field>
@@ -150,11 +174,11 @@ class Register extends Component {
                 </Form.Field>
 
                 <Form.Field>
-                  <Checkbox label='I agree to the Terms and Conditions' />
+                  <Checkbox label='I agree to the Terms and Conditions'/>
                 </Form.Field>
 
                 <div className='d-flex justify-content-end'>
-                  <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                  <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
                     <Button.Content visible>ยืนยัน</Button.Content>
                     <Button.Content hidden>
                       <Icon name='arrow right' />
@@ -172,4 +196,9 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToPrps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToPrps, { registerUser })(withRouter(Register))

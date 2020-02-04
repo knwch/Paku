@@ -31,56 +31,62 @@ router.post('/register', (req, res) => {
 
     // Check Validation
     if (!isValid) {
-        // console.log(isValid);
+        console.log(errors);
         return res.status(400).json(errors);
     }
 
-    User.findOne({ username: req.body.username }).then((user) => {
-        if (user) {
-            errors.username = `Username already exists`;
-            return res.status(400).json(errors);
-        } 
-        
-        const newUser = new User({
-            username: req.body.username,
-            password: req.body.password,
-            name: {
-                fname: req.body.fname,
-                lname: req.body.lname
-            },
-            email: req.body.email,
-            // photo_user: {
-            //     data: fs.readFileSync(req.body.photo_user.path),
-            //     contentType: req.body.photo_user.type
-            // },
-            birth: req.body.birth,
-            age: req.body.age,
-            phone: req.body.phone,
-            card: req.body.card,
-            // photo_card: {
-            //     data: fs.readFileSync(req.body.photo_card.path),
-            //     contentType: req.body.photo_card.type
-            // }
-        });
+    User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] })
+        .then((user) => {
+            if (user) {
+                if (user.username === req.body.username) {
+                    errors.username = `Username alrady exists`;
+                    return res.status(200).json(errors);
+                } else {
+                    errors.email = `Email alrady exists`;
+                    return res.status(200).json(errors);
+                }    
+            }
+            
+            const newUser = new User({
+                username: req.body.username,
+                password: req.body.password,
+                name: {
+                    fname: req.body.fname,
+                    lname: req.body.lname
+                },
+                email: req.body.email,
+                // photo_user: {
+                //     data: fs.readFileSync(req.body.photo_user.path),
+                //     contentType: req.body.photo_user.type
+                // },
+                birth: req.body.birth,
+                // age: req.body.age,
+                phone: req.body.phone,
+                // card: req.body.card,
+                // photo_card: {
+                //     data: fs.readFileSync(req.body.photo_card.path),
+                //     contentType: req.body.photo_card.type
+                // }
+            });
 
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(newUser.password, salt, (err, hash) => {
-                if (err) throw err;
-                newUser.password = hash;
-                newUser.save()
-                    .then((user) => {
-                        res.json(user);
-                        // console.log(res.user);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if (err) throw err;
+                    newUser.password = hash;
+                    newUser.save()
+                        .then((user) => {
+                            res.json(user);
+                            // console.log(user);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
             })
         })
-    })
-    .catch((err) => {
-        console.log(err);
-    })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 // @route   GET api/users/login

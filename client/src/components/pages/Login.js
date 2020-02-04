@@ -44,33 +44,33 @@ class Login extends Component {
     this.setState({ [input]: e.target.value });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
+  // onSubmit = e => {
+  //   e.preventDefault();
 
-    const userData = {
-      username: this.state.username,
-      password: this.state.password
-    };
-
-    this.props.loginUser(userData);
-  }
-  
-  // onSubmit(e) {
-  //   if (this.validator.allValid()) {
-  //     e.preventDefault();
-  //   } else {
-  //     this.validator.showMessages();
-  //     // rerender to show messages for the first time
-  //     // you can use the autoForceUpdate option to do this automatically`
-  //     this.forceUpdate();
-  //   }
   //   const userData = {
-  //     username: this.state.usesrname,
+  //     username: this.state.username,
   //     password: this.state.password
-  //   }
+  //   };
 
   //   this.props.loginUser(userData);
-  // };
+  // }
+  
+  onSubmit(e) {
+    if (this.validator.allValid()) {
+      e.preventDefault();
+      const userData = {
+        username: this.state.username,
+        password: this.state.password
+      }
+  
+      this.props.loginUser(userData);
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
+  };
 
   render() {
     const errors = this.state.errors;
