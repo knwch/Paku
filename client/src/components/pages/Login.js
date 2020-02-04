@@ -87,6 +87,9 @@ class Login extends Component {
                     <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
                   {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required')}
+                  <div className="container">
+                    { errors.username }
+                  </div>
                 </Form.Field>
 
                 <Form.Field className="text-left">
@@ -95,6 +98,9 @@ class Login extends Component {
                     <input type="text" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
+                  <div className="container">
+                    { errors.password }
+                  </div>
                 </Form.Field>
                 
                 <div className='text-center'>

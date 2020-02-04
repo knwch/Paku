@@ -92,6 +92,7 @@ router.post('/login', (req, res) => {
 
     // Check Validation
     if (!isValid) {
+        // console.log('Errors validate');
         return res.status(400).json(errors);
     }
 
@@ -103,7 +104,7 @@ router.post('/login', (req, res) => {
         // Check for user
         if (!user) {
             errors.username = `User not found`;
-            console.log(errors);
+            // console.log(errors);
             return res.status(404).json(errors);
         }
 
@@ -123,7 +124,7 @@ router.post('/login', (req, res) => {
                 });
             } else {
                 errors.password = `Password incorrect`;
-                console.log(errors);
+                // console.log(errors);
                 return res.status(400).json(errors);
             }
         });
