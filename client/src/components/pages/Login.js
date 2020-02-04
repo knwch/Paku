@@ -54,6 +54,7 @@ class Login extends Component {
 
     this.props.loginUser(userData);
   }
+  
   // onSubmit(e) {
   //   if (this.validator.allValid()) {
   //     e.preventDefault();

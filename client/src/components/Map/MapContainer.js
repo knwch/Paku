@@ -83,6 +83,12 @@ class MapContainer extends Component {
     //     }
     // };
 
+    handleClickedMap = (e) => {
+        var lat = e.latLng.lat()
+        var lng = e.latLng.lng()
+        console.log(lat, lng)
+    }
+
     componentDidMount = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -114,6 +120,7 @@ class MapContainer extends Component {
                         center={this.state.currentlocation}
                         zoom={this.state.zoom}
                         options={{ styles }}
+                        onClick={this.handleClickedMap}
                     >
                         {this.state.show &&
                             <Marker
