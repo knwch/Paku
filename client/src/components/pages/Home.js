@@ -25,16 +25,16 @@ class Home extends Component {
           </div>
           <Grid columns={4}>
             <Grid.Row>
-              <Grid.Column>
+              <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
               </Grid.Column>
-              <Grid.Column>
+              <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
               </Grid.Column>
             </Grid.Row>
