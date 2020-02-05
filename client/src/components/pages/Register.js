@@ -192,7 +192,7 @@ class Register extends Component {
                     <input type="checkbox" onChange={this.handleChange('terms')} defaultValue={this.state.terms} />
                   </Checkbox>
                   <a className="align-middle">&nbsp;ฉันยอมรับ<a href="#" onClick={this.handleOpenModal}>ข้อกำหนดและเงื่อนไขในการใช้งาน</a></a>
-                  {this.validator.message('terms', this.state.term, 'accepted')}
+                  {this.validator.message('terms', this.state.terms, 'accepted')}
                 </Form.Field>
 
                 <Modal
