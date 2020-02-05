@@ -1,5 +1,6 @@
 // load the things we need
 let mongoose = require('mongoose');
+let { ObjectId } = mongoose.Schema;
 
 // define the schema for our user model
 let userSchema = new mongoose.Schema({
@@ -54,6 +55,16 @@ let userSchema = new mongoose.Schema({
     //     data: Buffer,
     //     contentType
     // },
+    myBook: [{
+        post: {
+            type: ObjectId,
+            ref: 'post'
+        },
+        bookId: {
+            type: String,
+            required: true
+        }
+    }],
     status: {
         type: String,
         default: "renter"

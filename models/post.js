@@ -65,7 +65,7 @@ const postSchema = new mongoose.Schema({
     },
     postedBy: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'users'
     },
     price: {
         type: Number,
@@ -84,7 +84,7 @@ const postSchema = new mongoose.Schema({
         },
         postedBy: {
             type: ObjectId,
-            ref: 'User'
+            ref: 'users'
         }
     }],
     updated: Date,
@@ -94,4 +94,4 @@ const postSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('post', postSchema);

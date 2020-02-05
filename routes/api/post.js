@@ -9,4 +9,4 @@ const Post = require('../../models/post');
 // import input validation
 const validatePostInput = require('../../validator/post');
 
-module.exports = route;
+module.exports = router;
