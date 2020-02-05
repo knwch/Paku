@@ -43,17 +43,6 @@ class Login extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
-
-  // onSubmit = e => {
-  //   e.preventDefault();
-
-  //   const userData = {
-  //     username: this.state.username,
-  //     password: this.state.password
-  //   };
-
-  //   this.props.loginUser(userData);
-  // }
   
   onSubmit(e) {
     if (this.validator.allValid()) {
@@ -62,7 +51,6 @@ class Login extends Component {
         username: this.state.username,
         password: this.state.password
       }
-  
       this.props.loginUser(userData);
     } else {
       this.validator.showMessages();
@@ -96,7 +84,7 @@ class Login extends Component {
                 <Form.Field className="text-left">
                   <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
                     <Icon name='lock' />
-                    <input type="text" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
+                    <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
                   <div className="container">
