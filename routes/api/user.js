@@ -60,13 +60,7 @@ router.post('/register', (req, res) => {
                 //     contentType: req.body.photo_user.type
                 // },
                 birth: req.body.birth,
-                // age: req.body.age,
                 phone: req.body.phone,
-                // card: req.body.card,
-                // photo_card: {
-                //     data: fs.readFileSync(req.body.photo_card.path),
-                //     contentType: req.body.photo_card.type
-                // }
             });
 
             bcrypt.genSalt(10, (err, salt) => {

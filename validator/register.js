@@ -19,21 +19,21 @@ module.exports = validateRegisterInput = (data) => {
     
     // console.log(data);
 
-    if (!Validator.isLength(data.username, {min : 2 , max : 30})){
-        errors.username = `Username must be between 2 and 30 characters`;
+    if (!Validator.isLength(data.username, {min : 6 , max : 30})){
+        errors.username = `Username must be between 6 and 30 characters`;
     }
     if (Validator.isEmpty(data.username)) {
         errors.username = `Username field is required`;
     }
-    if (!Validator.isLength(data.fname, {min : 2 , max : 30})) {
-        errors.fname = `FirstName must be between 2 and 30 characters`;
-    }
+    // if (!Validator.isLength(data.fname, {min : 6 , max : 30})) {
+    //     errors.fname = `FirstName must be between 6 and 30 characters`;
+    // }
     if (Validator.isEmpty(data.fname)) {
         errors.fname = `FirstName field is required`;
     }
-    if (!Validator.isLength(data.lname, {min : 2 , max : 30})) {
-        errors.lname = `LastName must be between 2 and 30 characters`;
-    }
+    // if (!Validator.isLength(data.lname, {min : 2 , max : 30})) {
+    //     errors.lname = `LastName must be between 2 and 30 characters`;
+    // }
     if (Validator.isEmpty(data.lname)) {
         errorslname = `LastName field is required`;
     }
@@ -74,10 +74,10 @@ module.exports = validateRegisterInput = (data) => {
         errors.password = `Password must be between 6 and 30`;
     }
     if (Validator.isEmpty(data.password2)) {
-        errors.password2 = `Confirm password field is erequired`;
+        errors.password2 = `Confirm password field is required`;
     }
     if (!Validator.equals(data.password, data.password2)) {
-        errors.password2 = `Passwords must match`;
+        errors.password2 = `Password must match`;
     }
 
     return {
