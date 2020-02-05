@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Form, Label, Grid } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Menu } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loginUser } from '../../redux/actions/authActions';
@@ -14,10 +14,15 @@ class Login extends Component {
       password: '',
       errors: {}
     };
-    
     this.onSubmit = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
-      element: message => <Label basic color='red' pointing>{message}</Label>,
+      validators: {
+        error: {  // name the rule
+          message: 'ชื่อผู้ใช้หรือรหัสผ่านผิด',
+          rule: val => val === null
+        }
+      },
+      element: message => <div><Label basic color='red' pointing>{message}</Label><br/></div>,
       messages: {
         required: 'โปรดระบุ:attribute',
       }
@@ -43,9 +48,9 @@ class Login extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
-  
+
   onSubmit(e) {
-    if (this.validator.allValid()) {
+    if (this.validator.fieldValid('รหัสผ่าน') && this.validator.fieldValid('ชื่อผู้ใช้')) {
       e.preventDefault();
       const userData = {
         username: this.state.username,
@@ -76,9 +81,6 @@ class Login extends Component {
                     <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
                   {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required')}
-                  <div className="container">
-                    { errors.username }
-                  </div>
                 </Form.Field>
 
                 <Form.Field className="text-left">
@@ -87,11 +89,9 @@ class Login extends Component {
                     <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
-                  <div className="container">
-                    { errors.password }
-                  </div>
+                  {this.validator.message('errors', errors.username | errors.password, 'error')}
                 </Form.Field>
-                
+
                 <div className='text-center'>
                   <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
                     <Button.Content visible>เข้าสู่ระบบ</Button.Content>
@@ -108,6 +108,7 @@ class Login extends Component {
       </Responsive>
     );
   }
+
 }
 
 const mapStateToProps = state => ({
