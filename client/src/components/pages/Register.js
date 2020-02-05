@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Image, Header } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../redux/actions/authActions';
@@ -18,13 +19,13 @@ class Register extends Component {
       telephone: '',
       email: '',
       birth: '',
-      checkinfo: false,
+      terms: false,
       errors: {}
     };
 
     this.onChange = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
-      element: message => <Label basic color='red' pointing>{message}</Label>,
+      element: message => <div><Label basic color='red' pointing>{message}</Label><br /></div>,
       messages: {
         required: 'โปรดระบุ:attribute',
         alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
@@ -90,10 +91,20 @@ class Register extends Component {
     }
   }
 
+  handleCheckbox = () => {
+    this.setState({ terms: !this.state.terms });
+  }
+
   // Handle fields change
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
+
+  state = { modalOpen: false }
+
+  handleOpenModal = () => this.setState({ modalOpen: true })
+
+  handleCloseModal = () => this.setState({ modalOpen: false })
 
   render() {
     const errors = this.state.errors;
@@ -110,7 +121,7 @@ class Register extends Component {
                 <Form.Field>
                   <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
                     <Icon name='user' />
-                    <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
+                    <input type="text" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
                   {/* {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num')} */}
                 </Form.Field>
@@ -118,64 +129,86 @@ class Register extends Component {
                 <Form.Field>
                   <Input fluid iconPosition='left' placeholder='สร้างรหัสผ่าน'>
                     <Icon name='unlock' />
-                    <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
+                    <input type="password" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
-                  {/* {this.validator.message('รหัสผ่าน', values.password, 'required')} */}
+                  {/* {this.validator.message('รหัสผ่าน', this.state.password, 'required')} */}
                 </Form.Field>
 
                 <Form.Field>
                   <Input fluid iconPosition='left' placeholder='ยืนยันรหัสผ่าน'>
                     <Icon name='unlock alternate' />
-                    <input type="password" className="form-control" onChange={this.handleChange('confirmpassword')} defaultValue={this.state.confirmpassword} />
+                    <input type="password" onChange={this.handleChange('confirmpassword')} defaultValue={this.state.confirmpassword} />
                   </Input>
-                  {/* {this.validator.message('ยืนยันรหัสผ่าน', values.confirmpassword, `required|in:${values.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })} */}
+                  {/* {this.validator.message('ยืนยันรหัสผ่าน', this.state.confirmpassword, `required|in:${this.state.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })} */}
                 </Form.Field>
 
-                <Form.Field>
-                  <Input fluid iconPosition='left' placeholder='ชื่อจริง'>
-                    <Icon name='vcard' />
-                    <input type="text" className="form-control" onChange={this.handleChange('firstname')} defaultValue={this.state.firstname} />
-                  </Input>
-                  {/* {this.validator.message('ชื่อจริง', values.firstname, 'required|string')} */}
-                </Form.Field>
+                <Form.Group widths='equal'>
+
+                  <Form.Field>
+                    <Input fluid iconPosition='left' placeholder='ชื่อจริง'>
+                      <Icon name='vcard' />
+                      <input type="text" onChange={this.handleChange('firstname')} defaultValue={this.state.firstname} />
+                    </Input>
+                    {/* {this.validator.message('ชื่อจริง', this.state.firstname, 'required|string')} */}
+                  </Form.Field>
+
+                  <Form.Field>
+                    <Input fluid iconPosition='left' placeholder='นามสกุล'>
+                      <Icon name='vcard' />
+                      <input type="text" onChange={this.handleChange('lastname')} defaultValue={this.state.lastname} />
+                    </Input>
+                    {/* {this.validator.message('นามสกุล', this.state.lastname, 'required|string')} */}
+                  </Form.Field>
+
+                </Form.Group>
 
                 <Form.Field>
-                  <Input fluid iconPosition='left' placeholder='นามสกุล'>
-                    <Icon name='vcard' />
-                    <input type="text" className="form-control" onChange={this.handleChange('lastname')} defaultValue={this.state.lastname} />
+                  <Input fluid iconPosition='left' placeholder='อีเมล'>
+                    <Icon name='envelope' />
+                    <input type="email" onChange={this.handleChange('email')} defaultValue={this.state.email} />
                   </Input>
-                  {/* {this.validator.message('นามสกุล', values.lastname, 'required|string')} */}
+                  {/* {this.validator.message('อีเมล', this.state.email, 'required|email')} */}
                 </Form.Field>
 
                 <Form.Field>
                   <Input fluid iconPosition='left' placeholder='เบอร์โทรศัพท์'>
                     <Icon name='phone' flipped='horizontally' />
-                    <input type="text" className="form-control" onChange={this.handleChange('telephone')} defaultValue={this.state.telephone} />
+                    <input type="text" onChange={this.handleChange('telephone')} defaultValue={this.state.telephone} />
                   </Input>
-                  {/* {this.validator.message('เบอร์โทรศัพท์', values.telephone, 'required|phone')} */}
-                </Form.Field>
-
-                <Form.Field>
-                  <Input fluid iconPosition='left' placeholder='อีเมล'>
-                    <Icon name='envelope' />
-                    <input type="email" className="form-control" onChange={this.handleChange('email')} defaultValue={this.state.email} />
-                  </Input>
-                  {/* {this.validator.message('อีเมล', values.email, 'required|email')} */}
+                  {/* {this.validator.message('เบอร์โทรศัพท์', this.state.telephone, 'required|phone')} */}
                 </Form.Field>
 
                 <Form.Field>
                   <div>วันเกิด</div>
-                  <small>ผู้ลงทะเบียนจะต้องมีอายุ 18 ปีบริบูรณ์ขึ้นไป ผู้อื่นที่จะใช้ Paku จะไม่เห็นวันเกิดคุณ</small>
                   <Input fluid iconPosition='left' placeholder='วันเกิด'>
                     <Icon name='birthday' />
-                    <input type="date" className="form-control" onChange={this.handleChange('birth')} defaultValue={this.state.birth} />
+                    <input type="date" onChange={this.handleChange('birth')} defaultValue={this.state.birth} />
                   </Input>
-                  {/* {this.validator.message('วันเกิด', values.birth && moment(values.birth, 'YYYY-DD-MM'), 'required|date')} */}
+                  {/* {this.validator.message('วันเกิด', this.state.birth && moment(this.state.birth, 'YYYY-DD-MM'), 'required|date')} */}
                 </Form.Field>
 
                 <Form.Field>
-                  <Checkbox label='I agree to the Terms and Conditions'/>
+                  <Checkbox onClick={this.handleCheckbox} className="align-middle">
+                    <input type="checkbox" onChange={this.handleChange('terms')} defaultValue={this.state.terms} />
+                  </Checkbox>
+                  <a className="align-middle">&nbsp;ฉันยอมรับ<a href="#" onClick={this.handleOpenModal}>ข้อกำหนดและเงื่อนไขในการใช้งาน</a></a>
+                  {this.validator.message('terms', this.state.term, 'accepted')}
                 </Form.Field>
+
+                <Modal
+                  open={this.state.modalOpen}
+                  onClose={this.handleCloseModal} 
+                  className="modal-terms"
+                  >
+                  <Modal.Header>ข้อกำหนดและเงื่อนไขในการใช้งาน</Modal.Header>
+                  <Modal.Content>
+                    <Modal.Description>
+                      <Header>ฟหกด่าสว</Header>
+                      <p>We've found the following gravatar image associated with your e-mail address.</p>
+                      <p>Is it okay to use this photo?</p>
+                    </Modal.Description>
+                  </Modal.Content>
+                </Modal>
 
                 <div className='d-flex justify-content-end'>
                   <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
