@@ -1,12 +1,11 @@
 // load the things we need
 let mongoose = require('mongoose');
-let { ObjectId } = mongoose.Schema;
 
 // define the schema for our user model
 let userSchema = new mongoose.Schema({
     username: {
         type: String,
-        min: 2,
+        min: 6,
         max: 30,
         required: true,
         unique: true
@@ -18,11 +17,11 @@ let userSchema = new mongoose.Schema({
         required: true
     },
     name: {
-        fname:{
+        firstname: {
             type: String,
             required: true
         },
-        lname:{
+        lastname: {
             type: String,
             required: true 
         }
@@ -33,7 +32,7 @@ let userSchema = new mongoose.Schema({
     },
     // photo_user: {
     //     data: Buffer,
-    //     contentType
+    //     contentType: String
     // },
     birth: {
         type: String,
@@ -48,27 +47,23 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    card: {
-        type: Number,
+    terms: {
+        type: Boolean,
+        required: true
+    },
+    Card: {
+        idCard: {
+            type: Number,
+        },
+        confirm: {
+            type: Boolean,
+            default: 'false'
+        }
     },
     // photo_card: {
     //     data: Buffer,
     //     contentType
     // },
-    myBook: [{
-        post: {
-            type: ObjectId,
-            ref: 'post'
-        },
-        bookId: {
-            type: String,
-            required: true
-        }
-    }],
-    status: {
-        type: String,
-        default: "renter"
-    },
     rate: {
         type: Number,
         default: 0

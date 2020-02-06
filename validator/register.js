@@ -16,6 +16,7 @@ module.exports = validateRegisterInput = (data) => {
     // data.age = !isEmpty(data.age) ? data.age : '';
     data.phone = !isEmpty(data.phone) ? data.phone : '';
     // data.card = !isEmpty(data.card) ? data.card : '';
+    data.terms = !isEmpty(data.terms) ? data.terms : '';
     
     // console.log(data);
 
@@ -79,7 +80,12 @@ module.exports = validateRegisterInput = (data) => {
     if (!Validator.equals(data.password, data.password2)) {
         errors.password2 = `Password must match`;
     }
-
+    if (!Validator.isEmpty(data.terms)) {
+        errors.terms = `You must check box terms`;
+    }
+    if (!Validator.isBoolean(data.terms)) {
+        errors.terms = `You must check box terms`;
+    }
     return {
         errors,
         isValid: isEmpty(errors)

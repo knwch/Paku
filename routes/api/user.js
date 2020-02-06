@@ -51,8 +51,8 @@ router.post('/register', (req, res) => {
                 username: req.body.username,
                 password: req.body.password,
                 name: {
-                    fname: req.body.fname,
-                    lname: req.body.lname
+                    firstname: req.body.fname,
+                    lastname: req.body.lname
                 },
                 email: req.body.email,
                 // photo_user: {
@@ -61,6 +61,7 @@ router.post('/register', (req, res) => {
                 // },
                 birth: req.body.birth,
                 phone: req.body.phone,
+                terms: req.body.terms
             });
 
             bcrypt.genSalt(10, (err, salt) => {
@@ -98,40 +99,41 @@ router.post('/login', (req, res) => {
 
     const username = req.body.username;
     const password = req.body.password;
-
+    
     // Find user by username
-    User.findOne({ username }).then((user) => {
-        // Check for user
-        if (!user) {
-            errors.username = `User not found`;
-            // console.log(errors);
-            return res.status(404).json(errors);
-        }
-
-        // Check Password
-        bcrypt.compare(password, user.password).then((isMath) => {
-            if (isMath) {
-                // User Matched
-                // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
-                const payload = { id:user.id, name: user.name, email: user.email };
-                console.log('succeess');
-                // Sign Token
-                jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
-                    res.json({ 
-                        success: true,
-                        token: 'Bearer ' + token
-                    });
-                });
-            } else {
-                errors.password = `Password incorrect`;
+    User.findOne({ $or: [{ username: username }, { email: username }] })
+        .then((user) => {
+            // Check for user
+            if (!user) {
+                errors.username = `User not found`;
                 // console.log(errors);
-                return res.status(400).json(errors);
+                return res.status(404).json(errors);
             }
+
+            // Check Password
+            bcrypt.compare(password, user.password).then((isMath) => {
+                if (isMath) {
+                    // User Matched
+                    // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
+                    const payload = { id:user.id, name: user.name, email: user.email };
+                    console.log('succeess');
+                    // Sign Token
+                    jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
+                        res.json({ 
+                            success: true,
+                            token: 'Bearer ' + token
+                        });
+                    });
+                } else {
+                    errors.password = `Password incorrect`;
+                    // console.log(errors);
+                    return res.status(400).json(errors);
+                }
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    })
-    .catch((err) => {
-        console.log(err);
-    });
 });
 
 // @route   GET api/users/current

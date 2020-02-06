@@ -40,8 +40,8 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
     User.findById(req.user.id) 
         .then((userData) => { 
             userData.name = {
-                fname: req.body.fname,
-                lname: req.body.lname
+                firstname: req.body.fname,
+                lastname: req.body.lname
             }
             userData.birth = req.body.birth;
             userData.phone = req.body.phone;
