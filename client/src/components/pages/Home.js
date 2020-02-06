@@ -23,7 +23,7 @@ class Home extends Component {
           <div className="text-left">
             <h4>ที่จอดรถแนะนำ</h4>
           </div>
-          <Grid columns={4}>
+          <Grid textAlign='center' columns={4}>
             <Grid.Row>
               <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
