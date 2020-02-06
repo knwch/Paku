@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Sarabun&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Mitr:300&display=swap&subset=thai');
 
 * {
-  font-family: 'Sarabun', sans-serif;
+  font-family: 'Mitr', sans-serif;
 }
 
 .map-responsive {
@@ -9,6 +9,11 @@
   padding-bottom:100%;
   position:relative;
   height:0;
+}
+
+.modal-terms {
+  position: relative !important;
+  height: auto !important;
 }
 
 .btn-paku {

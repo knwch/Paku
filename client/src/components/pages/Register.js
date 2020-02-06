@@ -10,7 +10,6 @@ class Register extends Component {
   constructor() {
     super();
     this.state = {
-      step: 1,
       username: '',
       password: '',
       confirmpassword: '',
@@ -18,13 +17,18 @@ class Register extends Component {
       lastname: '',
       telephone: '',
       email: '',
-      birth: '',
       terms: false,
       errors: {}
     };
 
     this.onChange = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
+      validators: {
+        error: {  // name the rule
+          message: '...',
+          rule: val => val === null
+        }
+      },
       element: message => <div><Label basic color='red' pointing>{message}</Label><br /></div>,
       messages: {
         required: 'โปรดระบุ:attribute',
@@ -32,8 +36,9 @@ class Register extends Component {
         string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น',
         phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก',
         email: 'โปรดระบุอีเมล',
-        date: 'โปรดระบุวันเกิด',
-        size: 'โปรดระบุเลขบัตรประชาชน 13 หลัก'
+        accepted: 'โปรดยอมรับข้อกำหนดและเงื่อนไขในการใช้งาน',
+        min:  'รหัสผ่านต้องมีตัวอักษรมากกว่าหรือเท่ากับ :min',
+        max: 'รหัสผ่านต้องมีตัวอักษรน้อยกว่าหรือเท่ากับ :max'
       }
     });
 
@@ -52,22 +57,6 @@ class Register extends Component {
     }
   }
 
-  // // Proceed to next step
-  // nextStep = () => {
-  //   const { step } = this.state;
-  //   this.setState({
-  //     step: step + 1
-  //   });
-  // };
-
-  // // Go back to prev step
-  // prevStep = () => {
-  //   const { step } = this.state;
-  //   this.setState({
-  //     step: step - 1
-  //   });
-  // };
-
   onSubmit = e => {
     if (this.validator.allValid()) {
       e.preventDefault();
@@ -78,7 +67,6 @@ class Register extends Component {
         fname: this.state.firstname,
         lname: this.state.lastname,
         email: this.state.email,
-        birth: this.state.birth,
         phone: this.state.telephone
       }
 
@@ -131,7 +119,7 @@ class Register extends Component {
                     <Icon name='unlock' />
                     <input type="password" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
-                  {/* {this.validator.message('รหัสผ่าน', this.state.password, 'required')} */}
+                  {/* {this.validator.message('รหัสผ่าน', this.state.password, 'required|min:6,string|max:30,string')} */}
                 </Form.Field>
 
                 <Form.Field>
@@ -168,6 +156,7 @@ class Register extends Component {
                     <input type="email" onChange={this.handleChange('email')} defaultValue={this.state.email} />
                   </Input>
                   {/* {this.validator.message('อีเมล', this.state.email, 'required|email')} */}
+                  {/* {this.validator.message('errors', errors.email, 'error')} */}
                 </Form.Field>
 
                 <Form.Field>
@@ -178,21 +167,21 @@ class Register extends Component {
                   {/* {this.validator.message('เบอร์โทรศัพท์', this.state.telephone, 'required|phone')} */}
                 </Form.Field>
 
-                <Form.Field>
+                {/* <Form.Field>
                   <div>วันเกิด</div>
                   <Input fluid iconPosition='left' placeholder='วันเกิด'>
                     <Icon name='birthday' />
                     <input type="date" onChange={this.handleChange('birth')} defaultValue={this.state.birth} />
                   </Input>
-                  {/* {this.validator.message('วันเกิด', this.state.birth && moment(this.state.birth, 'YYYY-DD-MM'), 'required|date')} */}
-                </Form.Field>
+                  {this.validator.message('วันเกิด', this.state.birth && moment(this.state.birth, 'YYYY-DD-MM'), 'required|date')}
+                </Form.Field> */}
 
                 <Form.Field>
                   <Checkbox onClick={this.handleCheckbox} className="align-middle">
                     <input type="checkbox" onChange={this.handleChange('terms')} defaultValue={this.state.terms} />
                   </Checkbox>
                   <a className="align-middle">&nbsp;ฉันยอมรับ<a href="#" onClick={this.handleOpenModal}>ข้อกำหนดและเงื่อนไขในการใช้งาน</a></a>
-                  {this.validator.message('terms', this.state.terms, 'accepted')}
+                  {/* {this.validator.message('terms', this.state.terms, 'accepted')} */}
                 </Form.Field>
 
                 <Modal
@@ -229,9 +218,9 @@ class Register extends Component {
   }
 }
 
-const mapStateToPrps = state => ({
+const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors
 });
 
-export default connect(mapStateToPrps, { registerUser })(withRouter(Register))
+export default connect(mapStateToProps, { registerUser })(withRouter(Register))
