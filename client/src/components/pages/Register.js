@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Image, Header } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../redux/actions/authActions';
@@ -67,7 +66,8 @@ class Register extends Component {
         fname: this.state.firstname,
         lname: this.state.lastname,
         email: this.state.email,
-        phone: this.state.telephone
+        phone: this.state.telephone,
+        terms: this.state.terms,
       }
 
       this.props.registerUser(newUser, this.props.history);
