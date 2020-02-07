@@ -23,8 +23,12 @@ class Register extends Component {
     this.onChange = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
       validators: {
-        error: {  // name the rule
-          message: '...',
+        userror: {  // name the rule
+          message: 'ชื่อผู้ใช้ซ้ำ',
+          rule: val => val === null
+        },
+        emerror: {  // name the rule
+          message: 'อีเมลซ้ำ',
           rule: val => val === null
         }
       },
@@ -111,7 +115,9 @@ class Register extends Component {
                     <Icon name='user' />
                     <input type="text" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
-                  {/* {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num')} */}
+                  {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num')}
+                  {this.validator.message('error', errors.username, 'userror')}
+                  {errors.username = ''}
                 </Form.Field>
 
                 <Form.Field>
@@ -119,7 +125,7 @@ class Register extends Component {
                     <Icon name='unlock' />
                     <input type="password" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
-                  {/* {this.validator.message('รหัสผ่าน', this.state.password, 'required|min:6,string|max:30,string')} */}
+                  {this.validator.message('รหัสผ่าน', this.state.password, 'required|min:6,string|max:30,string')}
                 </Form.Field>
 
                 <Form.Field>
@@ -127,7 +133,7 @@ class Register extends Component {
                     <Icon name='unlock alternate' />
                     <input type="password" onChange={this.handleChange('confirmpassword')} defaultValue={this.state.confirmpassword} />
                   </Input>
-                  {/* {this.validator.message('ยืนยันรหัสผ่าน', this.state.confirmpassword, `required|in:${this.state.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })} */}
+                  {this.validator.message('ยืนยันรหัสผ่าน', this.state.confirmpassword, `required|in:${this.state.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })}
                 </Form.Field>
 
                 <Form.Group widths='equal'>
@@ -137,7 +143,7 @@ class Register extends Component {
                       <Icon name='vcard' />
                       <input type="text" onChange={this.handleChange('firstname')} defaultValue={this.state.firstname} />
                     </Input>
-                    {/* {this.validator.message('ชื่อจริง', this.state.firstname, 'required|string')} */}
+                    {this.validator.message('ชื่อจริง', this.state.firstname, 'required|string')}
                   </Form.Field>
 
                   <Form.Field>
@@ -145,7 +151,7 @@ class Register extends Component {
                       <Icon name='vcard' />
                       <input type="text" onChange={this.handleChange('lastname')} defaultValue={this.state.lastname} />
                     </Input>
-                    {/* {this.validator.message('นามสกุล', this.state.lastname, 'required|string')} */}
+                    {this.validator.message('นามสกุล', this.state.lastname, 'required|string')}
                   </Form.Field>
 
                 </Form.Group>
@@ -155,8 +161,9 @@ class Register extends Component {
                     <Icon name='envelope' />
                     <input type="email" onChange={this.handleChange('email')} defaultValue={this.state.email} />
                   </Input>
-                  {/* {this.validator.message('อีเมล', this.state.email, 'required|email')} */}
-                  {/* {this.validator.message('errors', errors.email, 'error')} */}
+                  {this.validator.message('อีเมล', this.state.email, 'required|email')}
+                  {this.validator.message('error', errors.email, 'emerror')}
+                  {errors.email = ''}
                 </Form.Field>
 
                 <Form.Field>
@@ -164,7 +171,7 @@ class Register extends Component {
                     <Icon name='phone' flipped='horizontally' />
                     <input type="text" onChange={this.handleChange('telephone')} defaultValue={this.state.telephone} />
                   </Input>
-                  {/* {this.validator.message('เบอร์โทรศัพท์', this.state.telephone, 'required|phone')} */}
+                  {this.validator.message('เบอร์โทรศัพท์', this.state.telephone, 'required|phone')}
                 </Form.Field>
 
                 {/* <Form.Field>
@@ -181,9 +188,7 @@ class Register extends Component {
                     <input type="checkbox" onChange={this.handleChange('terms')} defaultValue={this.state.terms} />
                   </Checkbox>
                   <a className="align-middle">&nbsp;ฉันยอมรับ<a href="#" onClick={this.handleOpenModal}>ข้อกำหนดและเงื่อนไขในการใช้งาน</a></a>
-                  {/* {this.validator.message('terms', this.state.terms, 'accepted')} */}
-                  {console.log(errors.username)}
-                  {console.log(errors.email)}
+                  {this.validator.message('terms', this.state.terms, 'accepted')}
                 </Form.Field>
 
                 <Modal
