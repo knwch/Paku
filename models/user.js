@@ -34,10 +34,6 @@ let userSchema = new mongoose.Schema({
     //     data: Buffer,
     //     contentType: String
     // },
-    birth: {
-        type: String,
-        required: true 
-    },
     // age: {
     //     type: Number,
     //     min: 18,

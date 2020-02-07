@@ -12,7 +12,7 @@ module.exports = validateRegisterInput = (data) => {
     data.fname = !isEmpty(data.fname) ? data.fname : '';
     data.lname = !isEmpty(data.lname) ? data.lname : '';
     data.email = !isEmpty(data.email) ? data.email : '';
-    data.birth = !isEmpty(data.birth) ? data.birth : '';
+    // data.birth = !isEmpty(data.birth) ? data.birth : '';
     // data.age = !isEmpty(data.age) ? data.age : '';
     data.phone = !isEmpty(data.phone) ? data.phone : '';
     // data.card = !isEmpty(data.card) ? data.card : '';
@@ -44,9 +44,9 @@ module.exports = validateRegisterInput = (data) => {
     if (!Validator.isEmail(data.email)) {
         errors.email = `Email is invalid`;
     }
-    if (Validator.isEmpty(data.birth)) {
-        errors.birth = `Birthday field is required`;
-    }
+    // if (Validator.isEmpty(data.birth)) {
+    //     errors.birth = `Birthday field is required`;
+    // }
     // if (Validator.isEmpty(data.age)) {
     //     errors.age = `Age field is required`;
     // }
