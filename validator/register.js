@@ -36,7 +36,7 @@ module.exports = validateRegisterInput = (data) => {
     //     errors.lname = `LastName must be between 2 and 30 characters`;
     // }
     if (Validator.isEmpty(data.lname)) {
-        errorslname = `LastName field is required`;
+        errors.lname = `LastName field is required`;
     }
     if (Validator.isEmpty(data.email)) {
         errors.email = `Email field is required`;
@@ -57,7 +57,7 @@ module.exports = validateRegisterInput = (data) => {
         errors.phone = `Phone field is required`;
     }
     if (!Validator.isNumeric(data.phone)) {
-        errors.age = `Phone must be Intger`;
+        errors.phone = `Phone must be Intger`;
     }
     // if (!Validator.isMobilePhone(data.phone, 'th-TH')) {
     //     errors.phone = `Phone number must be phone number of thailand`;
@@ -80,12 +80,12 @@ module.exports = validateRegisterInput = (data) => {
     if (!Validator.equals(data.password, data.password2)) {
         errors.password2 = `Password must match`;
     }
-    if (!Validator.isEmpty(data.terms)) {
-        errors.terms = `You must check box terms`;
-    }
-    if (!Validator.isBoolean(data.terms)) {
-        errors.terms = `You must check box terms`;
-    }
+    // if (!Validator.isEmpty(data.terms)) {
+    //     errors.terms = `You must check box terms`;
+    // }
+    // if (!Validator.isBoolean(data.terms)) {
+    //     errors.terms = `You must check box terms`;
+    // }
     return {
         errors,
         isValid: isEmpty(errors)

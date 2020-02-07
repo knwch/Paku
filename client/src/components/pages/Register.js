@@ -182,6 +182,8 @@ class Register extends Component {
                   </Checkbox>
                   <a className="align-middle">&nbsp;ฉันยอมรับ<a href="#" onClick={this.handleOpenModal}>ข้อกำหนดและเงื่อนไขในการใช้งาน</a></a>
                   {/* {this.validator.message('terms', this.state.terms, 'accepted')} */}
+                  {console.log(errors.username)}
+                  {console.log(errors.email)}
                 </Form.Field>
 
                 <Modal

@@ -40,10 +40,10 @@ router.post('/register', (req, res) => {
             if (user) {
                 if (user.username === req.body.username) {
                     errors.username = `Username alrady exists`;
-                    return res.status(200).json(errors);
+                    return res.status(400).json(errors);
                 } else {
                     errors.email = `Email alrady exists`;
-                    return res.status(200).json(errors);
+                    return res.status(400).json(errors);
                 }    
             }
             
@@ -59,7 +59,7 @@ router.post('/register', (req, res) => {
                 //     data: fs.readFileSync(req.body.photo_user.path),
                 //     contentType: req.body.photo_user.type
                 // },
-                birth: req.body.birth,
+                // birth: req.body.birth,
                 phone: req.body.phone,
                 terms: req.body.terms
             });
