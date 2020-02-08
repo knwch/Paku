@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header, Transition } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../redux/actions/authActions';
@@ -32,7 +32,17 @@ class Register extends Component {
           rule: val => val === null
         }
       },
-      element: message => <div><Label basic color='red' pointing>{message}</Label><br /></div>,
+      element: message =>
+        <div>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
       messages: {
         required: 'โปรดระบุ:attribute',
         alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
@@ -40,8 +50,8 @@ class Register extends Component {
         phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก',
         email: 'โปรดระบุอีเมล',
         accepted: 'โปรดยอมรับข้อกำหนดและเงื่อนไขในการใช้งาน',
-        min:  'รหัสผ่านต้องมีตัวอักษรมากกว่าหรือเท่ากับ :min',
-        max: 'รหัสผ่านต้องมีตัวอักษรน้อยกว่าหรือเท่ากับ :max'
+        min: ':attributeต้องมีความยาวตั้งแต่ 6 ถึง 30 ตัวอักษร',
+        max: ':attributeต้องมีความยาวตั้งแต่ 6 ถึง 30 ตัวอักษร'
       }
     });
 
@@ -73,7 +83,6 @@ class Register extends Component {
         phone: this.state.telephone,
         terms: this.state.terms,
       }
-
       this.props.registerUser(newUser, this.props.history);
     } else {
       this.validator.showMessages();
@@ -92,7 +101,10 @@ class Register extends Component {
     this.setState({ [input]: e.target.value });
   };
 
-  state = { modalOpen: false }
+  state = {
+    modalOpen: false,
+    modalRegist: false
+  }
 
   handleOpenModal = () => this.setState({ modalOpen: true })
 
@@ -107,7 +119,7 @@ class Register extends Component {
           <Grid className='mb-4' centered>
             <Grid.Column mobile={14} tablet={7} computer={6}>
 
-              <h4 className="text-center mb-4">ลงทะเบียน (Beta)</h4>
+              <h4 className="text-center mb-4"><div>ลงทะเบียน</div></h4>
               <Form className="text-left">
 
                 <Form.Field>
@@ -115,7 +127,7 @@ class Register extends Component {
                     <Icon name='user' />
                     <input type="text" onChange={this.handleChange('username')} defaultValue={this.state.username} />
                   </Input>
-                  {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num')}
+                  {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required|alpha_num|min:6|max:30')}
                   {this.validator.message('error', errors.username, 'userror')}
                   {errors.username = ''}
                 </Form.Field>
@@ -193,10 +205,10 @@ class Register extends Component {
 
                 <Modal
                   open={this.state.modalOpen}
-                  onClose={this.handleCloseModal} 
-                  className="modal-terms"
-                  >
-                  <Modal.Header>ข้อกำหนดและเงื่อนไขในการใช้งาน</Modal.Header>
+                  onClose={this.handleCloseModal}
+                  className="modal-paku"
+                >
+                  <Header icon='browser' content='ข้อกำหนดและเงื่อนไขในการใช้งาน' />
                   <Modal.Content>
                     <Modal.Description>
                       <Header>ฟหกด่าสว</Header>
@@ -204,6 +216,11 @@ class Register extends Component {
                       <p>Is it okay to use this photo?</p>
                     </Modal.Description>
                   </Modal.Content>
+                  <Modal.Actions>
+                    <Button onClick={this.handleCloseModal} className='btn-paku' color='yellow'>
+                      ปิด <Icon name='right chevron' />
+                    </Button>
+                  </Modal.Actions>
                 </Modal>
 
                 <div className='d-flex justify-content-end'>

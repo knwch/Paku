@@ -11,14 +11,19 @@
   height:0;
 }
 
-.modal-terms {
+.modal-paku {
   position: relative !important;
   height: auto !important;
 }
 
 .btn-paku {
   background-color: #ffce20 !important;
-  color: #2c2c2c !important;
+  color: #2c2c2c !important
+}
+
+.btn-paku:hover {
+  background-color: #edc01f !important;
+  color: #2c2c2c !important
 }
 
 .btn-paku-light {

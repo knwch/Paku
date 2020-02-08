@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Menu } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Modal, Header, Image, Transition } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loginUser } from '../../redux/actions/authActions';
@@ -22,7 +22,17 @@ class Login extends Component {
           rule: val => val === null
         }
       },
-      element: message => <div><Label basic color='red' pointing>{message}</Label><br/></div>,
+      element: message =>
+        <div>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
       messages: {
         required: 'โปรดระบุ:attribute',
       }
@@ -31,6 +41,10 @@ class Login extends Component {
 
   componentDidMount() {
     document.title = '🐤 Login';
+    if (this.props.location.state) {
+      this.handleRegistModal();
+      this.props.history.replace({ state: false })
+    }
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/');
     }
@@ -64,6 +78,44 @@ class Login extends Component {
       this.forceUpdate();
     }
   };
+
+
+  state = {
+    modalRegist: false
+  }
+
+  handleRegistModal = () => {
+    this.setState({ modalRegist: true })
+    setTimeout(function () {
+      this.setState({ modalRegist: false })
+    }.bind(this), 2250);
+  }
+
+  successRegistModal = () => {
+    return (
+      <Modal
+        open={this.state.modalRegist}
+        className="modal-paku"
+        size='mini'
+      >
+        <Modal.Content>
+          <div className='text-center'>
+            <Transition
+              animation='tada'
+              duration={1500}
+              transitionOnMount={true}
+            >
+              <Icon.Group size='big'>
+                <Icon loading size='huge' name='circle outline' />
+                <Icon size='big' name='check' color='yellow' />
+              </Icon.Group>
+            </Transition>
+            <Header>ลงทะเบียนสำเร็จ</Header>
+          </div>
+        </Modal.Content>
+      </Modal>
+    );
+  }
 
   render() {
     const errors = this.state.errors;
@@ -104,11 +156,11 @@ class Login extends Component {
               </Form>
             </Grid.Column>
           </Grid>
+          <this.successRegistModal />
         </Container>
       </Responsive>
     );
   }
-
 }
 
 const mapStateToProps = state => ({
