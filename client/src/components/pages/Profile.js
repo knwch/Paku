@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
-import { Card, Icon, Input, Divider, Button, Image, Modal, Header, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
+import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
 
 class Profile extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            name: "usertestssss",
+            username: "usertestssss",
+            firstname: "ชื่อจริง",
+            lastname: "นามสกุล",
             rate: "4.93",
-            bio: "asdfasdfasdfasdfasdf",
-            phone: "0915466421",
+            about: "asdfasdfasdfasdfasdf",
             email: "abcd@mail.co",
+            phone: "0915466421"
         };
 
         this.validator = new SimpleReactValidator({
             element: message => <div><Label basic color='red' pointing>{message}</Label><br /></div>,
             messages: {
                 required: 'โปรดระบุ:attribute',
-                phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก',
-                email: 'โปรดระบุอีเมล',
+                phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
             }
         });
     }
@@ -80,11 +81,15 @@ class Profile extends Component {
                         <Grid.Column mobile={15} tablet={11} computer={11}>
                             <Card fluid>
                                 <Card.Content>
-                                    <Card.Header textAlign='left'>{this.state.name}
+                                    <Card.Header textAlign='left'>
+                                        {this.state.username}
                                         <Button onClick={this.handleOpenModal} basic circular icon='edit outline' floated='right'></Button>
                                     </Card.Header>
                                     <Card.Description textAlign='left'>
-                                        {this.state.bio}
+                                        {this.state.firstname + ' ' + this.state.lastname}
+                                    </Card.Description>
+                                    <Card.Description textAlign='left'>
+                                        {this.state.about}
                                     </Card.Description>
                                     <Divider />
                                     <RecommendCardList />
@@ -96,34 +101,39 @@ class Profile extends Component {
                     <Modal
                         open={this.state.modalOpen}
                         onClose={this.handleCloseModal}
-                        className="modal-terms"
+                        className="modal-paku"
                         closeOnDimmerClick={false}
                         size='small'
                     >
-                        <Modal.Header>แก้ไขโปรไฟล์</Modal.Header>
+                        <Modal.Header>แก้ไขข้อมูลส่วนตัว</Modal.Header>
                         <Modal.Content>
                             <Modal.Description>
-                                <Header>ฟหกด่าสว</Header>
                                 <Form className="text-left">
                                     <Form.Field>
-                                        <Input fluid iconPosition='left' placeholder={this.state.name} disabled>
+                                        <Input fluid iconPosition='left' defaultValue={this.state.username} disabled>
                                             <Icon name='user' />
                                             <input type="text" />
                                         </Input>
                                     </Form.Field>
                                     <Form.Field>
-                                        <TextArea rows={3} placeholder='Tell us more' onChange={this.handleChange('bio')} defaultValue={this.state.bio} />
+                                        <Input fluid iconPosition='left' defaultValue={this.state.firstname + ' ' + this.state.lastname} disabled>
+                                            <Icon name='vcard' />
+                                            <input type="text" />
+                                        </Input>
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <Input fluid iconPosition='left' defaultValue={this.state.email} disabled>
+                                            <Icon name='mail' />
+                                            <input type="text" />
+                                        </Input>
+                                    </Form.Field>
+                                    <Form.Field>
+                                        <TextArea rows={3} placeholder='Tell us more' onChange={this.handleChange('about')} defaultValue={this.state.about} />
                                     </Form.Field>
                                     <Form.Field>
                                         <Input fluid iconPosition='left' placeholder={this.state.phone}>
                                             <Icon name='phone' flipped='horizontally' />
                                             <input type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
-                                        </Input>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Input fluid iconPosition='left' placeholder={this.state.email}>
-                                            <Icon name='mail' />
-                                            <input type="text" onChange={this.handleChange('email')} defaultValue={this.state.email} />
                                         </Input>
                                     </Form.Field>
                                 </Form>
