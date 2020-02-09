@@ -39,6 +39,9 @@ let userSchema = new mongoose.Schema({
     //     min: 18,
     //     required: true
     // },
+    aboutMe : {
+        type: String
+    },
     phone: {
         type: String,
         required: true
@@ -50,6 +53,7 @@ let userSchema = new mongoose.Schema({
     Card: {
         idCard: {
             type: Number,
+            default: 0
         },
         confirm: {
             type: Boolean,
