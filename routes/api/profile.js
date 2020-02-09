@@ -6,9 +6,6 @@ const passport = require('passport');
 const User = require('../../models/user');
 const Post = require('../../models/post');
 
-// import input validation
-const validatePostInput = require('../../validator/post');
-
 // @route       GET api/profile/test
 // @desc        Default Route
 // @access      Public
@@ -18,19 +15,30 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests profile system' }));
 // @desc    Get current users 
 // @access  Private
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let errors = {}; 
-
+    // let errors = {}; 
     User.findById(req.user.id) 
         .then((profile) => {
-            if (!profile) {
-                errors.noprofile = 'There is no profile for this user';
-                return res.status(404).json(errors)
-            }
             res.json(profile)
         })
         .catch((err) => {
             res.status(404).json(err)
         });
+});
+
+// @route   GET api/profile/alluser
+// @desc    Get All users 
+// @access  Public
+router.get('/alluser', (req, res) => {
+    User.find()
+        .then((profile) => {
+            if (profile.length === 0) {
+                return res.status(200).json({ msg : 'User not found' });
+            }
+            res.json(profile);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 // @route   POST api/profile/edit
@@ -43,7 +51,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
                 firstname: req.body.fname,
                 lastname: req.body.lname
             }
-            userData.birth = req.body.birth;
+            // userData.birth = req.body.birth;
             userData.phone = req.body.phone;
 
             userData.save()
@@ -79,7 +87,7 @@ router.get('/:userName', passport.authenticate('jwt', { session: false }), (req,
     User.findOne({ username: req.parms.userName })
         .then((profile) => {
             if (!profile) {
-                errors.noprofile = 'There is no profile for this user';
+                errors.msg = 'User not found';
                 return res.status(404).json(errors)
             }
             res.json(profile)
