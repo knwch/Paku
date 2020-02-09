@@ -11,6 +11,15 @@
   height:0;
 }
 
+.nav-flex-1 {
+  flex: 1;
+  flex-basis: 100%;
+}
+
+.nowrap {
+  white-space: nowrap ;
+}
+
 .modal-paku {
   position: relative !important;
   height: auto !important;

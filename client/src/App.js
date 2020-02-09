@@ -18,7 +18,7 @@ import Book from "./components/pages/Book";
 import Owner from "./components/pages/Owner";
 import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
-import Navbar from "./components/Navbar";
+import NavMenu from "./components/NavMenu";
 import Footer from "./components/Footer";
 
 // Check for token
@@ -46,7 +46,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-        <Navbar />
+        <NavMenu />
           <div className="App">
             <Switch>
               <Route exact path="/" component={Home} />
