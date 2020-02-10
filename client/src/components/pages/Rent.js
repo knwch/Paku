@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapContainer from '../Map/MapContainer';
+import MapContainer from '../map/MapContainer';
 import NearbyCard from '../cards/NearbyCard';
 import { Grid, Responsive, Container } from 'semantic-ui-react';
 

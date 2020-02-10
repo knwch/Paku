@@ -64,10 +64,6 @@ class MapContainer extends Component {
     //     }
     // };
 
-    // handleMapClick = () => {
-    //     console.log("Hello there")
-    // };
-
     // componentDidMount() {
     //     if (navigator.geolocation) {
     //         navigator.geolocation.getCurrentPosition((position) => {
@@ -82,12 +78,6 @@ class MapContainer extends Component {
     //         })
     //     }
     // };
-
-    handleClickedMap = (e) => {
-        var lat = e.latLng.lat()
-        var lng = e.latLng.lng()
-        console.log(lat, lng)
-    }
 
     componentDidMount = () => {
         if (navigator.geolocation) {
@@ -108,6 +98,19 @@ class MapContainer extends Component {
         }
     };
 
+    state = { mark: false }
+
+    handleMarker = ({ lat, lng }) => {
+        console.log(lat, lng)
+        this.setState({
+            currentlocation: {
+                lat: lat,
+                lng: lng
+            }
+        })
+        this.setState({ mark: true })
+    }
+
     render() {
         return (
             <div class="map-responsive">
@@ -120,7 +123,7 @@ class MapContainer extends Component {
                         center={this.state.currentlocation}
                         zoom={this.state.zoom}
                         options={{ styles }}
-                        onClick={this.handleClickedMap}
+                        onClick={this.handleMarker}
                     >
                         {this.state.show &&
                             <Marker
@@ -129,7 +132,13 @@ class MapContainer extends Component {
                             >
                             </Marker>
                         }
-
+                        {this.state.mark &&
+                            <Marker
+                                lat={this.state.currentlocation.lat}
+                                lng={this.state.currentlocation.lng}
+                            >
+                            </Marker>
+                        }
                     </GoogleMapReact>
 
                     {/* <CurrentLocation centerAroundCurrentLocation google={this.props.google} >

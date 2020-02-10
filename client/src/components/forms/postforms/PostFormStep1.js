@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
+
+  constructor(props) {
+    super(props);
+  };
 
   continue = e => {
     e.preventDefault();
@@ -20,6 +25,7 @@ class PostFormStep1 extends Component {
           <div className="form-group">
             <input type="text" className="form-control" onChange={handleChange('location')} defaultValue={values.location} placeholder="ตำแหน่งที่จอดรถ" />
           </div>
+          <MapContainer/>
           <h6>ขั้นตอนที่ 1</h6>
           <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
           <div className="row">
