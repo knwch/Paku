@@ -5,9 +5,11 @@ import store from "./redux/store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./redux/actions/authActions";
+import { clearCurrentProfile } from './redux/actions/profileActions';
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import PrivateRoute from './components/common/PrivateRoute';
 
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
@@ -35,7 +37,8 @@ if (localStorage.jwtToken) {
   if (decoded.exp < currentTime) {
     // Logout user
     store.dispatch(logoutUser());
-    // TODO: Clear current Profile
+    // Clear current Profile
+    store.dispatch(clearCurrentProfile());
     // Redirect to login
     window.location.href = "/login";
   }
@@ -52,12 +55,13 @@ class App extends Component {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/post" component={Post} />
-              <Route exact path="/rent" component={Rent} />
-              <Route exact path="/book" component={Book} />
+              <PrivateRoute exact path="/post" component={Post} />
+              <PrivateRoute exact path="/rent" component={Rent} />
+              <PrivateRoute exact path="/book" component={Book} />
               <Route exact path="/owner" component={Owner} />
-              <Route exact path="/profile" component={Profile} />
+              <PrivateRoute exact path="/profile" component={Profile} />
               <Route exact path="/support" component={Support} />
+              {/* <Route exact path="/not-found" component={NotFound} /> */}
             </Switch>
             <Footer />
           </div>

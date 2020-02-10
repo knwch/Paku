@@ -78,10 +78,10 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
     )
 });
 
-// @route   GET api/profile/:userName
+// @route   GET api/profile/handle/:userName
 // @desc    Get the profile data of the params passed
 // @access  Private
-router.get('/:userName', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/handle/:userName', passport.authenticate('jwt', { session: false }), (req, res) => {
     let errors = {};
 
     User.findOne({ username: req.parms.userName })
