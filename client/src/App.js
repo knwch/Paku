@@ -46,7 +46,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-        <NavMenu />
+          <NavMenu />
           <div className="App">
             <Switch>
               <Route exact path="/" component={Home} />

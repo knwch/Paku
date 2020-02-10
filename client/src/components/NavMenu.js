@@ -35,7 +35,7 @@ class NavMenu extends Component {
         );
 
         return (
-            <div className="mb-4">
+            <div className="mt-3 mb-5 mx-3">
                 <Navbar className="justify-content-center" expand="sm">
                     <div className="d-flex w-50 mr-auto">
                         <Navbar.Brand href="/">

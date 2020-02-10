@@ -59,6 +59,7 @@ class Register extends Component {
 
   componentDidMount() {
     document.title = "🐤 register"
+    document.body.classList.add('Background-Brown');
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/');
     }
@@ -116,8 +117,11 @@ class Register extends Component {
     return (
       <Responsive>
         <Container fluid>
-          <Grid className='mb-4' centered>
-            <Grid.Column mobile={14} tablet={7} computer={6}>
+          <Grid className='mb-4'>
+
+            <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
+
+            <Grid.Column mobile={16} tablet={7} computer={6}>
 
               <h4 className="text-center mb-4"><div>ลงทะเบียน</div></h4>
               <Form className="text-left">
@@ -132,22 +136,27 @@ class Register extends Component {
                   {errors.username = ''}
                 </Form.Field>
 
-                <Form.Field>
-                  <Input fluid iconPosition='left' placeholder='สร้างรหัสผ่าน'>
-                    <Icon name='unlock' />
-                    <input type="password" onChange={this.handleChange('password')} defaultValue={this.state.password} />
-                  </Input>
-                  {this.validator.message('รหัสผ่าน', this.state.password, 'required|min:6,string|max:30,string')}
-                </Form.Field>
+                <Form.Group widths='equal'>
 
-                <Form.Field>
-                  <Input fluid iconPosition='left' placeholder='ยืนยันรหัสผ่าน'>
-                    <Icon name='unlock alternate' />
-                    <input type="password" onChange={this.handleChange('confirmpassword')} defaultValue={this.state.confirmpassword} />
-                  </Input>
-                  {this.validator.message('ยืนยันรหัสผ่าน', this.state.confirmpassword, `required|in:${this.state.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })}
-                </Form.Field>
+                  <Form.Field>
+                    <Input fluid iconPosition='left' placeholder='สร้างรหัสผ่าน'>
+                      <Icon name='unlock' />
+                      <input type="password" onChange={this.handleChange('password')} defaultValue={this.state.password} />
+                    </Input>
+                    {this.validator.message('รหัสผ่าน', this.state.password, 'required|min:6,string|max:30,string')}
+                  </Form.Field>
 
+                  <Form.Field>
+                    <Input fluid iconPosition='left' placeholder='ยืนยันรหัสผ่าน'>
+                      <Icon name='unlock alternate' />
+                      <input type="password" onChange={this.handleChange('confirmpassword')} defaultValue={this.state.confirmpassword} />
+                    </Input>
+                    {this.validator.message('ยืนยันรหัสผ่าน', this.state.confirmpassword, `required|in:${this.state.password}`, { messages: { in: 'รหัสผ่านไม่ตรงกัน' } })}
+                  </Form.Field>
+
+                </Form.Group>
+
+                <small className='mb-1'>กรุณากรอกชื่อ และนามสกุลจริงของคุณ</small>
                 <Form.Group widths='equal'>
 
                   <Form.Field>

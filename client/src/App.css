@@ -4,6 +4,18 @@
   font-family: 'Mitr', sans-serif;
 }
 
+.Background-Yellow {
+  background-image: url(./components/imgs/background/Yellow.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Background-Brown {
+  background-image: url(./components/imgs/background/Brown.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .map-responsive {
   overflow:hidden;
   padding-bottom:100%;

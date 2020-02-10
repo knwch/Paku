@@ -41,6 +41,7 @@ class Login extends Component {
 
   componentDidMount() {
     document.title = '🐤 Login';
+    document.body.classList.add('Background-Brown');
     if (this.props.location.state) {
       this.handleRegistModal();
       this.props.history.replace({ state: false })
@@ -122,8 +123,11 @@ class Login extends Component {
     return (
       <Responsive>
         <Container fluid>
-          <Grid className='mb-4' centered>
-            <Grid.Column mobile={14} tablet={7} computer={6}>
+          <Grid className='mb-4'>
+
+            <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
+
+            <Grid.Column mobile={16} tablet={7} computer={6}>
               <h4 className="text-center mb-4">เข้าสู่ระบบ</h4>
               <Form>
 

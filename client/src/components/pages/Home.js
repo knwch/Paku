@@ -6,6 +6,7 @@ import { Grid } from 'semantic-ui-react';
 class Home extends Component {
   componentDidMount(){
     document.title = "🐤 Paku"
+    document.body.classList.add('Background-Yellow');
   }
   
   render() {
