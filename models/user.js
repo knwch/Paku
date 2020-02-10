@@ -30,15 +30,10 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // photo_user: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
-    // age: {
-    //     type: Number,
-    //     min: 18,
-    //     required: true
-    // },
+    photo_user: {
+        type: String,
+        default: 'https://uppic.cc/d/6SMp'
+    },
     aboutMe : {
         type: String
     },
