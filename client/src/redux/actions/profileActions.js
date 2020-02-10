@@ -4,7 +4,9 @@ import {
     GET_PROFILE, 
     PROFILE_LOADING, 
     CLEAR_CURRENT_PROFILE, 
-    GET_PROFILES 
+    GET_PROFILES, 
+    SET_CURRENT_USER,
+    GET_ERRORS
 } from './types';
 
 // Get Current profile
@@ -24,6 +26,59 @@ export const getCurrentProfile = () => dispatch => {
             })
         });
 }
+
+// Get profile by handle
+export const getProfileByHandle = handle => dispatch => {
+    dispatch(setProfileLoading());
+    axios.get(`/api/profile/handle/${handle}`)
+        .then(res => {
+            dispatch({
+                type: GET_PROFILE,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_PROFILE,
+                payload: null
+            })
+        })
+}
+
+// Get all profile
+export const getProfiles = () => dispatch => {
+    dispatch(setProfileLoading());
+    axios.get('/api/profile/all')
+        .then((res) => {
+            dispatch({
+                type: GET_PROFILES,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_PROFILES,
+                payload: null
+            })
+        })
+}
+
+// Delete account, profile, post
+export const deleteAccount = () => dispatch => {
+    axios.delete('/api/profile/delete')
+        .then((res) => {
+            dispatch({
+                type: SET_CURRENT_USER,
+                payload: {}
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+};
 
 // Profile loading
 export const setProfileLoading = () => {

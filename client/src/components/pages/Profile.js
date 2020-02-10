@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
 import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
+import { getCurrentProfile } from '../../redux/actions/profileActions';
+import { connect } from 'react-redux';
 
 class Profile extends Component {
-
     constructor(props) {
         super(props);
+
         this.state = {
-            username: "usertestssss",
-            firstname: "ชื่อจริง",
-            lastname: "นามสกุล",
-            rate: "4.93",
-            about: "asdfasdfasdfasdfasdf",
-            email: "abcd@mail.co",
-            phone: "0915466421"
+            username: "",
+            firstname: "",
+            lastname: "",
+            rate: "",
+            about: "",
+            email: "",
+            phone: "",
+            photo: null,
+            errors: {}
         };
 
         this.validator = new SimpleReactValidator({
@@ -24,6 +28,32 @@ class Profile extends Component {
                 phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
             }
         });
+    }
+
+    componentDidMount() {
+        document.title = "🐤 Profile"
+        this.props.getCurrentProfile();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+
+        if (nextProps.profile.profile) {
+            const profile = nextProps.profile.profile;
+
+            this.setState({
+                username: profile.username,
+                firstname: profile.name.firstname,
+                lastname: profile.name.lastname,
+                rate: profile.rate,
+                about: profile.aboutMe,
+                email: profile.email,
+                phone: profile.phone,
+                photo: profile.photo_user
+            })
+        }
     }
 
     onSubmit = e => {
@@ -36,10 +66,6 @@ class Profile extends Component {
             // you can use the autoForceUpdate option to do this automatically`
             this.forceUpdate();
         }
-    }
-
-    componentDidMount() {
-        document.title = "🐤 Profile"
     }
 
     // Handle fields change
@@ -61,7 +87,7 @@ class Profile extends Component {
                         <Grid.Column mobile={15} tablet={5} computer={5}>
                             <Card fluid>
                                 <Card.Content>
-                                    <Image src={require('../imgs/Logo.png')} size='small' centered wrapped />
+                                    <Image src={this.state.photo} size='small' centered wrapped />
                                     <Divider />
                                     <Card.Description textAlign='left' className='pb-1'>
                                         <Icon name='yellow star' />
@@ -180,4 +206,9 @@ function RecommendCardList() {
     );
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+    profile: state.profile
+  });
+  
+export default connect(mapStateToProps, { getCurrentProfile })(Profile);
+  
