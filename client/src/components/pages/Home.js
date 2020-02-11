@@ -4,7 +4,8 @@ import SearchBox from '../SearchBox';
 import { Grid } from 'semantic-ui-react';
 
 class Home extends Component {
-  componentDidMount(){
+
+  componentDidMount() {
     document.title = "🐤 Paku"
     document.body.classList.add('Background-Yellow');
   }
@@ -13,15 +14,8 @@ class Home extends Component {
     return (
       <div>
         <SearchBox />
-        <div className="container-fluid">
-          <div className="text-left">
-            <h4>รู้จักกับ PAKU</h4>
-            <p>บริก ารจองที่จอดรถล่วงหน้า
-              ที่จะทำให้คุณหมดปัญหาเรื่องหาที่จอดรถไม่ได้
-            คุณสามารถจองที่จอดรถล่วงหน้าได้สูงสุด 2 วัน<br />
-              ไม่ว่างานสำคัญ หรือจะเที่ยว ก็หายห่วงเรื่องรถได้เลย</p>
-          </div>
-          <div className="text-left">
+        <div className="container-fluid mt-5">
+          <div className="text-left mb-4">
             <h4>ที่จอดรถแนะนำ</h4>
           </div>
           <Grid textAlign='center' columns={4}>
