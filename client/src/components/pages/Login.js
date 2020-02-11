@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Modal, Header, Image, Transition } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Modal, Header, Loader, Transition } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { loginUser } from '../../redux/actions/authActions';
@@ -54,6 +54,7 @@ class Login extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/');
+      document.body.classList.remove('Background-Brown');
     }
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -67,6 +68,7 @@ class Login extends Component {
   onSubmit(e) {
     if (this.validator.fieldValid('รหัสผ่าน') && this.validator.fieldValid('ชื่อผู้ใช้')) {
       e.preventDefault();
+      this.handleLoaderModal();
       const userData = {
         username: this.state.username,
         password: this.state.password
@@ -82,7 +84,8 @@ class Login extends Component {
 
 
   state = {
-    modalRegist: false
+    modalRegist: false,
+    modalLoader: false
   }
 
   handleRegistModal = () => {
@@ -90,6 +93,10 @@ class Login extends Component {
     setTimeout(function () {
       this.setState({ modalRegist: false })
     }.bind(this), 2250);
+  }
+
+  handleLoaderModal = () => {
+    this.setState({ modalLoader: true })
   }
 
   successRegistModal = () => {
@@ -147,6 +154,15 @@ class Login extends Component {
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
                   {this.validator.message('errors', errors.username | errors.password, 'error')}
                 </Form.Field>
+
+                <Modal
+                  open={this.state.modalLoader}
+                  className="modal-paku"
+                  size='mini'
+                  basic
+                >
+                  <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
+                </Modal>
 
                 <div className='text-center'>
                   <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>

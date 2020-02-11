@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header, Transition } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header, Transition, Loader, Segment } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../redux/actions/authActions';
@@ -74,6 +74,7 @@ class Register extends Component {
   onSubmit = e => {
     if (this.validator.allValid()) {
       e.preventDefault();
+      this.handleLoaderModal();
       const newUser = {
         username: this.state.username,
         password: this.state.password,
@@ -104,7 +105,11 @@ class Register extends Component {
 
   state = {
     modalOpen: false,
-    modalRegist: false
+    modalLoader: false
+  }
+
+  handleLoaderModal = () => {
+    this.setState({ modalLoader: true })
   }
 
   handleOpenModal = () => this.setState({ modalOpen: true })
@@ -230,6 +235,15 @@ class Register extends Component {
                       ปิด <Icon name='right chevron' />
                     </Button>
                   </Modal.Actions>
+                </Modal>
+
+                <Modal
+                  open={this.state.modalLoader}
+                  className="modal-paku"
+                  size='mini'
+                  basic
+                >
+                  <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
                 </Modal>
 
                 <div className='d-flex justify-content-end'>
