@@ -163,6 +163,7 @@ class MapContainer extends Component {
                         </InfoWindow>
                     </CurrentLocation>
                     {this.displayMarkers()} */}
+                    
                 </div>
             </div>
         );
