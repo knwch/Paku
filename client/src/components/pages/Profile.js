@@ -73,11 +73,23 @@ class Profile extends Component {
         this.setState({ [input]: e.target.value });
     };
 
-    state = { modalOpen: false }
+    state = {
+        modalOpen: false,
+        filename: ""
+    }
 
     handleOpenModal = () => this.setState({ modalOpen: true })
 
     handleCloseModal = () => this.setState({ modalOpen: false })
+
+    fileInputRef = React.createRef();
+
+    fileChange = e => {
+        this.setState({ file: e.target.files[0] }, () => {
+            console.log("File chosen --->", this.state.file);
+            this.setState({ filename: this.state.file.name });
+        });
+    };
 
     render() {
         return (
@@ -88,6 +100,19 @@ class Profile extends Component {
                             <Card fluid>
                                 <Card.Content>
                                     <Image src={this.state.photo} size='small' centered wrapped />
+                                    <Button 
+                                    onClick={this.handleOpenModal} 
+                                    basic 
+                                    circular 
+                                    icon='photo' 
+                                    floated='right'
+                                    onClick={() => this.fileInputRef.current.click()} />
+                                    <input
+                                        ref={this.fileInputRef}
+                                        type="file"
+                                        hidden
+                                        onChange={this.fileChange}
+                                    />
                                     <Divider />
                                     <Card.Description textAlign='left' className='pb-1'>
                                         <Icon name='yellow star' />
@@ -154,7 +179,7 @@ class Profile extends Component {
                                         </Input>
                                     </Form.Field>
                                     <Form.Field>
-                                        <TextArea rows={3} placeholder='Tell us more' onChange={this.handleChange('about')} defaultValue={this.state.about} />
+                                        <TextArea rows={3} placeholder='ฟหกด่าสว' onChange={this.handleChange('about')} defaultValue={this.state.about} />
                                     </Form.Field>
                                     <Form.Field>
                                         <Input fluid iconPosition='left' placeholder={this.state.phone}>
@@ -176,7 +201,7 @@ class Profile extends Component {
                     </Modal>
 
                 </Container>
-            </Responsive>
+            </Responsive >
         );
     }
 }
@@ -208,7 +233,7 @@ function RecommendCardList() {
 
 const mapStateToProps = state => ({
     profile: state.profile
-  });
-  
+});
+
 export default connect(mapStateToProps, { getCurrentProfile })(Profile);
-  
+
