@@ -52,22 +52,18 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
     
     // Check Validation
     if (!isValid) {
-        // console.log(errors);
+        console.log(errors);
         return res.status(400).json(errors);
     }
 
     User.findById(req.user.id) 
         .then((userData) => { 
-            // userData.name = {
-            //     firstname: req.body.fname,
-            //     lastname: req.body.lname
-            // }
-            // userData.birth = req.body.birth;
             userData.phone = req.body.phone;
-
+            userData.aboutMe = req.body.about;
+            
             userData.save()
                 .then((user) => {
-                    res.json({ success: true });
+                    res.json(user);
                 })
         })
         .catch((err) => {

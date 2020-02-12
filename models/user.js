@@ -35,7 +35,8 @@ let userSchema = new mongoose.Schema({
         default: 'https://uppic.cc/d/6SMp'
     },
     aboutMe : {
-        type: String
+        type: String,
+        default: ' '
     },
     phone: {
         type: String,

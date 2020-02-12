@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
 import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
-import { getCurrentProfile } from '../../redux/actions/profileActions';
+import { getCurrentProfile, editProfile } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 class Profile extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class Profile extends Component {
             firstname: "",
             lastname: "",
             rate: "",
-            about: "",
+            about: " ",
             email: "",
             phone: "",
             photo: null,
@@ -56,10 +57,15 @@ class Profile extends Component {
         }
     }
 
-    onSubmit = e => {
+    onSubmit(e) {
         if (this.validator.allValid()) {
             e.preventDefault();
-            this.handleCloseModal();
+            const newProfile = {
+                about: this.state.about,
+                phone: this.state.phone
+            }
+            this.props.editProfile(newProfile, this.props.history)
+            // this.handleCloseModal();
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -92,6 +98,7 @@ class Profile extends Component {
     };
 
     render() {
+        let errors = this.state.errors
         return (
             <Responsive>
                 <Container fluid>
@@ -188,15 +195,17 @@ class Profile extends Component {
                                         </Input>
                                     </Form.Field>
                                 </Form>
+                                {errors.phone}
                             </Modal.Description>
                         </Modal.Content>
                         <Modal.Actions>
                             <Button color='red' onClick={this.handleCloseModal}>
                                 <Icon name='remove' /> Cancel
                             </Button>
-                            <Button color='green' onClick={this.onSubmit}>
+                            <Button color='green' onClick={(e) => this.onSubmit(e)}>
                                 <Icon name='checkmark' /> Submit
                             </Button>
+                            
                         </Modal.Actions>
                     </Modal>
 
@@ -232,8 +241,9 @@ function RecommendCardList() {
 }
 
 const mapStateToProps = state => ({
-    profile: state.profile
+    profile: state.profile,
+    errors: state.errors
 });
 
-export default connect(mapStateToProps, { getCurrentProfile })(Profile);
+export default connect(mapStateToProps, { getCurrentProfile, editProfile })(withRouter(Profile));
 

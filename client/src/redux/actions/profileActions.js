@@ -63,6 +63,23 @@ export const getProfiles = () => dispatch => {
         })
 }
 
+// Edit profile 
+export const editProfile = (user, history) => dispatch => {
+    axios.post('/api/profile/edit', user)
+        .then((res) => {
+            dispatch({
+                type: GET_PROFILES,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
+
 // Delete account, profile, post
 export const deleteAccount = () => dispatch => {
     axios.delete('/api/profile/delete')
