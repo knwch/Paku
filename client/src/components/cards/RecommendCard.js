@@ -6,7 +6,7 @@ class RecommendCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "aaabbc",
+            name: "aaabbcds",
             rating: "4.93",
             area: "ccc",
             price: "ddd"
@@ -21,9 +21,9 @@ class RecommendCard extends Component {
                 </Card>
                 <Card className='bg-transparent shadow-none mt-0' fluid>
                     <Card.Description textAlign='left' className='d-flex justify-content-between align-items-center pt-2 pb-0'>
-                        <h4>
+                        <h5>
                             {this.state.name}
-                        </h4>
+                        </h5>
                         <small>
                             <Icon name='yellow star' />
                             3.14

@@ -53,7 +53,7 @@ class Home extends Component {
         <SearchBox />
         <div className="container-fluid mt-5">
           <div className="text-left mb-4">
-            <h4>ที่จอดรถแนะนำ</h4>
+            <h4><div>ที่จอดรถแนะนำ</div></h4>
           </div>
           <Grid textAlign='center' columns={4}>
             <Grid.Row>

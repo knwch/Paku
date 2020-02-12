@@ -11,7 +11,7 @@ class Footer extends Component {
                             <small className="d-block mb-3 text-muted">&copy; 2020 PAKU</small>
                         </div>
                         <div className="col-6 col-md">
-                            <h5>Paku</h5>
+                            <h5><div>Paku</div></h5>
                             <ul className="list-unstyled text-small">
                                 <li><a className="text-muted" href="#">ข่าวสาร</a></li>
                                 <li><a className="text-muted" href="#">นโยบาย</a></li>
@@ -20,7 +20,7 @@ class Footer extends Component {
                             </ul>
                         </div>
                         <div className="col-6 col-md">
-                            <h5>ศูนย์ความช่วยเหลือ</h5>
+                            <h5><div>ศูนย์ความช่วยเหลือ</div></h5>
                             <ul className="list-unstyled text-small">
                                 <li><a className="text-muted" href="#">การจองที่จอดรถ</a></li>
                                 <li><a className="text-muted" href="#">การให้เช่าที่จอดรถ</a></li>
@@ -29,7 +29,7 @@ class Footer extends Component {
                             </ul>
                         </div>
                         <div className="col-6 col-md">
-                            <h5>About</h5>
+                            <h5><div>About</div></h5>
                             <ul className="list-unstyled text-small">
                                 <li><a className="text-muted" href="#">Facebook</a></li>
                                 <li><a className="text-muted" href="#">Google+</a></li>

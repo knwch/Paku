@@ -16,6 +16,22 @@
 
 }
 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  font-family: 'Mitr', sans-serif !important;
+}
+
 .Background-Yellow {
   background-image: url(./components/imgs/background/Yellow.png);
   background-repeat: no-repeat;
@@ -79,27 +95,6 @@
 
 .logo-paku {
   width: 2rem;
-}
-
-.search-main {
-  width: 50%;
-  margin: 50px auto;
-}
-
-.has-search .form-control {
-  padding-left: 2.375rem;
-}
-
-.has-search .form-control-feedback {
-  position: absolute;
-  z-index: 2;
-  display: block;
-  width: 2.375rem;
-  height: 2.375rem;
-  line-height: 2.375rem;
-  text-align: center;
-  pointer-events: none;
-  color: #aaa;
 }
 
 .App {
