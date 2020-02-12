@@ -124,7 +124,7 @@ class Register extends Component {
         <Container fluid>
           <Grid className='mb-4'>
 
-            <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
+            <Grid.Row style={{ "margin-top": "14vh" }} only='computer tablet' />
 
             <Grid.Column mobile={16} tablet={7} computer={6}>
 

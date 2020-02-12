@@ -13,21 +13,21 @@ class NavMenu extends Component {
     render() {
         const { isAuthenticated, user } = this.props.auth;
         const guestLinks = (
-            <Nav className="ml-auto nowrap">
-                <Nav.Link href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
-                <Nav.Link href="/rent">จองที่จอดรถ</Nav.Link>
-                <Nav.Link href="/support">ช่วยเหลือ</Nav.Link>
-                <Nav.Link href="/register">ลงทะเบียน</Nav.Link>
-                <Nav.Link href="/login">เข้าสู่ระบบ</Nav.Link>
+            <Nav className="nav-mobile ml-auto nowrap">
+                <Nav.Link className="nav-color" href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color" href="/rent">จองที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color" href="/support">ช่วยเหลือ</Nav.Link>
+                <Nav.Link className="nav-color" href="/register">ลงทะเบียน</Nav.Link>
+                <Nav.Link className="nav-color" href="/login">เข้าสู่ระบบ</Nav.Link>
             </Nav>
         );
         const authLinks = (
             <Nav className="ml-auto nowrap">
-                <Nav.Link href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
-                <Nav.Link href="/rent">จองที่จอดรถ</Nav.Link>
-                <Nav.Link href="/support">ช่วยเหลือ</Nav.Link>
-                <Nav.Link href="/profile">โปรไฟล์</Nav.Link>
-                <Nav.Link onClick={this.onLogout.bind(this)}>ออกจากระบบ</Nav.Link>
+                <Nav.Link className="nav-color" href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color" href="/rent">จองที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color" href="/support">ช่วยเหลือ</Nav.Link>
+                <Nav.Link className="nav-color" href="/profile">โปรไฟล์</Nav.Link>
+                <Nav.Link className="nav-color" onClick={this.onLogout.bind(this)}>ออกจากระบบ</Nav.Link>
             </Nav>
         );
 

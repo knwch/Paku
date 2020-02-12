@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RecommendCard from '../cards/RecommendCard';
+import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Modal, Header, Loader, Transition } from 'semantic-ui-react';
 import SearchBox from '../SearchBox';
-import { Grid } from 'semantic-ui-react';
 
 class Home extends Component {
 
@@ -9,6 +9,43 @@ class Home extends Component {
     document.title = "🐤 Paku"
     document.body.classList.add('Background-Yellow');
   }
+
+  // state = {
+  //   modalLogout: false
+  // }
+
+  // handleLogoutModal = () => {
+  //   this.setState({ modalLogout: true })
+  //   setTimeout(function () {
+  //     this.setState({ modalLogout: false })
+  //   }.bind(this), 2250);
+  // }
+
+  // successLogoutModal = () => {
+  //   return (
+  //     <Modal
+  //       open={this.state.modalLogout}
+  //       className="modal-paku"
+  //       size='mini'
+  //     >
+  //       <Modal.Content>
+  //         <div className='text-center'>
+  //           <Transition
+  //             animation='tada'
+  //             duration={1500}
+  //             transitionOnMount={true}
+  //           >
+  //             <Icon.Group size='big'>
+  //               <Icon loading size='huge' name='circle outline' />
+  //               <Icon size='big' name='check' color='yellow' />
+  //             </Icon.Group>
+  //           </Transition>
+  //           <Header>ลงทะเบียนสำเร็จ</Header>
+  //         </div>
+  //       </Modal.Content>
+  //     </Modal>
+  //   );
+  // }
   
   render() {
     return (

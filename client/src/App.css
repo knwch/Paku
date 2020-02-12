@@ -4,16 +4,36 @@
   font-family: 'Mitr', sans-serif;
 }
 
+@media only screen and (max-width: 600px) {
+
+  .Background-Brown .nav-mobile .nav-color {
+    color: black !important;
+  } 
+
+  .Background-Yellow .nav-mobile .nav-color {
+    color: black !important;
+  } 
+
+}
+
 .Background-Yellow {
   background-image: url(./components/imgs/background/Yellow.png);
   background-repeat: no-repeat;
   background-size: cover;
 }
 
+.Background-Yellow .nav-color {
+  color: black !important;
+}
+
 .Background-Brown {
   background-image: url(./components/imgs/background/Brown.png);
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.Background-Brown .nav-color {
+  color: white !important;
 }
 
 .map-responsive {
