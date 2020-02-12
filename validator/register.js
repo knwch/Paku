@@ -57,7 +57,10 @@ module.exports = validateRegisterInput = (data) => {
         errors.phone = `Phone field is required`;
     }
     if (!Validator.isNumeric(data.phone)) {
-        errors.phone = `Phone must be Intger`;
+        errors.phone = `Phone must be Integer`;
+    }
+    if (!Validator.isLength(data.phone, {min: 10, max: 10})) {
+        errors.phone = `Phone must be 10 number`;
     }
     // if (!Validator.isMobilePhone(data.phone, 'th-TH')) {
     //     errors.phone = `Phone number must be phone number of thailand`;

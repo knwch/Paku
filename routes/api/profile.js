@@ -6,6 +6,9 @@ const passport = require('passport');
 const User = require('../../models/user');
 const Post = require('../../models/post');
 
+// import input validation
+const validateEditProfile = require('../../validator/edit');
+
 // @route       GET api/profile/test
 // @desc        Default Route
 // @access      Public
@@ -45,12 +48,20 @@ router.get('/alluser', (req, res) => {
 // @desc    post edit users profile
 // @access  Private
 router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { errors, isValid } = validateEditProfile(req.body);
+    
+    // Check Validation
+    if (!isValid) {
+        // console.log(errors);
+        return res.status(400).json(errors);
+    }
+
     User.findById(req.user.id) 
         .then((userData) => { 
-            userData.name = {
-                firstname: req.body.fname,
-                lastname: req.body.lname
-            }
+            // userData.name = {
+            //     firstname: req.body.fname,
+            //     lastname: req.body.lname
+            // }
             // userData.birth = req.body.birth;
             userData.phone = req.body.phone;
 
