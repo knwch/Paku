@@ -11,6 +11,8 @@ class Profile extends Component {
         super(props);
 
         this.state = {
+            formOpen: false,
+            filename: "",
             username: "",
             firstname: "",
             lastname: "",
@@ -65,7 +67,7 @@ class Profile extends Component {
                 phone: this.state.phone
             }
             this.props.editProfile(newProfile, this.props.history)
-            // this.handleCloseModal();
+            this.handleCloseForm();
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -79,14 +81,9 @@ class Profile extends Component {
         this.setState({ [input]: e.target.value });
     };
 
-    state = {
-        modalOpen: false,
-        filename: ""
-    }
+    handleOpenForm = () => this.setState({ formOpen: true })
 
-    handleOpenModal = () => this.setState({ modalOpen: true })
-
-    handleCloseModal = () => this.setState({ modalOpen: false })
+    handleCloseForm = () => this.setState({ formOpen: false })
 
     fileInputRef = React.createRef();
 
@@ -97,6 +94,85 @@ class Profile extends Component {
         });
     };
 
+    ProfileForm = (temp) => {
+        switch (temp) {
+            case false:
+                return (
+                    <div>
+                        <Card.Description textAlign='left'>
+                            {this.state.firstname + ' ' + this.state.lastname}
+                        </Card.Description>
+
+                        <Card.Description textAlign='left' className='pb-1'>
+                            <Icon name='yellow star' />
+                            {this.state.rate}
+                        </Card.Description>
+
+                        <Card.Description textAlign='left'>
+                            {this.state.username}
+                        </Card.Description>
+
+                        <Card.Description textAlign='left'>
+                            {this.state.about}
+                        </Card.Description>
+
+                        <Card.Description textAlign='left' className='pb-1'>
+                            <Icon name='phone' flipped='horizontally' />
+                            {this.state.phone}
+                        </Card.Description>
+
+                        <Card.Description textAlign='left' className='pb-1'>
+                            <Icon name='mail' />
+                            {this.state.email}
+                        </Card.Description>
+
+                        <Button onClick={this.handleOpenForm} basic circular icon='edit outline' floated='right'></Button>
+
+                    </div>
+                );
+            case true:
+                return (
+                    <div>
+                        <Form className="text-left">
+                            <Form.Field>
+                                <Input transparent fluid iconPosition='left' defaultValue={this.state.firstname + ' ' + this.state.lastname} disabled>
+                                    <Icon name='vcard' />
+                                    <input type="text" />
+                                </Input>
+                            </Form.Field>
+                            <Form.Field>
+                                <Input transparent fluid iconPosition='left' defaultValue={this.state.username} disabled>
+                                    <Icon name='user' />
+                                    <input type="text" />
+                                </Input>
+                            </Form.Field>
+                            <Form.Field>
+                                <TextArea rows={3} placeholder='ฟหกด่าสว' onChange={this.handleChange('about')} defaultValue={this.state.about} />
+                            </Form.Field>
+                            <Form.Field>
+                                <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
+                                    <Icon name='phone' flipped='horizontally' />
+                                    <input type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
+                                </Input>
+                            </Form.Field>
+                            <Form.Field>
+                                <Input transparent fluid iconPosition='left' defaultValue={this.state.email} disabled>
+                                    <Icon name='mail' />
+                                    <input type="text" />
+                                </Input>
+                            </Form.Field>
+                            <Button color='red' onClick={this.handleCloseForm}>
+                                <Icon name='remove' /> Cancel
+                        </Button>
+                            <Button color='green' onClick={(e) => this.onSubmit(e)}>
+                                <Icon name='checkmark' /> Submit
+                        </Button>
+                        </Form>
+                    </div>
+                );
+        }
+    }
+
     render() {
         let errors = this.state.errors
         return (
@@ -105,109 +181,39 @@ class Profile extends Component {
                     <Grid className='mb-4' centered>
                         <Grid.Column mobile={15} tablet={5} computer={5}>
                             <Card fluid>
+
                                 <Card.Content>
                                     <Image src={this.state.photo} size='small' centered wrapped />
-                                    <Button 
-                                    onClick={this.handleOpenModal} 
-                                    basic 
-                                    circular 
-                                    icon='photo' 
-                                    floated='right'
-                                    onClick={() => this.fileInputRef.current.click()} />
+                                    <Button
+                                        onClick={this.handleOpenModal}
+                                        basic
+                                        circular
+                                        icon='photo'
+                                        floated='right'
+                                        onClick={() => this.fileInputRef.current.click()} />
                                     <input
                                         ref={this.fileInputRef}
                                         type="file"
                                         hidden
                                         onChange={this.fileChange}
                                     />
+
                                     <Divider />
-                                    <Card.Description textAlign='left' className='pb-1'>
-                                        <Icon name='yellow star' />
-                                        {this.state.rate}
-                                    </Card.Description>
-                                    <Card.Description textAlign='left' className='pb-1'>
-                                        <Icon name='phone' flipped='horizontally' />
-                                        {this.state.phone}
-                                    </Card.Description>
-                                    <Card.Description textAlign='left' className='pb-1'>
-                                        <Icon name='mail' />
-                                        {this.state.email}
-                                    </Card.Description>
+
+                                    {this.ProfileForm(this.state.formOpen)}
+
                                 </Card.Content>
+
                             </Card>
                         </Grid.Column>
                         <Grid.Column mobile={15} tablet={11} computer={11}>
                             <Card fluid>
                                 <Card.Content>
-                                    <Card.Header textAlign='left'>
-                                        {this.state.username}
-                                        <Button onClick={this.handleOpenModal} basic circular icon='edit outline' floated='right'></Button>
-                                    </Card.Header>
-                                    <Card.Description textAlign='left'>
-                                        {this.state.firstname + ' ' + this.state.lastname}
-                                    </Card.Description>
-                                    <Card.Description textAlign='left'>
-                                        {this.state.about}
-                                    </Card.Description>
-                                    <Divider />
                                     <RecommendCardList />
                                 </Card.Content>
                             </Card>
                         </Grid.Column>
                     </Grid>
-
-                    <Modal
-                        open={this.state.modalOpen}
-                        onClose={this.handleCloseModal}
-                        className="modal-paku"
-                        closeOnDimmerClick={false}
-                        size='small'
-                    >
-                        <Modal.Header>แก้ไขข้อมูลส่วนตัว</Modal.Header>
-                        <Modal.Content>
-                            <Modal.Description>
-                                <Form className="text-left">
-                                    <Form.Field>
-                                        <Input fluid iconPosition='left' defaultValue={this.state.username} disabled>
-                                            <Icon name='user' />
-                                            <input type="text" />
-                                        </Input>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Input fluid iconPosition='left' defaultValue={this.state.firstname + ' ' + this.state.lastname} disabled>
-                                            <Icon name='vcard' />
-                                            <input type="text" />
-                                        </Input>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Input fluid iconPosition='left' defaultValue={this.state.email} disabled>
-                                            <Icon name='mail' />
-                                            <input type="text" />
-                                        </Input>
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <TextArea rows={3} placeholder='ฟหกด่าสว' onChange={this.handleChange('about')} defaultValue={this.state.about} />
-                                    </Form.Field>
-                                    <Form.Field>
-                                        <Input fluid iconPosition='left' placeholder={this.state.phone}>
-                                            <Icon name='phone' flipped='horizontally' />
-                                            <input type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
-                                        </Input>
-                                    </Form.Field>
-                                </Form>
-                                {errors.phone}
-                            </Modal.Description>
-                        </Modal.Content>
-                        <Modal.Actions>
-                            <Button color='red' onClick={this.handleCloseModal}>
-                                <Icon name='remove' /> Cancel
-                            </Button>
-                            <Button color='green' onClick={(e) => this.onSubmit(e)}>
-                                <Icon name='checkmark' /> Submit
-                            </Button>
-                            
-                        </Modal.Actions>
-                    </Modal>
 
                 </Container>
             </Responsive >
