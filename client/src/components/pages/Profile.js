@@ -13,6 +13,7 @@ class Profile extends Component {
         super(props);
 
         this.state = {
+            modalOpen: false,
             formOpen: false,
             filename: "",
             username: "",
@@ -35,6 +36,8 @@ class Profile extends Component {
             }
         });
     }
+
+    fileInputRef = React.createRef();
 
     componentDidMount() {
         document.title = "🐤 Profile"
@@ -88,6 +91,10 @@ class Profile extends Component {
 
     handleCloseForm = () => this.setState({ formOpen: false })
 
+    handleOpenModal = () => this.setState({ modalOpen: true })
+
+    handleCloseModal = () => this.setState({ modalOpen: false })
+
     fileChange = e => {
         let file = e.target.files[0];
         let err = {}
@@ -95,8 +102,8 @@ class Profile extends Component {
 
         // console.log(file.type);
         if (types.every(type => file.type !== type)) {
-            
-            err = { photo : "Image is not a supported format"}
+
+            err = { photo: "Image is not a supported format" }
             this.setState({
                 errors: err
             });
@@ -117,40 +124,40 @@ class Profile extends Component {
         let currentImageName = "firebase-image-" + Date.now();
 
         let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.temp);
-        
-        uploadImage.on('state_changed',
-        (snapshot) => { },
-        (error) => {
-            alert(error);
-        },
-        () => {
-            storage.ref('images').child(currentImageName).getDownloadURL()
-            .then(url => {
-                this.setState({
-                firebaseImg: url
-                })
 
-                imageObj = {
-                    imageURL: url
-                }
-                // console.log(imageObj);
-                
-                axios.post('/api/profile/upload', imageObj)
-                    .then((data) => {
-                        if (data.success) {
-                            this.setState({
-                                photo: data.imageURL
-                            })
-                        }
-                    })  
-                    .catch((err) => {
+        uploadImage.on('state_changed',
+            (snapshot) => { },
+            (error) => {
+                alert(error);
+            },
+            () => {
+                storage.ref('images').child(currentImageName).getDownloadURL()
+                    .then(url => {
                         this.setState({
-                            ...this.state,
-                            errors: err.respons.data
+                            firebaseImg: url
                         })
+
+                        imageObj = {
+                            imageURL: url
+                        }
+                        // console.log(imageObj);
+
+                        axios.post('/api/profile/upload', imageObj)
+                            .then((data) => {
+                                if (data.success) {
+                                    this.setState({
+                                        photo: data.imageURL
+                                    })
+                                }
+                            })
+                            .catch((err) => {
+                                this.setState({
+                                    ...this.state,
+                                    errors: err.respons.data
+                                })
+                            })
                     })
-            })
-        }
+            }
         )
     }
 
@@ -244,22 +251,51 @@ class Profile extends Component {
 
                                 <Card.Content>
                                     <Image src={this.state.photo} size='small' centered wrapped />
-                                    {/* <Button
-                                        onClick={this.handleOpenModal}
+                                    <Button
                                         basic
                                         circular
                                         icon='photo'
                                         floated='right'
-                                        onClick={() => this.fileInputRef.current.click()} />
+                                        onClick={() => this.fileInputRef.current.click()}
+                                    />
+                                    {/* <Button
+                                        basic
+                                        circular
+                                        icon='photo'
+                                        floated='right'
+                                        onClick={this.handleOpenModal}
+                                    /> */}
                                     <input
                                         ref={this.fileInputRef}
                                         type="file"
                                         hidden
                                         onChange={this.fileChange}
-                                    /> */}
-                                    <input type="file" onChange={ this.fileChange } />
+                                    />
                                     <button onClick={(e) => this.handleUpload(e)}>Upload</button>
-                                    { errors.photo }
+                                    {errors.photo}
+
+                                    {/* <Modal
+                                        open={this.state.modalRegist}
+                                        className="modal-paku"
+                                        size='mini'
+                                    >
+                                        <Modal.Content>
+                                            <div className='text-center'>
+                                                <Transition
+                                                    animation='tada'
+                                                    duration={1500}
+                                                    transitionOnMount={true}
+                                                >
+                                                    <Icon.Group size='big'>
+                                                        <Icon loading size='huge' name='circle outline' />
+                                                        <Icon size='big' name='check' color='yellow' />
+                                                    </Icon.Group>
+                                                </Transition>
+                                                <Header>ลงทะเบียนสำเร็จ</Header>
+                                            </div>
+                                        </Modal.Content>
+                                    </Modal> */}
+
                                     <Divider />
 
                                     {this.ProfileForm(this.state.formOpen)}
