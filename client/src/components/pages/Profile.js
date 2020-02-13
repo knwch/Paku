@@ -17,7 +17,7 @@ class Profile extends Component {
             firstname: "",
             lastname: "",
             rate: "",
-            about: " ",
+            about: "",
             email: "",
             phone: "",
             photo: null,
@@ -99,29 +99,29 @@ class Profile extends Component {
             case false:
                 return (
                     <div>
-                        <Card.Description textAlign='left'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             {this.state.firstname + ' ' + this.state.lastname}
                         </Card.Description>
 
-                        <Card.Description textAlign='left' className='pb-1'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             <Icon name='yellow star' />
                             {this.state.rate}
                         </Card.Description>
 
-                        <Card.Description textAlign='left'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             {this.state.username}
                         </Card.Description>
 
-                        <Card.Description textAlign='left'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             {this.state.about}
                         </Card.Description>
 
-                        <Card.Description textAlign='left' className='pb-1'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             <Icon name='phone' flipped='horizontally' />
                             {this.state.phone}
                         </Card.Description>
 
-                        <Card.Description textAlign='left' className='pb-1'>
+                        <Card.Description className='pb-1' textAlign='left'>
                             <Icon name='mail' />
                             {this.state.email}
                         </Card.Description>
@@ -163,7 +163,7 @@ class Profile extends Component {
                             </Form.Field>
                             <Button color='red' onClick={this.handleCloseForm}>
                                 <Icon name='remove' /> Cancel
-                        </Button>
+                            </Button>
                             <Button color='green' onClick={(e) => this.onSubmit(e)}>
                                 <Icon name='checkmark' /> Submit
                         </Button>
