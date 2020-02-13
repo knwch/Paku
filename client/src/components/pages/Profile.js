@@ -113,7 +113,7 @@ class Profile extends Component {
                 photo: URL.createObjectURL(file),
                 temp: file
             });
-            alert("No!!")
+            // alert("No!!")
         }
     };
 
