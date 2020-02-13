@@ -5,6 +5,8 @@ import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Resp
 import { getCurrentProfile, editProfile } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { storage } from '../../config/firebase-config';
+import axios from 'axios';
 
 class Profile extends Component {
     constructor(props) {
@@ -20,6 +22,7 @@ class Profile extends Component {
             about: "",
             email: "",
             phone: "",
+            temp: "",
             photo: null,
             errors: {}
         };
@@ -85,14 +88,71 @@ class Profile extends Component {
 
     handleCloseForm = () => this.setState({ formOpen: false })
 
-    fileInputRef = React.createRef();
-
     fileChange = e => {
-        this.setState({ file: e.target.files[0] }, () => {
-            console.log("File chosen --->", this.state.file);
-            this.setState({ filename: this.state.file.name });
-        });
+        let file = e.target.files[0];
+        let err = {}
+        const types = ['image/png', 'image/jpeg', 'image/jpg']
+
+        // console.log(file.type);
+        if (types.every(type => file.type !== type)) {
+            
+            err = { photo : "Image is not a supported format"}
+            this.setState({
+                errors: err
+            });
+            // alert("Yes!!")
+        } else {
+            this.setState({
+                photo: URL.createObjectURL(file),
+                temp: file
+            });
+            alert("No!!")
+        }
     };
+
+    handleUpload(e) {
+        e.preventDefault();
+        let imageObj = {};
+
+        let currentImageName = "firebase-image-" + Date.now();
+
+        let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.temp);
+        
+        uploadImage.on('state_changed',
+        (snapshot) => { },
+        (error) => {
+            alert(error);
+        },
+        () => {
+            storage.ref('images').child(currentImageName).getDownloadURL()
+            .then(url => {
+                this.setState({
+                firebaseImg: url
+                })
+
+                imageObj = {
+                    imageURL: url
+                }
+                // console.log(imageObj);
+                
+                axios.post('/api/profile/upload', imageObj)
+                    .then((data) => {
+                        if (data.success) {
+                            this.setState({
+                                photo: data.imageURL
+                            })
+                        }
+                    })  
+                    .catch((err) => {
+                        this.setState({
+                            ...this.state,
+                            errors: err.respons.data
+                        })
+                    })
+            })
+        }
+        )
+    }
 
     ProfileForm = (temp) => {
         switch (temp) {
@@ -184,7 +244,7 @@ class Profile extends Component {
 
                                 <Card.Content>
                                     <Image src={this.state.photo} size='small' centered wrapped />
-                                    <Button
+                                    {/* <Button
                                         onClick={this.handleOpenModal}
                                         basic
                                         circular
@@ -196,8 +256,10 @@ class Profile extends Component {
                                         type="file"
                                         hidden
                                         onChange={this.fileChange}
-                                    />
-
+                                    /> */}
+                                    <input type="file" onChange={ this.fileChange } />
+                                    <button onClick={(e) => this.handleUpload(e)}>Upload</button>
+                                    { errors.photo }
                                     <Divider />
 
                                     {this.ProfileForm(this.state.formOpen)}

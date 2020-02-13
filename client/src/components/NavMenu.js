@@ -9,9 +9,9 @@ class NavMenu extends Component {
 
     onLogout(e) {
         e.preventDefault();
+        window.location.href = "/";
         this.props.clearCurrentProfile();
         this.props.logoutUser();
-        window.location.href = "/";
     }
 
     render() {
