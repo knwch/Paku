@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header, Transition, Loader, Segment } from 'semantic-ui-react';
+import { Responsive, Container, Icon, Input, Button, Label, Form, Grid, Checkbox, Modal, Header, Transition, Loader } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../redux/actions/authActions';
@@ -195,7 +195,7 @@ class Register extends Component {
                 <Form.Field>
                   <Input fluid iconPosition='left' placeholder='เบอร์โทรศัพท์'>
                     <Icon name='phone' flipped='horizontally' />
-                    <input type="text" onChange={this.handleChange('telephone')} defaultValue={this.state.telephone} />
+                    <input maxlength='10' type="text" onChange={this.handleChange('telephone')} defaultValue={this.state.telephone} />
                   </Input>
                   {this.validator.message('เบอร์โทรศัพท์', this.state.telephone, 'required|phone')}
                 </Form.Field>

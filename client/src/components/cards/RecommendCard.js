@@ -16,10 +16,10 @@ class RecommendCard extends Component {
     render() {
         return (
             <Card.Group className='mb-4' centered>
-                <Card className='shadow-none mb-0' fluid>
+                <Card link className='shadow-none mb-0' fluid>
                     <Image src={require('../imgs/parking-test.jpg')} circular wrapped />
                 </Card>
-                <Card className='bg-transparent shadow-none mt-0' fluid>
+                <Card link className='bg-transparent shadow-none mt-0' fluid>
                     <Card.Description textAlign='left' className='d-flex justify-content-between align-items-center pt-2 pb-0'>
                         <h5>
                             {this.state.name}
