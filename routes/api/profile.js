@@ -8,6 +8,7 @@ const Post = require('../../models/post');
 
 // import input validation
 const validateEditProfile = require('../../validator/edit');
+const validateImageURL = require('../../validator/image');
 
 // @route       GET api/profile/test
 // @desc        Default Route
@@ -103,4 +104,32 @@ router.get('/handle/:userName', passport.authenticate('jwt', { session: false })
             res.state(404).json(err);
         });
 });
+
+// @route   POST api/profile/upload
+// @desc    Post Picture user 
+// @access  Private
+router.post('/upload', passport.authenticate('jwt', { session: false }), (req, res ) => {
+    const { errors, isValid } = validateImageURL(req.body);
+
+    if (!isValid) {
+        return res.status(200).json(errors);
+    }
+    
+    User.findById(req.user.id)
+        .then((newImage) => {
+            newImage.photo_user = req.body.imageURL
+
+            newImage.save()
+                .then((user) => {
+                    res.json({ success: true, imageURL: user.photo_user})
+                })
+                .catch((err) => {
+                    res.json({ image : "Upload fail" })
+                })
+        })
+        .catch((err) => {
+            res.state(404).json(err);
+        })
+});
+
 module.exports = router;
