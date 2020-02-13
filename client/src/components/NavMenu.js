@@ -35,8 +35,6 @@ class NavMenu extends Component {
                     <NavDropdown.Item href="/profile">โปรไฟล์</NavDropdown.Item>
                     <NavDropdown.Item onClick={this.onLogout.bind(this)}>ออกจากระบบ</NavDropdown.Item>
                 </NavDropdown>
-                {/* <Nav.Link className="nav-color" href="/profile">โปรไฟล์</Nav.Link> */}
-                {/* <Nav.Link className="nav-color" onClick={this.onLogout.bind(this)}>ออกจากระบบ</Nav.Link> */}
             </Nav>
         );
 
