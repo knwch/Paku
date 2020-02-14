@@ -7,7 +7,7 @@ import PostSuccess from '../forms/postforms/PostSuccess';
 
 class Post extends Component {
     componentDidMount(){
-        document.title = "🐤 Paku"
+        document.title = "Paku - Posting"
     }
     // render() {
     //     return (

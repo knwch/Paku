@@ -31,7 +31,7 @@ class Footer extends Component {
                         <div className="col-6 col-md">
                             <h5><div>About</div></h5>
                             <ul className="list-unstyled text-small">
-                                <li><a className="text-muted" href="#">Facebook</a></li>
+                                <li><a className="text-muted" href="https://www.facebook.com/GarfieldKp311">Facebook</a></li>
                                 <li><a className="text-muted" href="#">Google+</a></li>
                                 <li><a className="text-muted" href="#">Twitter</a></li>
                             </ul>

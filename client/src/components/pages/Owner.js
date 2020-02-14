@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 class Owner extends Component {
   componentDidMount() {
-    document.title = "🐤 Paku";
+    document.title = "Paku - Owner";
   }
   
   render() {

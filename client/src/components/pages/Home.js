@@ -6,7 +6,7 @@ import SearchBox from '../SearchBox';
 class Home extends Component {
 
   componentDidMount() {
-    document.title = "🐤 Paku"
+    document.title = "Paku - Home"
     document.body.classList.add('Background-Yellow');
   }
 

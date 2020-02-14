@@ -40,7 +40,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    document.title = '🐤 Login';
+    document.title = 'Paku - Login';
     document.body.classList.add('Background-Brown');
     if (this.props.location.state) {
       this.handleRegistModal();

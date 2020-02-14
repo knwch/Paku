@@ -16,7 +16,7 @@ class Book extends Component {
     };
 
     componentDidMount(){
-        document.title = "🐤 Paku"
+        document.title = "Paku - Booking"
     }
 
     handleChange = input => e => {

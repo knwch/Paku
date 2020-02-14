@@ -5,7 +5,7 @@ import { Grid, Responsive, Container } from 'semantic-ui-react';
 
 class Rent extends Component {
     componentDidMount(){
-        document.title = "🐤 Paku"
+        document.title = "Paku - Rent"
     }
     
     render() {

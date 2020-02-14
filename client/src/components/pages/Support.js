@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Support extends Component {
     componentDidMount(){
-        document.title = "🐤 Paku"
+        document.title = "Paku - Support"
     }
 
     render() {

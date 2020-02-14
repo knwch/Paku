@@ -41,7 +41,7 @@ class Profile extends Component {
     fileInputRef = React.createRef();
 
     componentDidMount() {
-        document.title = "🐤 Profile"
+        document.title = "Paku - Profile"
         this.props.getCurrentProfile();
     }
 
