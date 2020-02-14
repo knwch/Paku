@@ -68,6 +68,28 @@
   white-space: nowrap ;
 }
 
+.img-center img {
+  width: 30vh;
+  height: 30vh;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.button-floated {    
+  line-height: 0px;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  display:inline-block;
+  position:relative;
+}
+
+.button-floated a {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+}
+
 .modal-paku {
   position: relative !important;
   height: auto !important;

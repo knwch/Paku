@@ -194,21 +194,25 @@ class Profile extends Component {
         switch (temp) {
             case false:
                 return (
-                    <div>
-                        <Card.Description className='pb-1' textAlign='left'>
+                    <Card.Content>
+
+                        <Card.Header className='pb-1' textAlign='left'>
                             {this.state.firstname + ' ' + this.state.lastname}
-                        </Card.Description>
+                        </Card.Header>
+
+                        <Card.Meta className='pb-1' textAlign='left'>
+                            {this.state.username}
+                        </Card.Meta>
 
                         <Card.Description className='pb-1' textAlign='left'>
                             <Icon name='yellow star' />
                             {this.state.rate}
                         </Card.Description>
 
-                        <Card.Description className='pb-1' textAlign='left'>
-                            {this.state.username}
-                        </Card.Description>
+                        <Divider />
 
                         <Card.Description className='pb-1' textAlign='left'>
+                            <Icon name='comment' flipped='horizontally' />
                             {this.state.about}
                         </Card.Description>
 
@@ -224,11 +228,11 @@ class Profile extends Component {
 
                         <Button onClick={this.handleOpenForm} basic circular icon='edit outline' floated='right'></Button>
 
-                    </div>
+                    </Card.Content>
                 );
             case true:
                 return (
-                    <div>
+                    <Card.Content>
                         <Form className="text-left">
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' defaultValue={this.state.firstname + ' ' + this.state.lastname} disabled>
@@ -246,7 +250,7 @@ class Profile extends Component {
                                 <TextArea rows={3} placeholder='เกี่ยวกับตัวฉัน...' onChange={this.handleChange('temp')} defaultValue={this.state.about} />
                             </Form.Field>
                             <Form.Field>
-                                <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
+                                <Input fluid iconPosition='left' placeholder={this.state.phone}>
                                     <Icon name='phone' flipped='horizontally' />
                                     <input maxlength='10' type="text" onChange={this.handleChange('tempphone')} defaultValue={this.state.tempphone} />
                                 </Input>
@@ -258,14 +262,18 @@ class Profile extends Component {
                                     <input type="text" />
                                 </Input>
                             </Form.Field>
-                            <Button color='red' onClick={this.handleCloseForm}>
-                                <Icon name='remove' /> Cancel
-                            </Button>
-                            <Button color='green' onClick={(e) => this.onSubmit(e)}>
-                                <Icon name='checkmark' /> Submit
-                        </Button>
+
+                            <div className='text-right'>
+                                <Button basic onClick={this.handleCloseForm}>
+                                    ยกเลิก
+                                </Button>
+                                <Button className='btn-paku' onClick={(e) => this.onSubmit(e)}>
+                                    <Icon name='checkmark' /> แก้ไข
+                                </Button>
+                            </div>
+
                         </Form>
-                    </div>
+                    </Card.Content>
                 );
         }
     }
@@ -279,13 +287,15 @@ class Profile extends Component {
                         <Grid.Column mobile={15} tablet={5} computer={5}>
                             <Card fluid>
 
-                                <Card.Content>
-                                        <Image src={this.state.photo} size='small' circular centered wrapped />
+                                <Card.Content className='card-color' textAlign='center'>
+                                    <div class="button-floated">
+                                        <div className='img-center' >
+                                            <Image src={this.state.photo} wrapped ui={false} />
+                                        </div>
                                         <Button
-                                            basic
+                                            as='a'
                                             circular
                                             icon='photo'
-                                            floated='right'
                                             onClick={() => this.fileInputRef.current.click()}
                                         />
                                         <input
@@ -294,6 +304,7 @@ class Profile extends Component {
                                             hidden
                                             onChange={this.fileChange}
                                         />
+                                    </div>
                                     {errors.photo}
 
                                     <Modal
@@ -310,27 +321,21 @@ class Profile extends Component {
                                                 content='ยกเลิก'
                                                 onClick={this.handleCloseModal}
                                             />
-                                            <Button
-                                                className='btn-paku'
-                                                content='อัพโหลด'
-                                                onClick={(e) => this.handleUpload(e)}
-                                            />
+                                            <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
+                                                <Icon name='checkmark' /> อัพโหลด
+                                            </Button>
                                         </Modal.Actions>
                                     </Modal>
 
-                                    <Divider />
-
-                                    {this.ProfileForm(this.state.formOpen)}
-
                                 </Card.Content>
+
+                                {this.ProfileForm(this.state.formOpen)}
 
                             </Card>
                         </Grid.Column>
                         <Grid.Column mobile={15} tablet={11} computer={11}>
                             <Card fluid>
-                                <Card.Content>
-                                    <RecommendCardList />
-                                </Card.Content>
+                                <RecommendCardList />
                             </Card>
                         </Grid.Column>
                     </Grid>
@@ -343,10 +348,10 @@ class Profile extends Component {
 
 function RecommendCardList() {
     return (
-        <div>
-            <Card.Description textAlign='left' className='pb-1'>
+        <Card.Content>
+            <Card.Header textAlign='left' className='py-2'>
                 ที่จอดรถของฉัน
-            </Card.Description>
+            </Card.Header>
             <Card.Description>
                 <Grid textAlign='center' stackable columns={3}>
                     <Grid.Row>
@@ -362,7 +367,7 @@ function RecommendCardList() {
                     </Grid.Row>
                 </Grid>
             </Card.Description>
-        </div>
+        </Card.Content>
     );
 }
 
