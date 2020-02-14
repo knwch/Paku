@@ -3,10 +3,6 @@ import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
 
-  constructor(props) {
-    super(props);
-  };
-
   continue = e => {
     e.preventDefault();
     this.props.nextStep();

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RecommendCard from '../cards/RecommendCard';
-import { Responsive, Container, Icon, Input, Button, Form, Label, Grid, Modal, Header, Loader, Transition } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import SearchBox from '../SearchBox';
 
 class Home extends Component {

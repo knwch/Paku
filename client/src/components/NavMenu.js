@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Icon, Button } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/actions/authActions';
 import { clearCurrentProfile } from '../redux/actions/profileActions';
@@ -27,8 +27,9 @@ class NavMenu extends Component {
         );
         const authLinks = (
             <Nav className="ml-auto nowrap">
-                <Nav.Link className="nav-color mr-3" href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color mr-3" href="/owner">เพิ่มที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/rent">จองที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color mr-3" href="/owner">รายการของฉัน</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/support">ช่วยเหลือ</Nav.Link>
                 <Nav.Link><Icon name="black bell"/></Nav.Link>
                 <NavDropdown alignRight title={<Icon name="black user"/>} id="basic-nav-dropdown">

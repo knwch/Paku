@@ -6,7 +6,6 @@ import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
-import axios from 'axios';
 
 class Profile extends Component {
     constructor(props) {
@@ -160,21 +159,8 @@ class Profile extends Component {
                         }
 
                         this.props.uploadImage(imageObj)
-                        // axios.post('/api/profile/upload', imageObj)
-                        //     .then((data) => {
-                        //         if (data.success) {
-                        //             this.setState({
-                        //                 photo: data.imageURL
-                        //             })
-                        //         }
-                        //     })
-                        //     .catch((err) => {
-                        //         this.setState({
-                        //             ...this.state,
-                        //             errors: err.response.data
-                        //         })
-                        //     })
                         this.handleCloseModal();
+
                         this.setState({
                             preview: null,
                             temp: null
