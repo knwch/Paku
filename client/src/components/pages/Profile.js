@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
-import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
+import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label, Transition } from 'semantic-ui-react';
 import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -29,11 +29,21 @@ class Profile extends Component {
         };
 
         this.validator = new SimpleReactValidator({
-            element: message => <div><Label basic color='red' pointing>{message}</Label><br /></div>,
-            messages: {
-                required: 'โปรดระบุ:attribute',
-                phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
-            }
+            element: message =>
+            <div>
+              <Transition
+                animation='shake'
+                duration={250}
+                transitionOnMount={true}
+              >
+                <Label basic color='red' pointing>{message}</Label>
+              </Transition>
+              <br />
+            </div>,
+          messages: {
+            required: 'โปรดระบุ:attribute',
+            phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
+          }
         });
     }
 
@@ -228,8 +238,9 @@ class Profile extends Component {
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
                                     <Icon name='phone' flipped='horizontally' />
-                                    <input type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
+                                    <input maxlength='10' type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
                                 </Input>
+                                {this.validator.message('เบอร์โทรศัพท์', this.state.phone, 'required|phone')}
                             </Form.Field>
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' defaultValue={this.state.email} disabled>
