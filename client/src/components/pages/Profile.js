@@ -96,42 +96,43 @@ class Profile extends Component {
 
     handleCloseModal = () => {
         this.setState({ 
-            modalOpen: false
-            // preview: null,
-            // temp: null
+            modalOpen: false,
+            preview: null,
+            temp: null
         })
     }
 
     fileChange = e => {
-        // if (e.target.files[0])
         // console.log(e.target.files[0])
-        let file = e.target.files[0];
-        let err = {}
-        const types = ['image/png', 'image/jpeg', 'image/jpg']
-        const size = 1024000;
-        // console.log(file.size);
-        if (types.every(type => file.type !== type)) {
-            err = { image: "Image is not a supported format" }
-            this.setState({
-                ...this.state,
-                errors: err
-            });
-        } else {
-            if (file.size <= size) {
-                this.setState({
-                    preview: URL.createObjectURL(file),
-                    temp: file
-                });
-                this.handleOpenModal();
-            } else {
-                err = { image: "Image is oversize"};
-                // console.log(err);
+        if (typeof e.target.files[0] !== 'undefined' ){
+            let file = e.target.files[0];
+            let err = {}
+            const types = ['image/png', 'image/jpeg', 'image/jpg']
+            const size = 1024000;
+                // console.log(file.size);
+            if (types.every(type => file.type !== type)) {
+                err = { image: "Image is not a supported format" }
                 this.setState({
                     ...this.state,
                     errors: err
                 });
+            } else {
+                if (file.size <= size) {
+                    this.setState({
+                        preview: URL.createObjectURL(file),
+                        temp: file
+                    });
+                    this.handleOpenModal();
+                } else {
+                    err = { image: "Image is oversize"};
+                    // console.log(err);
+                    this.setState({
+                        ...this.state,
+                        errors: err
+                    });
+                }
             }
-        }
+        } 
     };
 
     handleUpload(e) {
