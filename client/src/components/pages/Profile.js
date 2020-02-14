@@ -153,7 +153,7 @@ class Profile extends Component {
                             .catch((err) => {
                                 this.setState({
                                     ...this.state,
-                                    errors: err.respons.data
+                                    errors: err.response.data
                                 })
                             })
                     })

@@ -19,7 +19,7 @@ class Login extends Component {
       validators: {
         error: {  // name the rule
           message: 'ชื่อผู้ใช้หรือรหัสผ่านผิด',
-          rule: val => val === null
+          rule: val => (val == null)
         }
       },
       element: message =>
@@ -68,12 +68,13 @@ class Login extends Component {
   onSubmit(e) {
     if (this.validator.fieldValid('รหัสผ่าน') && this.validator.fieldValid('ชื่อผู้ใช้')) {
       e.preventDefault();
-      this.handleLoaderModal();
+      // this.handleLoaderModal();
       const userData = {
         username: this.state.username,
         password: this.state.password
       }
       this.props.loginUser(userData);
+      this.validator.showMessages();
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
@@ -152,7 +153,9 @@ class Login extends Component {
                     <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
                   </Input>
                   {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
-                  {this.validator.message('errors', errors.username | errors.password, 'error')}
+                  {this.validator.message('errors', this.state.errors.username, 'error')}
+                  {this.validator.message('errors', this.state.errors.password, 'error')}
+                  {console.log(this.state.errors.username + " " + this.state.errors.password)}
                 </Form.Field>
 
                 <Modal
