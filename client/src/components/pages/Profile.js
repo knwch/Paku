@@ -25,6 +25,7 @@ class Profile extends Component {
             phone: "",
             temp: "",
             photo: null,
+            preview: null,
             errors: {}
         };
 
@@ -110,9 +111,10 @@ class Profile extends Component {
             // alert("Yes!!")
         } else {
             this.setState({
-                photo: URL.createObjectURL(file),
+                preview: URL.createObjectURL(file),
                 temp: file
             });
+            this.handleOpenModal();
             // alert("No!!")
         }
     };
@@ -156,6 +158,7 @@ class Profile extends Component {
                                     errors: err.response.data
                                 })
                             })
+                        this.handleCloseModal();
                     })
             }
         )
@@ -258,43 +261,35 @@ class Profile extends Component {
                                         floated='right'
                                         onClick={() => this.fileInputRef.current.click()}
                                     />
-                                    {/* <Button
-                                        basic
-                                        circular
-                                        icon='photo'
-                                        floated='right'
-                                        onClick={this.handleOpenModal}
-                                    /> */}
                                     <input
                                         ref={this.fileInputRef}
                                         type="file"
                                         hidden
                                         onChange={this.fileChange}
                                     />
-                                    <button onClick={(e) => this.handleUpload(e)}>Upload</button>
                                     {errors.photo}
 
-                                    {/* <Modal
-                                        open={this.state.modalRegist}
+                                    <Modal
+                                        open={this.state.modalOpen}
                                         className="modal-paku"
                                         size='mini'
                                     >
                                         <Modal.Content>
-                                            <div className='text-center'>
-                                                <Transition
-                                                    animation='tada'
-                                                    duration={1500}
-                                                    transitionOnMount={true}
-                                                >
-                                                    <Icon.Group size='big'>
-                                                        <Icon loading size='huge' name='circle outline' />
-                                                        <Icon size='big' name='check' color='yellow' />
-                                                    </Icon.Group>
-                                                </Transition>
-                                                <Header>ลงทะเบียนสำเร็จ</Header>
-                                            </div>
+                                            <Image src={this.state.preview} size='small' centered wrapped />
                                         </Modal.Content>
-                                    </Modal> */}
+                                        <Modal.Actions>
+                                            <Button
+                                                basic
+                                                content='ยกเลิก'
+                                                onClick={this.handleCloseModal}
+                                            />
+                                            <Button
+                                                className='btn-paku'
+                                                content='อัพโหลด'
+                                                onClick={(e) => this.handleUpload(e)}
+                                            />
+                                        </Modal.Actions>
+                                    </Modal>
 
                                     <Divider />
 
