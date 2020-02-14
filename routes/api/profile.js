@@ -121,7 +121,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
 
             newImage.save()
                 .then((user) => {
-                    res.json({ success: true, imageURL: user.photo_user})
+                    res.json(user)
                 })
                 .catch((err) => {
                     res.json({ image : "Upload fail" })

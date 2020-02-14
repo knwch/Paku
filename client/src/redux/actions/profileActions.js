@@ -31,7 +31,7 @@ export const getCurrentProfile = () => dispatch => {
 export const getProfileByHandle = handle => dispatch => {
     dispatch(setProfileLoading());
     axios.get(`/api/profile/handle/${handle}`)
-        .then(res => {
+        .then((res) => {
             dispatch({
                 type: GET_PROFILE,
                 payload: res.data
@@ -69,6 +69,23 @@ export const editProfile = (user, history) => dispatch => {
         .then((res) => {
             dispatch({
                 type: GET_PROFILES,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
+
+// Upload image 
+export const uploadImage = (userImage) => dispatch => {
+    axios.post('/api/profile/upload', userImage)
+        .then((res) => {
+            dispatch({
+                type: GET_PROFILE,
                 payload: res.data
             })
         })

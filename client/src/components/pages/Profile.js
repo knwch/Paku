@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
 import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label } from 'semantic-ui-react';
-import { getCurrentProfile, editProfile } from '../../redux/actions/profileActions';
+import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
@@ -94,28 +94,43 @@ class Profile extends Component {
 
     handleOpenModal = () => this.setState({ modalOpen: true })
 
-    handleCloseModal = () => this.setState({ modalOpen: false })
+    handleCloseModal = () => {
+        this.setState({ 
+            modalOpen: false
+            // preview: null,
+            // temp: null
+        })
+    }
 
     fileChange = e => {
+        // if (e.target.files[0])
+        // console.log(e.target.files[0])
         let file = e.target.files[0];
         let err = {}
         const types = ['image/png', 'image/jpeg', 'image/jpg']
-
-        // console.log(file.type);
+        const size = 1024000;
+        // console.log(file.size);
         if (types.every(type => file.type !== type)) {
-
-            err = { photo: "Image is not a supported format" }
+            err = { image: "Image is not a supported format" }
             this.setState({
+                ...this.state,
                 errors: err
             });
-            // alert("Yes!!")
         } else {
-            this.setState({
-                preview: URL.createObjectURL(file),
-                temp: file
-            });
-            this.handleOpenModal();
-            // alert("No!!")
+            if (file.size <= size) {
+                this.setState({
+                    preview: URL.createObjectURL(file),
+                    temp: file
+                });
+                this.handleOpenModal();
+            } else {
+                err = { image: "Image is oversize"};
+                // console.log(err);
+                this.setState({
+                    ...this.state,
+                    errors: err
+                });
+            }
         }
     };
 
@@ -142,23 +157,27 @@ class Profile extends Component {
                         imageObj = {
                             imageURL: url
                         }
-                        // console.log(imageObj);
 
-                        axios.post('/api/profile/upload', imageObj)
-                            .then((data) => {
-                                if (data.success) {
-                                    this.setState({
-                                        photo: data.imageURL
-                                    })
-                                }
-                            })
-                            .catch((err) => {
-                                this.setState({
-                                    ...this.state,
-                                    errors: err.response.data
-                                })
-                            })
+                        this.props.uploadImage(imageObj)
+                        // axios.post('/api/profile/upload', imageObj)
+                        //     .then((data) => {
+                        //         if (data.success) {
+                        //             this.setState({
+                        //                 photo: data.imageURL
+                        //             })
+                        //         }
+                        //     })
+                        //     .catch((err) => {
+                        //         this.setState({
+                        //             ...this.state,
+                        //             errors: err.response.data
+                        //         })
+                        //     })
                         this.handleCloseModal();
+                        this.setState({
+                            preview: null,
+                            temp: null
+                        })
                     })
             }
         )
@@ -344,5 +363,5 @@ const mapStateToProps = state => ({
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, editProfile })(withRouter(Profile));
+export default connect(mapStateToProps, { getCurrentProfile, editProfile, uploadImage })(withRouter(Profile));
 
