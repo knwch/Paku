@@ -20,11 +20,14 @@ class Profile extends Component {
             lastname: "",
             rate: "",
             about: "",
+            temp: "",
             email: "",
             phone: "",
             temp: "",
+            tempphone: "",
             photo: null,
             preview: null,
+            close: true,
             errors: {}
         };
 
@@ -68,8 +71,10 @@ class Profile extends Component {
                 lastname: profile.name.lastname,
                 rate: profile.rate,
                 about: profile.aboutMe,
+                temp: profile.aboutMe,
                 email: profile.email,
                 phone: profile.phone,
+                tempphone: profile.phone,
                 photo: profile.photo_user
             })
         }
@@ -82,8 +87,10 @@ class Profile extends Component {
                 about: this.state.about,
                 phone: this.state.phone
             }
+            this.setState({ close: false });
             this.props.editProfile(newProfile, this.props.history)
             this.handleCloseForm();
+            // console.log(this.state.temp, this.state.tempphone);
         } else {
             this.validator.showMessages();
             // rerender to show messages for the first time
@@ -99,7 +106,20 @@ class Profile extends Component {
 
     handleOpenForm = () => this.setState({ formOpen: true })
 
-    handleCloseForm = () => this.setState({ formOpen: false })
+    handleCloseForm = () => {
+        if (this.state.close) {
+            this.setState({ 
+                formOpen: false ,
+                about: this.state.temp,
+                phone: this.state.tempphone
+            });
+        } else {
+            this.setState({ 
+                formOpen: false ,
+            });
+        }
+        
+    }
 
     handleOpenModal = () => this.setState({ modalOpen: true })
 
@@ -233,7 +253,7 @@ class Profile extends Component {
                                 </Input>
                             </Form.Field>
                             <Form.Field>
-                                <TextArea rows={3} placeholder='ฟหกด่าสว' onChange={this.handleChange('about')} defaultValue={this.state.about} />
+                                <TextArea rows={3} placeholder='เกี่ยวกับตัวฉัน...' onChange={this.handleChange('about')} defaultValue={this.state.about} />
                             </Form.Field>
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
