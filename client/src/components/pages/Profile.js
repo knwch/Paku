@@ -33,20 +33,20 @@ class Profile extends Component {
 
         this.validator = new SimpleReactValidator({
             element: message =>
-            <div>
-              <Transition
-                animation='shake'
-                duration={250}
-                transitionOnMount={true}
-              >
-                <Label basic color='red' pointing>{message}</Label>
-              </Transition>
-              <br />
-            </div>,
-          messages: {
-            required: 'โปรดระบุ:attribute',
-            phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
-          }
+                <div>
+                    <Transition
+                        animation='shake'
+                        duration={250}
+                        transitionOnMount={true}
+                    >
+                        <Label basic color='red' pointing>{message}</Label>
+                    </Transition>
+                    <br />
+                </div>,
+            messages: {
+                required: 'โปรดระบุ:attribute',
+                phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก'
+            }
         });
     }
 
@@ -106,15 +106,15 @@ class Profile extends Component {
     handleOpenForm = () => this.setState({ formOpen: true })
 
     handleCloseForm = () => {
-        this.setState({ 
+        this.setState({
             formOpen: false
-        });   
+        });
     }
 
     handleOpenModal = () => this.setState({ modalOpen: true })
 
     handleCloseModal = () => {
-        this.setState({ 
+        this.setState({
             modalOpen: false,
             preview: null,
             temp: null
@@ -123,12 +123,12 @@ class Profile extends Component {
 
     fileChange = e => {
         // console.log(e.target.files[0])
-        if (typeof e.target.files[0] !== 'undefined' ){
+        if (typeof e.target.files[0] !== 'undefined') {
             let file = e.target.files[0];
             let err = {}
             const types = ['image/png', 'image/jpeg', 'image/jpg']
             const size = 1024000;
-                // console.log(file.size);
+            // console.log(file.size);
             if (types.every(type => file.type !== type)) {
                 err = { image: "Image is not a supported format" }
                 this.setState({
@@ -143,7 +143,7 @@ class Profile extends Component {
                     });
                     this.handleOpenModal();
                 } else {
-                    err = { image: "Image is oversize"};
+                    err = { image: "Image is oversize" };
                     // console.log(err);
                     this.setState({
                         ...this.state,
@@ -151,7 +151,7 @@ class Profile extends Component {
                     });
                 }
             }
-        } 
+        }
     };
 
     handleUpload(e) {
@@ -248,9 +248,9 @@ class Profile extends Component {
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
                                     <Icon name='phone' flipped='horizontally' />
-                                    <input maxlength='10' type="text" onChange={this.handleChange('tempphone')} defaultValue={this.state.phone} />
+                                    <input maxlength='10' type="text" onChange={this.handleChange('tempphone')} defaultValue={this.state.tempphone} />
                                 </Input>
-                                {this.validator.message('เบอร์โทรศัพท์', this.state.phone, 'required|phone')}
+                                {this.validator.message('เบอร์โทรศัพท์', this.state.tempphone, 'required|phone')}
                             </Form.Field>
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' defaultValue={this.state.email} disabled>
@@ -280,20 +280,20 @@ class Profile extends Component {
                             <Card fluid>
 
                                 <Card.Content>
-                                    <Image src={this.state.photo} size='small' centered wrapped />
-                                    <Button
-                                        basic
-                                        circular
-                                        icon='photo'
-                                        floated='right'
-                                        onClick={() => this.fileInputRef.current.click()}
-                                    />
-                                    <input
-                                        ref={this.fileInputRef}
-                                        type="file"
-                                        hidden
-                                        onChange={this.fileChange}
-                                    />
+                                        <Image src={this.state.photo} size='small' circular centered wrapped />
+                                        <Button
+                                            basic
+                                            circular
+                                            icon='photo'
+                                            floated='right'
+                                            onClick={() => this.fileInputRef.current.click()}
+                                        />
+                                        <input
+                                            ref={this.fileInputRef}
+                                            type="file"
+                                            hidden
+                                            onChange={this.fileChange}
+                                        />
                                     {errors.photo}
 
                                     <Modal
