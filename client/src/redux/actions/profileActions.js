@@ -68,7 +68,7 @@ export const editProfile = (user, history) => dispatch => {
     axios.post('/api/profile/edit', user)
         .then((res) => {
             dispatch({
-                type: GET_PROFILES,
+                type: GET_PROFILE,
                 payload: res.data
             })
         })
