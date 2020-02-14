@@ -84,10 +84,9 @@ class Profile extends Component {
         if (this.validator.allValid()) {
             e.preventDefault();
             const newProfile = {
-                about: this.state.about,
-                phone: this.state.phone
+                about: this.state.temp,
+                phone: this.state.tempphone
             }
-            this.setState({ close: false });
             this.props.editProfile(newProfile, this.props.history)
             this.handleCloseForm();
             // console.log(this.state.temp, this.state.tempphone);
@@ -107,18 +106,9 @@ class Profile extends Component {
     handleOpenForm = () => this.setState({ formOpen: true })
 
     handleCloseForm = () => {
-        if (this.state.close) {
-            this.setState({ 
-                formOpen: false ,
-                about: this.state.temp,
-                phone: this.state.tempphone
-            });
-        } else {
-            this.setState({ 
-                formOpen: false ,
-            });
-        }
-        
+        this.setState({ 
+            formOpen: false
+        });   
     }
 
     handleOpenModal = () => this.setState({ modalOpen: true })
@@ -253,12 +243,12 @@ class Profile extends Component {
                                 </Input>
                             </Form.Field>
                             <Form.Field>
-                                <TextArea rows={3} placeholder='เกี่ยวกับตัวฉัน...' onChange={this.handleChange('about')} defaultValue={this.state.about} />
+                                <TextArea rows={3} placeholder='เกี่ยวกับตัวฉัน...' onChange={this.handleChange('temp')} defaultValue={this.state.about} />
                             </Form.Field>
                             <Form.Field>
                                 <Input transparent fluid iconPosition='left' placeholder={this.state.phone}>
                                     <Icon name='phone' flipped='horizontally' />
-                                    <input maxlength='10' type="text" onChange={this.handleChange('phone')} defaultValue={this.state.phone} />
+                                    <input maxlength='10' type="text" onChange={this.handleChange('tempphone')} defaultValue={this.state.phone} />
                                 </Input>
                                 {this.validator.message('เบอร์โทรศัพท์', this.state.phone, 'required|phone')}
                             </Form.Field>
