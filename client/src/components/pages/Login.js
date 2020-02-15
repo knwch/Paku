@@ -136,7 +136,7 @@ class Login extends Component {
             <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
 
             <Grid.Column mobile={16} tablet={7} computer={6}>
-              <h4 className="text-center mb-4">เข้าสู่ระบบ</h4>
+              <h4 className="text-center mb-4"><div>เข้าสู่ระบบ</div></h4>
               <Form>
 
                 <Form.Field className="text-left">
