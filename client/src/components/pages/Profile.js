@@ -32,6 +32,13 @@ class Profile extends Component {
         };
 
         this.validator = new SimpleReactValidator({
+            validators: {
+                imgerror: {  // name the rule
+                    message: ':values',
+                    rule: (val, params, validator) => params === null,
+                    messageReplace: (message, params) => message.replace(':values', params)  // optional
+                }
+            },
             element: message =>
                 <div>
                     <Transition
@@ -81,7 +88,7 @@ class Profile extends Component {
     }
 
     onSubmit(e) {
-        if (this.validator.allValid()) {
+        if (this.validator.fieldValid('เบอร์โทรศัพท์')) {
             e.preventDefault();
             const newProfile = {
                 about: this.state.temp,
@@ -130,11 +137,12 @@ class Profile extends Component {
             const size = 1024000;
             // console.log(file.size);
             if (types.every(type => file.type !== type)) {
-                err = { image: "Image is not a supported format" }
+                err = { image: "ไฟล์ไม่รองรับ" }
                 this.setState({
                     ...this.state,
                     errors: err
                 });
+                this.validator.showMessages();
             } else {
                 if (file.size <= size) {
                     this.setState({
@@ -143,12 +151,13 @@ class Profile extends Component {
                     });
                     this.handleOpenModal();
                 } else {
-                    err = { image: "Image is oversize" };
+                    err = { image: "ขนาดไฟล์ไม่เกิน 1 MB" };
                     // console.log(err);
                     this.setState({
                         ...this.state,
                         errors: err
                     });
+                    this.validator.showMessages();
                 }
             }
         }
@@ -226,7 +235,16 @@ class Profile extends Component {
                             {this.state.email}
                         </Card.Description>
 
-                        <Button onClick={this.handleOpenForm} basic circular icon='edit outline' floated='right'></Button>
+                        <div className='text-center mt-1'>
+                            <Button
+                                onClick={this.handleOpenForm}
+                                basic
+                                circular
+                                size='tiny'
+                            >
+                                <Icon name='edit outline' /> <text>แก้ไขข้อมูล</text>
+                            </Button>
+                        </div>
 
                     </Card.Content>
                 );
@@ -265,10 +283,10 @@ class Profile extends Component {
 
                             <div className='text-right'>
                                 <Button basic onClick={this.handleCloseForm}>
-                                    ยกเลิก
+                                    <text>ยกเลิก</text>
                                 </Button>
                                 <Button className='btn-paku' onClick={(e) => this.onSubmit(e)}>
-                                    <Icon name='checkmark' /> แก้ไข
+                                    <Icon name='checkmark' /> <text>แก้ไข</text>
                                 </Button>
                             </div>
 
@@ -305,24 +323,25 @@ class Profile extends Component {
                                             onChange={this.fileChange}
                                         />
                                     </div>
-                                    {errors.photo}
+
+                                    {this.validator.message('err', errors.image, `imgerror:${errors.image}`)}
 
                                     <Modal
                                         open={this.state.modalOpen}
                                         className="modal-paku"
                                         size='mini'
                                     >
-                                        <Modal.Content>
-                                            <Image src={this.state.preview} size='small' centered wrapped />
+                                        <Modal.Content className='text-center'>
+                                            <div className='img-center' >
+                                                <Image src={this.state.preview} size='small' centered wrapped />
+                                            </div>
                                         </Modal.Content>
                                         <Modal.Actions>
-                                            <Button
-                                                basic
-                                                content='ยกเลิก'
-                                                onClick={this.handleCloseModal}
-                                            />
+                                            <Button basic onClick={this.handleCloseModal}>
+                                                <text>ยกเลิก</text>
+                                            </Button>
                                             <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
-                                                <Icon name='checkmark' /> อัพโหลด
+                                                <Icon name='checkmark' /> <text>อัพโหลด</text>
                                             </Button>
                                         </Modal.Actions>
                                     </Modal>
