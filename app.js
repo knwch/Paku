@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const admin = require('./routes/api/admin');
-// const post = require('./routes/post');
+const post = require('./routes/api/post');
 const profile = require('./routes/api/profile');
 const user = require('./routes/api/user');
 
@@ -32,7 +32,7 @@ require('./config/passport')(passport);
 
 // Use Routes
 app.use('/api/admin', admin);
-// app.use('/api/post', post);
+app.use('/api/posts', post);
 app.use('/api/profile', profile);
 app.use('/api/users', user);
 
