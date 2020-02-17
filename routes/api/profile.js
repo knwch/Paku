@@ -36,7 +36,7 @@ router.get('/alluser', (req, res) => {
     User.find()
         .then((profile) => {
             if (profile.length === 0) {
-                return res.status(200).json({ msg : 'User not found' });
+                return res.status(404).json({ msg : 'User not found' });
             }
             res.json(profile);
         })
@@ -89,7 +89,7 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
 // @route   GET api/profile/handle/:userName
 // @desc    Get the profile data of the params passed
 // @access  Private
-router.get('/handle/:userName', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/handle/:userName', (req, res) => {
     let errors = {};
 
     User.findOne({ username: req.parms.userName })
@@ -112,7 +112,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
     const { errors, isValid } = validateImageURL(req.body);
 
     if (!isValid) {
-        return res.status(200).json(errors);
+        return res.status(400).json(errors);
     }
     
     User.findById(req.user.id)
