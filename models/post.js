@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    photo: [{
+    photos: [{
         data: Buffer,
         contentType: String
     }],
@@ -30,10 +30,7 @@ const postSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-
-    },
-    explanation: {
-        about: {
+        explain: {
             type: String,
             required: true
         },
@@ -53,19 +50,33 @@ const postSchema = new mongoose.Schema({
             }
         }]
     },
+    location: {
+        address: {
+            type: String,
+            required: true
+        },
+        longitude: {
+            type: String,
+            required: true
+        },
+        latitude: {
+            type: String,
+            required: true
+        }
+    },
     date: {
         open: {
             type: String,
             required: true
         },
-        off: {
+        close: {
             type: String,
             required: true
         }
     },
-    postedBy: {
+    user: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'users'
     },
     price: {
         type: Number,
@@ -84,7 +95,7 @@ const postSchema = new mongoose.Schema({
         },
         postedBy: {
             type: ObjectId,
-            ref: 'User'
+            ref: 'users'
         }
     }],
     updated: Date,
@@ -94,4 +105,4 @@ const postSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('post', postSchema);

@@ -5,23 +5,23 @@ let mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     username: {
         type: String,
-        min: 2,
+        min: 6,
         max: 30,
         required: true,
         unique: true
     },
     password: {
         type: String,
-        min: 2,
+        min: 6,
         max: 30,
         required: true
     },
     name: {
-        fname:{
+        firstname: {
             type: String,
             required: true
         },
-        lname:{
+        lastname: {
             type: String,
             required: true 
         }
@@ -30,35 +30,36 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // photo_user: {
-    //     data: Buffer,
-    //     contentType
-    // },
-    birth: {
+    photo_user: {
         type: String,
-        required: true 
+        default: 'https://uppic.cc/d/6SMp'
     },
-    age: {
-        type: Number,
-        min: 18,
-        required: true
+    aboutMe : {
+        type: String,
+        default: ' '
     },
     phone: {
         type: String,
         required: true
     },
-    card: {
-        type: Number,
-        require: true
+    terms: {
+        type: Boolean,
+        required: true
+    },
+    Card: {
+        idCard: {
+            type: Number,
+            default: 0
+        },
+        confirm: {
+            type: Boolean,
+            default: 'false'
+        }
     },
     // photo_card: {
     //     data: Buffer,
     //     contentType
     // },
-    status: {
-        type: String,
-        default: "renter"
-    },
     rate: {
         type: Number,
         default: 0

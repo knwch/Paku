@@ -1,5 +1,132 @@
+@import url('https://fonts.googleapis.com/css?family=Mitr:300&display=swap&subset=thai');
+
+* {
+  font-family: 'Mitr', sans-serif;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .Background-Brown .nav-mobile .nav-color {
+    color: black !important;
+  } 
+
+  .Background-Yellow .nav-mobile .nav-color {
+    color: black !important;
+  } 
+
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  font-family: 'Mitr', sans-serif !important;
+}
+
+.Background-Yellow {
+  background-image: url(./components/imgs/background/Yellow.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Background-Yellow .nav-color {
+  color: black !important;
+}
+
+.Background-Brown {
+  background-image: url(./components/imgs/background/Brown.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Background-Brown .nav-color {
+  color: white !important;
+}
+
+.map-responsive {
+  overflow:hidden;
+  padding-bottom:100%;
+  position:relative;
+  height:0;
+}
+
+.nav-flex-1 {
+  flex: 1;
+  flex-basis: 100%;
+}
+
+.nowrap {
+  white-space: nowrap ;
+}
+
+.img-center img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.button-floated {    
+  line-height: 0px;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  display:inline-block;
+  position:relative;
+}
+
+.button-floated a {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.modal-paku {
+  position: relative !important;
+  height: auto !important;
+}
+
+.btn-paku {
+  background-color: #ffce20 !important;
+  color: #2c2c2c !important
+}
+
+.btn-paku:hover {
+  background-color: #edc01f !important;
+  color: #2c2c2c !important
+}
+
+.btn-paku-light {
+  background-color: #635b5a !important;
+  color: #ffce20 !important;
+}
+
+.btn-paku-light:hover {
+  background-color: #595250 !important;
+  color: #ffce20 !important;
+}
+
+.logo-paku {
+  width: 2rem;
+}
+
 .App {
   text-align: center;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+.App footer {
+  text-align: left;
 }
 
 .App-logo {
