@@ -9,6 +9,20 @@ const Post = require('../../models/post');
 // import input validation
 const validatePostInput = require('../../validator/post');
 
+// authenticateIdCard = (req, res) => {
+//     User.findById(req.user.id).where('Card.confirm', true)
+//         .then((user) => {
+//             if (!user) {
+//                 return res.json({ user: "User must comfirm CardID"})
+//             }
+//             // res.send(user)
+//             next();
+//         })
+//         .catch((err) => {
+//             res.json(err);
+//         });
+// }
+
 // @route   GET api/post
 // @desc    Default Route
 // @access  Public
@@ -46,20 +60,22 @@ router.get('/handle/:postId', (req, res) => {
 // @route   POST api/post/addPost
 // @desc    Post park my self
 // @access  Private
-router.post('/addPost', passport.authenticate('jwt', { session: false }), authenticateIdCard, (req, res) => {
-    res.json({sdf:"dsfsdfsd"})
+router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, res) => {
+
 });
 
-function authenticateIdCard(req, res, next) {
-    User.findById(req.user.id).and({Crad:{confirm: true}})
-        .then((user) => {
-            console.log("ssrsa")
-            next();
-        })
-        .catch((err) => {
-            console.log("No")
-            res.json({confirm : "User must comfirm CardID" });
-        });
-} 
+// @route   DELETE api/post/delete/:postId
+// @desc    Delete park my self
+// @access  Private
+router.delete('/delete/:postId', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+});
+
+// @route   POST api/post/edit/:postId
+// @desc    Edit info park my self
+// @access  Private
+router.post('edit/:postId', passport.authenticate('jwt', { session: false }), (req, res) => {
+
+});
 
 module.exports = router;
