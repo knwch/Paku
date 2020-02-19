@@ -8,15 +8,11 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    photos: [{
-        data: Buffer,
-        contentType: String
-    }],
+    // photos: [{
+    //     type: String,
+    //     required: true
+    // }],
     detail: {
-        point: {
-            type: String,
-            required: true
-        },
         typeofpark: {
             type: String,
             required: true
@@ -34,21 +30,18 @@ const postSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        rule: [{
-            text: {
-                type: String,
-            }
-        }],
-        nearby: [{
-            text: {
-                type: String,
-            }
-        }],
-        facility: [{
-            text: {
-                type: String,
-            }
-        }]
+        rule: {
+            type: [String],
+            default: undefined
+        },
+        nearby: {
+            type: [String],
+            default: undefined
+        },
+        facility: {
+            type: [String],
+            default: undefined
+        }
     },
     location: {
         address: {
@@ -88,7 +81,7 @@ const postSchema = new mongoose.Schema({
         default: 0
     },
     comments: [{
-        text: String,
+        comment: String,
         created: {
             type: Date,
             default: Date.now
