@@ -5,6 +5,7 @@ module.exports = validatePostInput = (data) => {
     let errors = {};
 
     data.title = !isEmpty(data.title) ? data.title : '';
+    data.imagePost = !isEmpty(data.imagePost) ? data.imagePost : '';
     data.typeofpark = !isEmpty(data.typeofpark) ? data.typeofpark : '';
     data.numberofcar = !isEmpty(data.numberofcar) ? data.numberofcar : '';
     data.typeofcar = !isEmpty(data.typeofcar) ? data.typeofcar : '';
@@ -21,6 +22,9 @@ module.exports = validatePostInput = (data) => {
     }
     if (Validator.isEmpty(data.title)) {
         errors.title = `Title field is required`;
+    }
+    if (Validator.isEmpty(data.imagePost)) {
+        errors.image = `Please upload image`;
     }
     if (Validator.isEmpty(data.typeofpark)) {
         errors.typeofpark = `Type field is required`;
