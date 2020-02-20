@@ -8,10 +8,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // photos: [{
-    //     type: String,
-    //     required: true
-    // }],
+    photos: {
+        type: [String],
+        required: true
+    },
     detail: {
         typeofpark: {
             type: String,
@@ -77,18 +77,32 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     rate: {
-        type: Number,
-        default: 0
+        sum: {
+            type: Number,
+            default: 0
+        },
+        rating: {
+            type: Number,
+            default: 0
+        }
     },
     comments: [{
-        comment: String,
+        user: {
+            type: ObjectId,
+            ref: 'users'
+        },
+        comment: {
+            type: String,
+            default: ""
+        },
+        photoUser: String,
+        rate: {
+            type: String,
+            required: true
+        },
         created: {
             type: Date,
             default: Date.now
-        },
-        postedBy: {
-            type: ObjectId,
-            ref: 'users'
         }
     }],
     updated: Date,
