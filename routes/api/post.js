@@ -33,13 +33,13 @@ router.get('/allpost', (req, res) => {
 // @route   GET api/post/handle/:postId
 // @desc    Get the post data of the params passed
 // @access  Pubilc
-router.get('/handle/:postId', (req, res) => {
-    Post.findById(req.params.postId)
+router.get('/handle/:id', (req, res) => {
+    Post.findById(req.params.id)
         .then((post) => {
             res.json(post);
         })
         .catch((err) => {
-            res.status(404).json({ msg : 'No hostel found with that ID'});
+            res.status(404).json({ msg : 'No Post found with that ID'});
         })
 });
 
@@ -48,10 +48,11 @@ router.get('/handle/:postId', (req, res) => {
 // @access  Private
 router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { errors, isValid } = validatePostInput(req.body);
+
     User.findById(req.user.id).where('Card.confirm', true)
         .then((user) => {
             if (!user) {
-                errors.user = 'User must comfirm CardID'
+                errors.user = 'User must comfirm IDCard'
                 return res.json(errors)
             }
 
@@ -63,6 +64,7 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
 
             const newPost = new Post({
                 title: req.body.title,
+                photos: req.body.imagePost,
                 detail: {
                     typeofpark: req.body.typeofpark,
                     numberofcar: req.body.numberofcar,
@@ -114,11 +116,79 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
         })
 });
 
-// @route   POST api/post/edit/:postId
+// @route   POST api/post/edit/:id
 // @desc    Edit info park my self
 // @access  Private
 router.post('edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
 
+    if (!isValid) {
+        return res.status(400).json(errors)
+    }
+
+    Post.findOne({ _id: req.params.id })
+        .then((post) => {
+            post.title = req.body.title
+            post.photos = req.body.imagePost
+            post.detail.typeofpark = req.body.typeofpark
+            post.detail.numberofcar = req.body.numberofcar
+            post.detail.typeofcar = req.body.typeofcar
+            post.detail.explain = req.body.explain
+            if (req.body.rule) post.detail.rule = req.body.rule
+            if (req.body.nearby) post.detail.nearby = req.body.nearby
+            if (req.body.facility) post.detail.facility = req.body.facility
+            post.location = {
+                address: req.body.address,
+                longitude: req.body.longitude,
+                latitude: req.body.latitude
+            }
+            post.price = req.body.price
+
+            console.log(post);
+            // post.save().then((post) => {
+            //     res.json(post)
+            // })
+        })
+        .catch((err) => {
+            res.status(404).json({ post: 'Post not found'});
+        });
+});
+
+// @route   POST api/post/comment/:id
+// @desc    Post comment in post
+// @access  Private
+router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Post.findById({ _id: req.params.id })
+        .then((post) => {
+            if (!req.body.rate) {
+                return res.status(400).json({ comment: 'rateing field is required'});
+            }
+
+            const newComment = {
+                user: req.user.id,
+                comment: req.body.comment,
+                photoUser: req.user.photo_user,
+                rate: req.body.rate
+            }
+
+            const sum = post.rate.sum + req.body.rate;
+            const count = post.comments.length + 1 ;
+            const rate = sum / count;
+
+            post.rate = {
+                sum: sum,
+                rating: rate
+            }
+
+            post.comments.unshift(newComment);
+
+            post.save().then((post) => {
+                res.json({ success: true });
+            })
+        })
+        .catch((err) => {
+            res.status(404).json({ post: 'Post not found'});
+        });
 });
 
 module.exports = router;
