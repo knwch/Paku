@@ -25,7 +25,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
             res.json(profile)
         })
         .catch((err) => {
-            res.status(404).json(err)
+            res.status(404).json({ profile: 'User not found'});
         });
 });
 
@@ -53,7 +53,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
     
     // Check Validation
     if (!isValid) {
-        console.log(errors);
+        // console.log(errors);
         return res.status(400).json(errors);
     }
 
@@ -76,7 +76,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
 // @desc    Get current users profile
 // @access  Private
 router.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Post.findOneAndRemove({ postBy: req.user.id}).then(
+    Post.findOneAndRemove({ user: req.user.id}).then(
         User.findByIdAndDelete({ _id: req.user.id }).then(
             res.json({ success: true })
         )
@@ -86,13 +86,13 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
     )
 });
 
-// @route   GET api/profile/handle/:userName
+// @route   GET api/profile/handle/:id
 // @desc    Get the profile data of the params passed
 // @access  Private
-router.get('/handle/:userName', (req, res) => {
+router.get('/handle/:id', (req, res) => {
     let errors = {};
 
-    User.findOne({ username: req.parms.userName })
+    User.findOne({ username: req.parms.id })
         .then((profile) => {
             if (!profile) {
                 errors.msg = 'User not found';
