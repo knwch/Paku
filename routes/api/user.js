@@ -10,6 +10,7 @@ const fs = require('fs');
 // import input validation
 const validateRegisterInput = require('../../validator/register');
 const validateLoginInput = require('../../validator/login');
+const validateIDCradInput = require('../../validator/idcard');
 
 // import User Model
 const User = require('../../models/user');
@@ -133,6 +134,30 @@ router.post('/login', (req, res) => {
         })
         .catch((err) => {
             console.log(err);
+        });
+});
+
+// @route   POST api/users/confirmIdCard
+// @desc    Confirm IdCard of user
+// @access  Private
+router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { errors, isValid } = validateIDCradInput(req.body); 
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+
+    User.findById(req.user.id)
+        .then((user) => {
+            user.Card.idCard = req.body.idCard
+            user.photo_card = req.body.idCardURL
+
+            user.save().then((user) => {
+                res.json({ success: true });
+            })
+        })
+        .catch((err) => {
+            res.json(err);
         });
 });
 
