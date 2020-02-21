@@ -21,7 +21,7 @@ router.get('/allpost', (req, res) => {
     Post.find()
         .then((post) => {
             if (post.length === 0) {
-                return res.status(404).json({ msg : 'Posts not found' });
+                return res.status(404).json({ msg : 'No have post' });
             }
             res.json(post);
         })
@@ -48,14 +48,14 @@ router.get('/handle/:id', (req, res) => {
 // @access  Private
 router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { errors, isValid } = validatePostInput(req.body);
+    let err = {}
 
     User.findById(req.user.id).where('Card.confirm', true)
         .then((user) => {
             if (!user) {
-                errors.user = 'User must comfirm IDCard'
-                return res.json(errors)
+                err.user = 'User must comfirm IDCard'
+                return res.status(400).json(err)
             }
-
 
             if (!isValid) {
                 console.log(errors)
@@ -87,6 +87,7 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
                 price: req.body.price
             })
 
+            // res.json(newPost)
             newPost.save()
                 .then((post) => {
                     res.json(post);
@@ -108,7 +109,7 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
             }
 
             post.remove().then((post) => {
-                res.json({ post: "Success"});
+                res.json({ success: true});
             })
         })
         .catch((err) => {
@@ -119,35 +120,45 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
 // @route   POST api/post/edit/:id
 // @desc    Edit info park my self
 // @access  Private
-router.post('edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { errors, isValid } = validatePostInput(req.body);
-
-    if (!isValid) {
-        return res.status(400).json(errors)
-    }
 
     Post.findOne({ _id: req.params.id })
         .then((post) => {
-            post.title = req.body.title
-            post.photos = req.body.imagePost
-            post.detail.typeofpark = req.body.typeofpark
-            post.detail.numberofcar = req.body.numberofcar
-            post.detail.typeofcar = req.body.typeofcar
-            post.detail.explain = req.body.explain
-            if (req.body.rule) post.detail.rule = req.body.rule
-            if (req.body.nearby) post.detail.nearby = req.body.nearby
-            if (req.body.facility) post.detail.facility = req.body.facility
+            if (!isValid) {
+                return res.status(400).json(errors)
+            }
+
+            if (post.user.toString() !== req.user.id) {
+                return res.status(401).json({ post : "User not authorized" });
+            }
+
+            post.title = req.body.title;
+            post.photos = req.body.imagePost;
+            post.detail.typeofpark = req.body.typeofpark;
+            post.detail.numberofcar = req.body.numberofcar;
+            post.detail.typeofcar = req.body.typeofcar;
+            post.detail.explain = req.body.explain;
+            if (req.body.rule) post.detail.rule = req.body.rule;
+            else post.detail.rule = undefined;
+            if (req.body.nearby) post.detail.nearby = req.body.nearby;
+            else post.detail.nearby = undefined;
+            if (req.body.facility) post.detail.facility = req.body.facility;
+            else post.detail.facility = undefined;
             post.location = {
                 address: req.body.address,
                 longitude: req.body.longitude,
                 latitude: req.body.latitude
             }
-            post.price = req.body.price
+            post.date.open = req.body.open;
+            post.date.close = req.body.close;
+            post.price = req.body.price;
 
-            console.log(post);
-            // post.save().then((post) => {
-            //     res.json(post)
-            // })
+            // console.log(post);
+            // res.json(post)
+            post.save().then((post) => {
+                res.json(post);
+            })
         })
         .catch((err) => {
             res.status(404).json({ post: 'Post not found'});
@@ -182,6 +193,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             post.comments.unshift(newComment);
 
+            // res.json(post)
             post.save().then((post) => {
                 res.json({ success: true });
             })
@@ -189,6 +201,48 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
         .catch((err) => {
             res.status(404).json({ post: 'Post not found'});
         });
+});
+
+// @route   DELETE api/post/comment/delete/:id
+// @desc    Delete comment in post
+// @access  Private
+router.delete('/comment/delete/:postId/:commentId', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Post.findById(req.params.postId)
+        .then((post) => {
+            // Check to see if comment exists
+            if (
+                post.comments.filter(
+                  comment => comment._id.toString() === req.params.commentId
+                ).length === 0
+            ) {
+                return res.status(404).json({ comment: 'Comment does not exist' });
+            }
+
+            // Get remove index
+            const removeIndex = post.comments.map((item) => item._id.toString()).indexOf(req.params.commentId);
+
+            if (post.user.toString() !== req.user.id) {
+                return res.status(401).json({ post : "User not authorized" });
+            }
+
+            const rate = post.comments[removeIndex].rate
+            const sum = post.rate.sum - rate;
+            const count = post.comments.length - 1;
+            const rating = sum / count
+            post.rate = {
+                sum: sum,
+                rating: rating
+            }
+            // Splice comment out of array
+            post.comments.splice(removeIndex, 1);
+
+            post.save().then((post) => {
+                res.json(post);
+            })
+        })
+        .catch((err) => {
+            res.json({ post: "Post not found"});
+        })
 });
 
 module.exports = router;
