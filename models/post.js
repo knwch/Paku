@@ -97,7 +97,7 @@ const postSchema = new mongoose.Schema({
         },
         photoUser: String,
         rate: {
-            type: String,
+            type: Number,
             required: true
         },
         created: {
