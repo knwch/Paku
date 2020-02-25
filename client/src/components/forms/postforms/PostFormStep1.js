@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
+import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
+
+  state = {}
+  handleChange = (e, { value }) => {
+    this.setState({ value })
+    console.log(value)
+  }
+
+  radioCarRef = React.createRef();
+  radioMotorcycleRef = React.createRef();
+  radioTruckRef = React.createRef();
 
   continue = e => {
     e.preventDefault();
@@ -9,51 +20,94 @@ class PostFormStep1 extends Component {
   };
 
   render() {
-    const { values, handleChange } = this.props;
+    const options = [
+      { key: 'h', text: 'บ้าน', value: 'house' },
+      { key: 'f', text: 'ลานกว้าง', value: 'field' },
+      { key: 'o', text: 'อื่นๆ', value: 'other' }
+    ];
+    const { values, handleChange, handleSelect } = this.props;
+
     return (
-      <div className="col-md-5 text-left pr-auto">
-        <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
-        <form>
-          <text>ให้เรารู้จักที่จอดรถของคุณ</text>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('name')} defaultValue={values.name} placeholder="ชื่อที่จอดรถ" />
-          </div>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('location')} defaultValue={values.location} placeholder="ตำแหน่งที่จอดรถ" />
-          </div>
-          <MapContainer/>
-          <h6>ขั้นตอนที่ 1</h6>
-          <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
-          <div className="row">
-            <div className="form-group col-md-6 pr-1">
-              <select class="form-control" onChange={handleChange('parkingtype')} defaultValue={values.parkingtype}>
-                <option selected disabled>ประเภทที่จอดรถ</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-              </select>
-            </div>
-            <div className="form-group col-md-6 pl-1">
-              <input type="text" className="form-control" onChange={handleChange('slot')} defaultValue={values.slot} placeholder="จำนวนที่จอดรถ" />
-            </div>
-          </div>
-          <text>ประเภทรถที่สามารถจอดได้</text>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('cartype')} defaultValue={values.cartype} placeholder="..." />
-          </div>
-          <text>ประเภทรถที่สามารถจอดได้</text>
-          <div className="row">
-            <div className="form-group col-md-6 pr-1">
-              <input type="text" className="form-control" onChange={handleChange('open')} defaultValue={values.open} placeholder="ตั้งแต่" />
-            </div>
-            <div className="form-group col-md-6 pl-1">
-              <input type="text" className="form-control" onChange={handleChange('close')} defaultValue={values.close} placeholder="จนถึง" />
-            </div>
-          </div>
-          <button onClick={this.continue} className="btn btn-primary">ถัดไป</button>
-        </form>
-      </div>
+      <Responsive>
+        <Container fluid>
+          <Grid className='mb-4'>
+            <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
+              <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
+              <Form>
+                <text>ให้เรารู้จักที่จอดรถของคุณ</text>
+                <Form.Input
+                  fluid
+                  placeholder='ชื่อที่จอดรถ'
+                  onChange={handleChange('name')}
+                  value={values.name}
+                />
+                {/* <MapContainer /> */}
+                <h6>ขั้นตอนที่ 1</h6>
+                <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
+                <Form.Group widths='equal'>
+                  <Form.Select
+                    fluid
+                    placeholder='ประเภทที่จอดรถ'
+                    onChange={handleChange('parkingtype')}
+                    value={values.parkingtype}
+                    options={options}
+                  />
+                  <Form.Input
+                    fluid
+                    placeholder='จำนวนที่จอดรถ'
+                    onChange={handleChange('slot')}
+                    value={values.slot}
+                  />
+                </Form.Group>
+
+                <text>ประเภทรถที่สามารถจอดได้</text>
+                <Form.Group inline>
+                  <Form.Radio
+                    label='รถยนต์'
+                    checked={values.cartype === 'car'}
+                    onChange={handleChange('cartype')} 
+                    value='car'
+                  />
+                  <Form.Radio
+                    label='รถจักรยานยนต์'
+                    checked={values.cartype === 'motorcycle'}
+                    onChange={handleChange('cartype')} 
+                    value='motorcycle'
+                  />
+                  <Form.Radio
+                    label='รถบรรทุก'
+                    checked={values.cartype === 'truck'}
+                    onChange={handleChange('cartype')} 
+                    value='truck'
+                  />
+                </Form.Group>
+
+                <text>ช่วงเวลาที่คุณเปิดให้บริการ</text>
+                <Form.Group widths='equal'>
+                  <Form.Input
+                    fluid
+                    placeholder='ตั้งแต่'
+                    onChange={handleChange('open')}
+                    value={values.open}
+                  />
+                  <Form.Input
+                    fluid
+                    placeholder='จนถึง'
+                    onChange={handleChange('close')}
+                    value={values.close}
+                  />
+                </Form.Group>
+                <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                    <Button.Content visible>ถัดไป</Button.Content>
+                    <Button.Content hidden>
+                      <Icon name='arrow right' />
+                    </Button.Content>
+                  </Button>
+              </Form>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </Responsive>
     );
   }
 }

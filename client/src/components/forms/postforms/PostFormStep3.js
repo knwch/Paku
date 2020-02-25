@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
 
 class PostFormStep3 extends Component {
 
@@ -15,26 +16,43 @@ class PostFormStep3 extends Component {
   render() {
     const { values, handleChange } = this.props;
     return (
-      <div className="col-md-5 text-left pr-auto">
-        <button onClick={this.back} className="btn btn-danger">ย้อนกลับ</button>
-        <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
-        <h6 className="mb-4">ขั้นตอนที่ 3</h6>
-        <form className="text-left">
-          <text>เพิ่มราคาที่จอดรถของคุณ</text><br />
-          <small>เพิ่มราคาที่จอดรถของคุณ</small>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('price')} defaultValue={values.price} placeholder="กรุณากรอกราคาที่คุณต้องการ (เฉพาะตัวเลข)" />
-          </div>
-          <text>เพิ่มรูปภาพที่จอดรถของคุณ</text><br />
-          <div className="form-group">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="customFile" />
-              <label class="custom-file-label" for="customFile">Choose file</label>
-            </div>
-          </div>
-          <button onClick={this.continue} className="btn btn-primary">ประกาศ</button>
-        </form>
-      </div>
+      <Responsive>
+        <Container fluid>
+          <Grid className='mb-4'>
+            <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
+              <Button onClick={this.back} className='btn-paku' color='yellow'>
+                <Button.Content>
+                  <Icon name='arrow left' />
+                </Button.Content>
+              </Button>
+              <h4 className="mb-3">ลงประกาศที่จอดรถในขั้นตอนสุดท้าย</h4>
+              <h6 className="mb-4">ขั้นตอนที่ 3</h6>
+              <Form>
+                <text>เพิ่มราคาที่จอดรถของคุณ</text>
+                <Form.Input
+                  fluid
+                  placeholder='กรุณากรอกราคาที่คุณต้องการ (เฉพาะตัวเลข)'
+                  onChange={handleChange('price')}
+                  value={values.price}
+                />
+
+                <h5 className="mb-4">เพิ่มรูปภาพที่จอดรถของคุณ</h5>
+                <Form.Input
+                  fluid
+                />
+
+                <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                  <Button.Content visible>ประกาศ</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name='arrow right' />
+                  </Button.Content>
+                </Button>
+
+              </Form>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </Responsive>
     );
   }
 }

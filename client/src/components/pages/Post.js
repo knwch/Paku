@@ -6,25 +6,9 @@ import PostConfirm from '../forms/postforms/PostConfirm';
 import PostSuccess from '../forms/postforms/PostSuccess';
 
 class Post extends Component {
-    componentDidMount(){
+    componentDidMount() {
         document.title = "Paku - Posting"
     }
-    // render() {
-    //     return (
-    //         <div className="container-fluid">
-    //             {/* <div>
-    //                 <h4 className="mb-4">วิธีเริ่มให้เช่าที่จอดรถ</h4>
-    //                 <p>
-    //                     การลงประกาศที่จอดรถบน PAKU ไม่ใช่เรื่องยาก...
-    //                 </p>
-    //                 <Link className="nav-link" to="/login">
-    //                     <button className="btn btn-primary">เริ่มต้น</button>
-    //                 </Link>
-    //             </div> */}
-
-    //         </div>
-    //     );
-    // }
 
     state = {
         step: 1,
@@ -60,9 +44,15 @@ class Post extends Component {
     };
 
     // Handle fields change
-    handleChange = input => e => {
-        this.setState({ [input]: e.target.value });
-    };
+    // handleChange = input => (e) => {
+    //     this.setState({ [input]: e.target.value });
+    //     console.log(e.target.value)
+    // };
+
+    handleChange = input => (e, {value}) => {
+        this.setState({ [input]: value });
+        console.log(value);
+    }
 
     render() {
         const { step } = this.state;
@@ -103,6 +93,7 @@ class Post extends Component {
                     <PostFormStep1
                         nextStep={this.nextStep}
                         handleChange={this.handleChange}
+                        handleSelect={this.handleSelect}
                         values={values}
                     />
                 );
