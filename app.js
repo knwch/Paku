@@ -8,7 +8,7 @@ const post = require('./routes/api/post');
 const profile = require('./routes/api/profile');
 const user = require('./routes/api/user');
 const book = require('./routes/api/booking');
-// const mysqlConnection = require('./controller/mysqlConnect');
+const mysqlConnection = require('./controller/mysqlConnect');
 
 //init app 
 const app = express();
