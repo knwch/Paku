@@ -94,7 +94,7 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
                 })
         })
         .catch((err) => {
-            res.json(err);
+            res.status(404).json({ user: 'No User found with that ID'});
         });
 });
 
@@ -113,7 +113,7 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
             })
         })
         .catch((err) => {
-            res.json({ post: "Post not found "});
+            res.status(404).json({ post: "Post not found "});
         })
 });
 
@@ -161,7 +161,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
             })
         })
         .catch((err) => {
-            res.status(404).json({ post: 'Post not found'});
+            res.status(404).json({ post: 'No Post found with that ID'});
         });
 });
 
@@ -199,7 +199,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
             })
         })
         .catch((err) => {
-            res.status(404).json({ post: 'Post not found'});
+            res.status(404).json({ post: 'No Post found with that ID'});
         });
 });
 
@@ -241,7 +241,7 @@ router.delete('/comment/delete/:postId/:commentId', passport.authenticate('jwt',
             })
         })
         .catch((err) => {
-            res.json({ post: "Post not found"});
+            res.json({ post: "No Post found with that ID"});
         })
 });
 
