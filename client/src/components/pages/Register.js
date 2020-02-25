@@ -80,7 +80,7 @@ class Register extends Component {
   onSubmit = e => {
     if (this.validator.allValid()) {
       e.preventDefault();
-      this.handleLoaderModal();
+      // this.handleLoaderModal();
       const newUser = {
         username: this.state.username,
         password: this.state.password,
