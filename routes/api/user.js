@@ -157,7 +157,8 @@ router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, 
             })
         })
         .catch((err) => {
-            res.json(err);
+            // res.json(err);
+            console.log(err);
         });
 });
 

@@ -68,7 +68,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
                 })
         })
         .catch((err) => {
-            res.json({ error: 'User not found'});
+            res.status(404).json({ error: 'No Post found with that ID'});
         });
 })
 
@@ -101,7 +101,8 @@ router.get('/handle/:id', (req, res) => {
             res.json(profile)
         })
         .catch((err) => {
-            res.state(404).json(err);
+            console.log(err);
+            res.state(404).json({ profile: 'No User found with that ID'});
         });
 });
 
@@ -128,7 +129,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
                 })
         })
         .catch((err) => {
-            res.state(404).json(err);
+            res.state(404).json({image: 'No User found with that ID'});
         })
 });
 
