@@ -50,10 +50,14 @@ class Admin extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (users.length !== 0) {
-      this.setState({
-        users: users,
-      });
+    if (users != null) {
+      if (users.user !== "No have user") {
+        if (users.length !== 0) {
+          this.setState({
+            users: users,
+          });
+        }
+      }
     }
   }
 
@@ -87,9 +91,12 @@ class Admin extends Component {
 
   handleSubItemClick = (e, { name }) => this.setState({ activeSubItem: name });
 
-  deleteUser = (userid) => {
+  deleteUser = async (userid) => {
     this.setState({ modalDeleteOpen: false });
-    this.props.delUser(userid);
+    await this.props.delUser(userid);
+    this.setState({
+      users: this.props.admin.users,
+    });
   };
 
   showRow = (user, index) => {
@@ -315,7 +322,10 @@ class Admin extends Component {
             <Button
               basic
               onClick={() => {
-                this.setState({ temp_userdata: null, modalDeleteOpen: false });
+                this.setState({
+                  temp_userdata: null,
+                  modalDeleteOpen: false,
+                });
               }}
             >
               <text>กลับ</text>
@@ -334,7 +344,7 @@ class Admin extends Component {
     const { admin, loading } = this.props.admin;
     if (admin === null || loading) {
       return (
-        <Modal open={true} className="modal-paku" size="mini" basic>
+        <Modal open={loading} className="modal-paku" size="mini" basic>
           <Loader size="large" active inline="centered">
             <p>โปรดรอสักครู่</p>
           </Loader>

@@ -187,14 +187,10 @@ class PostDetail extends Component {
                   <Item>
                     <Item.Content>
                       <Item.Header>
-                        <div>ประเภทที่สามารถจอดได้</div>
+                        <div>ประเภทที่จอดรถ</div>
                       </Item.Header>
                       <Item.Description>
                         <Icon name="home" /> {this.state.typeofpark}
-                      </Item.Description>
-                      <Item.Description>
-                        <Icon name="warehouse" /> จำนวนที่จอดรถ{" "}
-                        {this.state.numberofcar} คัน
                       </Item.Description>
                     </Item.Content>
                   </Item>
@@ -202,10 +198,14 @@ class PostDetail extends Component {
                   <Item>
                     <Item.Content>
                       <Item.Header>
-                        <div>ประเภทที่จอดรถ</div>
+                        <div>ประเภทที่สามารถจอดได้</div>
                       </Item.Header>
                       <Item.Description>
                         <Icon name="car" /> {this.state.typeofcar}
+                      </Item.Description>
+                      <Item.Description>
+                        <Icon name="warehouse" /> จำนวนที่จอดรถ{" "}
+                        {this.state.numberofcar} คัน
                       </Item.Description>
                     </Item.Content>
                   </Item>

@@ -81,7 +81,7 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    document.title = "🐤 register";
+    document.title = "PAKU - Register";
     document.body.classList.add("Background-Brown");
     if (this.props.auth.isAuthenticated) {
       if (this.props.auth.user.status === 0) {
@@ -689,7 +689,9 @@ class Register extends Component {
                         className="btn-paku"
                         color="yellow"
                       >
-                        ปิด <Icon name="right chevron" />
+                        <div>
+                          ปิด <Icon name="right chevron" />
+                        </div>
                       </Button>
                     </Modal.Actions>
                   </Modal>

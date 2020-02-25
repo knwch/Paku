@@ -11,7 +11,7 @@ class RecommendCard extends Component {
           className="bg-transparent shadow-none mb-0 text-decoration-none"
           fluid
         >
-          <div className="img-center-180">
+          <div className="img-center-180-x">
             <Image src={this.props.photo} wrapped ui={false} />
           </div>
           <Card.Description
