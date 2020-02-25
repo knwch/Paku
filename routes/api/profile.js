@@ -36,7 +36,7 @@ router.get('/alluser', (req, res) => {
     User.find()
         .then((profile) => {
             if (profile.length === 0) {
-                return res.status(404).json({ msg : 'User not found' });
+                return res.status(200).json({ msg : 'User not found' });
             }
             res.json(profile);
         })

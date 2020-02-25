@@ -21,12 +21,12 @@ router.get('/allpost', (req, res) => {
     Post.find()
         .then((post) => {
             if (post.length === 0) {
-                return res.status(404).json({ msg : 'No have post' });
+                return res.status(200).json({ msg : 'No have post' });
             }
             res.json(post);
         })
         .catch((err) => {
-            res.state(404).json(err);
+            res.status(404).json(err);
         })
 });
 
