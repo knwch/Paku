@@ -7,8 +7,8 @@ const admin = require('./routes/api/admin');
 const post = require('./routes/api/post');
 const profile = require('./routes/api/profile');
 const user = require('./routes/api/user');
-const book = require('./routes/api/booking');
-const mysqlConnection = require('./controller/mysqlConnect');
+// const book = require('./routes/api/booking');
+// const mysqlConnection = require('./controller/mysqlConnect');
 
 //init app 
 const app = express();
@@ -37,7 +37,7 @@ app.use('/api/admin', admin);
 app.use('/api/posts', post);
 app.use('/api/profile', profile);
 app.use('/api/users', user);
-app.use('/api/book', book);
+// app.use('/api/book', book);
 
 // Set portnumber
 const portnumber = process.env.PORT || 5000
