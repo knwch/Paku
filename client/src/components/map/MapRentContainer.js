@@ -98,19 +98,6 @@ class MapContainer extends Component {
         }
     };
 
-    state = { mark: false }
-
-    handleMarker = ({ lat, lng }) => {
-        console.log(lat, lng)
-        this.setState({
-            currentlocation: {
-                lat: lat,
-                lng: lng
-            }
-        })
-        this.setState({ mark: true })
-    }
-
     render() {
         return (
             <div class="map-responsive">
@@ -123,7 +110,6 @@ class MapContainer extends Component {
                         center={this.state.currentlocation}
                         zoom={this.state.zoom}
                         options={{ styles }}
-                        onClick={this.handleMarker}
                     >
                         {this.state.show &&
                             <Marker
@@ -132,38 +118,7 @@ class MapContainer extends Component {
                             >
                             </Marker>
                         }
-                        {this.state.mark &&
-                            <Marker
-                                lat={this.state.currentlocation.lat}
-                                lng={this.state.currentlocation.lng}
-                            >
-                            </Marker>
-                        }
                     </GoogleMapReact>
-
-                    {/* <CurrentLocation centerAroundCurrentLocation google={this.props.google} >
-
-                        <Marker
-                            onClick={this.onMarkerClick}
-                            name={'current location'}
-                            icon={{
-                                url: require('../imgs/Logo.png'),
-                                scaledSize: new this.props.google.maps.Size(26, 35)
-                            }}
-                        />
-                        <InfoWindow
-                            marker={this.state.activeMarker}
-                            visible={this.state.showingInfoWindow}
-                            onClose={this.onClose}
-                        >
-                            <div>
-                                <h4>{this.state.selectedPlace.name}</h4>
-                                Hi
-                        </div>
-                        </InfoWindow>
-                    </CurrentLocation>
-                    {this.displayMarkers()} */}
-                    
                 </div>
             </div>
         );
