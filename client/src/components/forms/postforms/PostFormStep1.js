@@ -15,7 +15,7 @@ class PostFormStep1 extends Component {
       { key: 'f', text: 'ลานกว้าง', value: 'field' },
       { key: 'o', text: 'อื่นๆ', value: 'other' }
     ];
-    const { values, handleChange, handleSelect } = this.props;
+    const { values, handleChange } = this.props;
 
     return (
       <Responsive>
