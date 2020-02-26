@@ -31,7 +31,7 @@ class PostFormStep1 extends Component {
                   onChange={handleChange('name')}
                   value={values.name}
                 />
-                {/* <MapContainer /> */}
+                <MapContainer />
                 <h6>ขั้นตอนที่ 1</h6>
                 <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
                 <Form.Group widths='equal'>

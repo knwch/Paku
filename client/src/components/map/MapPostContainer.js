@@ -98,8 +98,6 @@ class MapContainer extends Component {
         }
     };
 
-    state = { mark: false }
-
     handleMarker = ({ lat, lng }) => {
         console.log(lat, lng)
         this.setState({
@@ -108,7 +106,7 @@ class MapContainer extends Component {
                 lng: lng
             }
         })
-        this.setState({ mark: true })
+        this.setState({ show: true })
     }
 
     render() {
@@ -117,7 +115,7 @@ class MapContainer extends Component {
                 <div style={{ height: '100vh', width: '100%' }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{
-                            key: 'AIzaSyBvzeljl7lR56XZfMcbSpHiPmqZlD0zpDY',
+                            key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
                             language: 'th'
                         }}
                         center={this.state.currentlocation}
@@ -126,13 +124,6 @@ class MapContainer extends Component {
                         onClick={this.handleMarker}
                     >
                         {this.state.show &&
-                            <Marker
-                                lat={this.state.currentlocation.lat}
-                                lng={this.state.currentlocation.lng}
-                            >
-                            </Marker>
-                        }
-                        {this.state.mark &&
                             <Marker
                                 lat={this.state.currentlocation.lat}
                                 lng={this.state.currentlocation.lng}
