@@ -80,7 +80,6 @@ class Register extends Component {
   onSubmit = e => {
     if (this.validator.allValid()) {
       e.preventDefault();
-      // this.handleLoaderModal();
       const newUser = {
         username: this.state.username,
         password: this.state.password,
@@ -110,12 +109,7 @@ class Register extends Component {
   };
 
   state = {
-    modalOpen: false,
-    modalLoader: false
-  }
-
-  handleLoaderModal = () => {
-    this.setState({ modalLoader: true })
+    modalOpen: false
   }
 
   handleOpenModal = () => this.setState({ modalOpen: true })
@@ -241,15 +235,6 @@ class Register extends Component {
                       ปิด <Icon name='right chevron' />
                     </Button>
                   </Modal.Actions>
-                </Modal>
-
-                <Modal
-                  open={this.state.modalLoader}
-                  className="modal-paku"
-                  size='mini'
-                  basic
-                >
-                  <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
                 </Modal>
 
                 <div className='d-flex justify-content-end'>

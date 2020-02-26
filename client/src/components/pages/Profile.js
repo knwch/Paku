@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
-import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label, Transition } from 'semantic-ui-react';
+import {
+    Card,
+    Icon,
+    Input,
+    Divider,
+    Button,
+    Image,
+    Modal,
+    Grid,
+    Container,
+    Responsive,
+    Form,
+    TextArea,
+    Label,
+    Transition,
+    Loader
+} from 'semantic-ui-react';
 import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -297,71 +313,85 @@ class Profile extends Component {
     }
 
     render() {
+        const { profile, loading } = this.props.profile
         let errors = this.state.errors
-        return (
-            <Responsive>
-                <Container fluid>
-                    <Grid className='mb-4' centered>
-                        <Grid.Column mobile={15} tablet={5} computer={5}>
-                            <Card fluid>
+        if (profile === null || loading) {
+            return (
+                <Modal
+                    open={true}
+                    className="modal-paku"
+                    size='mini'
+                    basic
+                >
+                    <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
+                </Modal>
+            );
+        } else {
+            return (
+                <Responsive>
+                    <Container fluid>
+                        <Grid className='mb-4' centered>
+                            <Grid.Column mobile={15} tablet={5} computer={5}>
+                                <Card fluid>
 
-                                <Card.Content className='card-color' textAlign='center'>
-                                    <div class="button-floated">
-                                        <div className='img-center' >
-                                            <Image src={this.state.photo} wrapped ui={false} />
-                                        </div>
-                                        <Button
-                                            as='a'
-                                            circular
-                                            icon='photo'
-                                            onClick={() => this.fileInputRef.current.click()}
-                                        />
-                                        <input
-                                            ref={this.fileInputRef}
-                                            type="file"
-                                            hidden
-                                            onChange={this.fileChange}
-                                        />
-                                    </div>
-
-                                    {this.validator.message('err', errors.image, `imgerror:${errors.image}`)}
-
-                                    <Modal
-                                        open={this.state.modalOpen}
-                                        className="modal-paku"
-                                        size='mini'
-                                    >
-                                        <Modal.Content className='text-center'>
+                                    <Card.Content className='card-color' textAlign='center'>
+                                        <div class="button-floated">
                                             <div className='img-center' >
-                                                <Image src={this.state.preview} size='small' centered wrapped />
+                                                <Image src={this.state.photo} wrapped ui={false} />
                                             </div>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button basic onClick={this.handleCloseModal}>
-                                                <text>ยกเลิก</text>
-                                            </Button>
-                                            <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
-                                                <Icon name='checkmark' /> <text>อัพโหลด</text>
-                                            </Button>
-                                        </Modal.Actions>
-                                    </Modal>
+                                            <Button
+                                                as='a'
+                                                circular
+                                                icon='photo'
+                                                onClick={() => this.fileInputRef.current.click()}
+                                            />
+                                            <input
+                                                ref={this.fileInputRef}
+                                                type="file"
+                                                hidden
+                                                onChange={this.fileChange}
+                                            />
+                                        </div>
 
-                                </Card.Content>
+                                        {this.validator.message('err', errors.image, `imgerror:${errors.image}`)}
 
-                                {this.ProfileForm(this.state.formOpen)}
+                                        <Modal
+                                            open={this.state.modalOpen}
+                                            className="modal-paku"
+                                            size='mini'
+                                        >
+                                            <Modal.Content className='text-center'>
+                                                <div className='img-center' >
+                                                    <Image src={this.state.preview} size='small' centered wrapped />
+                                                </div>
+                                            </Modal.Content>
+                                            <Modal.Actions>
+                                                <Button basic onClick={this.handleCloseModal}>
+                                                    <text>ยกเลิก</text>
+                                                </Button>
+                                                <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
+                                                    <Icon name='checkmark' /> <text>อัพโหลด</text>
+                                                </Button>
+                                            </Modal.Actions>
+                                        </Modal>
 
-                            </Card>
-                        </Grid.Column>
-                        <Grid.Column mobile={15} tablet={11} computer={11}>
-                            <Card fluid>
-                                <RecommendCardList />
-                            </Card>
-                        </Grid.Column>
-                    </Grid>
+                                    </Card.Content>
 
-                </Container>
-            </Responsive >
-        );
+                                    {this.ProfileForm(this.state.formOpen)}
+
+                                </Card>
+                            </Grid.Column>
+                            <Grid.Column mobile={15} tablet={11} computer={11}>
+                                <Card fluid>
+                                    <RecommendCardList />
+                                </Card>
+                            </Grid.Column>
+                        </Grid>
+
+                    </Container>
+                </Responsive >
+            );
+        }
     }
 }
 
