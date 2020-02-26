@@ -4,16 +4,6 @@ import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
 
-  state = {}
-  handleChange = (e, { value }) => {
-    this.setState({ value })
-    console.log(value)
-  }
-
-  radioCarRef = React.createRef();
-  radioMotorcycleRef = React.createRef();
-  radioTruckRef = React.createRef();
-
   continue = e => {
     e.preventDefault();
     this.props.nextStep();
