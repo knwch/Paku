@@ -167,7 +167,7 @@ class Profile extends Component {
                     });
                     this.handleOpenModal();
                 } else {
-                    err = { image: "ขนาดไฟล์ไม่เกิน 1 MB" };
+                    err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
                     // console.log(err);
                     this.setState({
                         ...this.state,
