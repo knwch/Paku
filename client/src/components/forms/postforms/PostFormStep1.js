@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
-import MapContainer from '../../map/MapContainer';
+import MapContainer from '../../map/MapPostContainer';
 
 class PostFormStep1 extends Component {
 
