@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
@@ -24,9 +24,9 @@ class PostFormStep1 extends Component {
         <Container fluid>
           <Grid className='mb-4'>
             <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
-              <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
+              <Header as='h3'><div>มาเริ่มลงประกาศที่จอดรถกันเถอะ</div></Header>
               <Form>
-                <text>ให้เรารู้จักที่จอดรถของคุณ</text>
+                <Header as='h4'><div>ให้เรารู้จักที่จอดรถของคุณ</div></Header>
                 <Form.Input
                   fluid
                   placeholder='ชื่อที่จอดรถ'
@@ -41,8 +41,8 @@ class PostFormStep1 extends Component {
                   show={values.show}
                   handleClick={handleMarker}
                 />
-                <h6>ขั้นตอนที่ 1</h6>
-                <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
+                <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>
+                <Header as='h3'><div>ที่จอดรถของคุณเป็นแบบไหน</div></Header>
                 <Form.Group widths='equal'>
                   <Form.Select
                     fluid
@@ -59,7 +59,7 @@ class PostFormStep1 extends Component {
                   />
                 </Form.Group>
 
-                <text>ประเภทรถที่สามารถจอดได้</text>
+                <Header as='h4'><div>ประเภทรถที่สามารถจอดได้</div></Header>
                 <Form.Group inline>
                   <Form.Radio
                     label='รถยนต์'
@@ -81,7 +81,7 @@ class PostFormStep1 extends Component {
                   />
                 </Form.Group>
 
-                <text>ช่วงเวลาที่คุณเปิดให้บริการ</text>
+                <Header as='h4'><div>ช่วงเวลาที่คุณเปิดให้บริการ</div></Header>
                 <Form.Group widths='equal'>
                   <Form.Input
                     fluid
