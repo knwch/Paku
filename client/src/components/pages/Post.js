@@ -3,7 +3,10 @@ import PostFormStep1 from '../forms/postforms/PostFormStep1';
 import PostFormStep2 from '../forms/postforms/PostFormStep2';
 import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
-import PostSuccess from '../forms/postforms/PostSuccess';
+import { addPost } from '../../redux/actions/postActions';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 
 class Post extends Component {
 
@@ -11,21 +14,22 @@ class Post extends Component {
         super(props);
         this.state = {
             step: 1,
-            name: '',
-            parkingtype: '',
-            slot: '',
-            cartype: '',
+            title: '',
+            picture: '',
+            price: '',
+            typeofpark: '',
+            numberofcar: '',
+            typeofcar: '',
+            explain: '',
+            rule: '',
+            nearby: '',
+            facility: '',
             open: '',
             close: '',
-            detail: '',
-            rule: [],
-            nearby: [],
-            facility: '',
-            price: '',
-            picture: '',
-            currentlocation: {
+            address: '',
+            location: {
                 lat: 13.7563,
-                lng: 100.5018,
+                lng: 100.5018
             },
             zoom: 16,
             show: false
@@ -38,7 +42,7 @@ class Post extends Component {
             navigator.geolocation.getCurrentPosition(
                 position => {
                     this.setState(prevState => ({
-                        currentlocation: {
+                        location: {
                             ...prevState.currentLatLng,
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
@@ -54,7 +58,7 @@ class Post extends Component {
     handleMarker = ({ lat, lng }) => {
         console.log(lat, lng)
         this.setState({
-            currentlocation: {
+            location: {
                 lat: lat,
                 lng: lng
             }
@@ -79,50 +83,72 @@ class Post extends Component {
     };
 
     // Handle fields change
-    // handleChange = input => (e) => {
-    //     this.setState({ [input]: e.target.value });
-    //     console.log(e.target.value)
-    // };
-
-    handleChange = input => (e, {value}) => {
+    handleChange = input => (e, { value }) => {
         this.setState({ [input]: value });
         console.log(value);
+        console.log(this.state.price);
+    }
+
+    handleSubmit = (e) => {
+        console.log(this.state)
+        e.preventDefault();
+        const newPost = {
+            title: this.state.title,
+            location: this.state.location,
+            longitude: this.state.location.longitude,
+            latitude: this.state.location.latitude,
+            address: this.state.address,
+            open: this.state.open,
+            close: this.state.close,
+            typeofpark: this.state.typeofpark,
+            numberofcar: this.state.numberofcar,
+            typeofcar: this.state.typeofcar,
+            explain: this.state.explain,
+            rule: this.state.rule,
+            nearby: this.state.nearby,
+            facility: this.state.facility,
+            price: this.state.price,
+        }
+        this.props.addPost(newPost);
     }
 
     render() {
         const { step } = this.state;
-        const { name,
-            currentlocation,
-            zoom,
-            show,
-            parkingtype,
-            slot,
-            cartype,
+        const {
+            title,
+            address,
+            location,
             open,
             close,
-            detail,
+            typeofpark,
+            numberofcar,
+            typeofcar,
+            explain,
             rule,
             nearby,
             facility,
+            zoom,
+            show,
             price,
-            picture } = this.state;
+            photos } = this.state;
         const values =
         {
-            name,
-            currentlocation,
+            title,
+            address,
+            location,
             zoom,
             show,
-            parkingtype,
-            slot,
-            cartype,
             open,
             close,
-            detail,
+            typeofpark,
+            numberofcar,
+            typeofcar,
+            explain,
             rule,
             nearby,
             facility,
             price,
-            picture
+            photos
         };
 
         // eslint-disable-next-line default-case
@@ -148,7 +174,7 @@ class Post extends Component {
             case 3:
                 return (
                     <PostFormStep3
-                        nextStep={this.nextStep}
+                        nextStep={this.handleSubmit}
                         prevStep={this.prevStep}
                         handleChange={this.handleChange}
                         values={values}
@@ -157,16 +183,18 @@ class Post extends Component {
             case 4:
                 return (
                     <PostConfirm
-                        nextStep={this.nextStep}
-                        prevStep={this.prevStep}
                         values={values}
                     />
                 );
-            case 5:
-                return <PostSuccess />;
         }
 
     }
 }
 
-export default Post;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    post: state.post,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, { addPost })(withRouter(Post))

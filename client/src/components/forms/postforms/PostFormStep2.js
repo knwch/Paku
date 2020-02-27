@@ -32,8 +32,8 @@ class PostFormStep2 extends Component {
                 <Form.TextArea
                   fluid
                   placeholder='อธิบายที่จอดรถของคุณให้ผู้จองได้รู้'
-                  onChange={handleChange('detail')}
-                  value={values.detail}
+                  onChange={handleChange('explain')}
+                  value={values.explain}
                 />
 
                 <Header as='h4'><div>กฎที่จอดรถ</div></Header>

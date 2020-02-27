@@ -5,7 +5,7 @@ class PostFormStep3 extends Component {
 
   continue = e => {
     e.preventDefault();
-    this.props.nextStep();
+    this.props.nextStep(e);
   };
 
   back = e => {

@@ -30,13 +30,19 @@ class PostFormStep1 extends Component {
                 <Form.Input
                   fluid
                   placeholder='ชื่อที่จอดรถ'
-                  onChange={handleChange('name')}
-                  value={values.name}
+                  onChange={handleChange('title')}
+                  value={values.title}
+                />
+                <Form.Input
+                  fluid
+                  placeholder='ที่อยู่'
+                  onChange={handleChange('address')}
+                  value={values.address}
                 />
                 <MapContainer
-                  center={values.currentlocation}
-                  lat={values.currentlocation.lat}
-                  lng={values.currentlocation.lng}
+                  center={values.location}
+                  lat={values.location.latitude}
+                  lng={values.location.longitude}
                   zoom={values.zoom}
                   show={values.show}
                   handleClick={handleMarker}
@@ -47,15 +53,15 @@ class PostFormStep1 extends Component {
                   <Form.Select
                     fluid
                     placeholder='ประเภทที่จอดรถ'
-                    onChange={handleChange('parkingtype')}
-                    value={values.parkingtype}
+                    onChange={handleChange('typeofpark')}
+                    value={values.typeofpark}
                     options={options}
                   />
                   <Form.Input
                     fluid
                     placeholder='จำนวนที่จอดรถ'
-                    onChange={handleChange('slot')}
-                    value={values.slot}
+                    onChange={handleChange('numberofcar')}
+                    value={values.numberofcar}
                   />
                 </Form.Group>
 
@@ -63,20 +69,20 @@ class PostFormStep1 extends Component {
                 <Form.Group inline>
                   <Form.Radio
                     label='รถยนต์'
-                    checked={values.cartype === 'car'}
-                    onChange={handleChange('cartype')}
+                    checked={values.typeofcar === 'car'}
+                    onChange={handleChange('typeofcar')}
                     value='car'
                   />
                   <Form.Radio
                     label='รถจักรยานยนต์'
-                    checked={values.cartype === 'motorcycle'}
-                    onChange={handleChange('cartype')}
+                    checked={values.typeofcar === 'motorcycle'}
+                    onChange={handleChange('typeofcar')}
                     value='motorcycle'
                   />
                   <Form.Radio
                     label='รถบรรทุก'
-                    checked={values.cartype === 'truck'}
-                    onChange={handleChange('cartype')}
+                    checked={values.typeofcar === 'truck'}
+                    onChange={handleChange('typeofcar')}
                     value='truck'
                   />
                 </Form.Group>
