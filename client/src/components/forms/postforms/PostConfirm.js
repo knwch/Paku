@@ -17,7 +17,6 @@ class PostConfirm extends Component {
     const {
       values: {
         name,
-        location,
         parkingtype,
         slot,
         cartype,
@@ -35,9 +34,6 @@ class PostConfirm extends Component {
       <div className="col-md-5 ml-auto mr-auto">
         <li>
           {name}
-        </li>
-        <li>
-          {location}
         </li>
         <li>
           {parkingtype}

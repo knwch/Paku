@@ -6,26 +6,61 @@ import PostConfirm from '../forms/postforms/PostConfirm';
 import PostSuccess from '../forms/postforms/PostSuccess';
 
 class Post extends Component {
-    componentDidMount() {
-        document.title = "Paku - Posting"
-    }
 
-    state = {
-        step: 1,
-        name: '',
-        location: '',
-        parkingtype: '',
-        slot: '',
-        cartype: '',
-        open: '',
-        close: '',
-        detail: '',
-        rule: [],
-        nearby: [],
-        facility: '',
-        price: '',
-        picture: ''
+    constructor(props) {
+        super(props);
+        this.state = {
+            step: 1,
+            name: '',
+            parkingtype: '',
+            slot: '',
+            cartype: '',
+            open: '',
+            close: '',
+            detail: '',
+            rule: [],
+            nearby: [],
+            facility: '',
+            price: '',
+            picture: '',
+            currentlocation: {
+                lat: 13.7563,
+                lng: 100.5018,
+            },
+            zoom: 16,
+            show: false
+        }
     };
+
+    componentDidMount = () => {
+        document.title = "Paku - Posting"
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    this.setState(prevState => ({
+                        currentlocation: {
+                            ...prevState.currentLatLng,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        zoom: 16,
+                        show: true
+                    }))
+                }
+            )
+        }
+    };
+
+    handleMarker = ({ lat, lng }) => {
+        console.log(lat, lng)
+        this.setState({
+            currentlocation: {
+                lat: lat,
+                lng: lng
+            }
+        })
+        this.setState({ show: true })
+    }
 
     // Proceed to next step
     nextStep = () => {
@@ -57,7 +92,9 @@ class Post extends Component {
     render() {
         const { step } = this.state;
         const { name,
-            location,
+            currentlocation,
+            zoom,
+            show,
             parkingtype,
             slot,
             cartype,
@@ -72,7 +109,9 @@ class Post extends Component {
         const values =
         {
             name,
-            location,
+            currentlocation,
+            zoom,
+            show,
             parkingtype,
             slot,
             cartype,
@@ -93,7 +132,7 @@ class Post extends Component {
                     <PostFormStep1
                         nextStep={this.nextStep}
                         handleChange={this.handleChange}
-                        handleSelect={this.handleSelect}
+                        handleMarker={this.handleMarker}
                         values={values}
                     />
                 );
