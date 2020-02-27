@@ -14,7 +14,7 @@ import {
 export const addPost = postData => dispatch => {
   dispatch(clearErrors());
   axios
-    .post('/api/posts', postData)
+    .post('/api/post/addPost', postData)
     .then(res =>
       dispatch({
         type: ADD_POST,
