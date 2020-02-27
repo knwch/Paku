@@ -39,7 +39,6 @@ class Profile extends Component {
             temp: "",
             email: "",
             phone: "",
-            temp: "",
             tempphone: "",
             photo: null,
             preview: null,
@@ -309,6 +308,8 @@ class Profile extends Component {
                         </Form>
                     </Card.Content>
                 );
+            default:
+                
         }
     }
 
