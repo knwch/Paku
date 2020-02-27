@@ -111,7 +111,7 @@ class MapContainer extends Component {
 
     render() {
         return (
-            <div class="map-responsive">
+            <div className="map-responsive">
                 <div style={{ height: '70vh', width: '100%' }}>
                     <GoogleMapReact
                         bootstrapURLKeys={{
