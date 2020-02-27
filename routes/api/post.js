@@ -17,11 +17,11 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests post system' }));
 // @route   GET api/profile/allpost
 // @desc    Get All posts 
 // @access  Public
-router.get('/allpost', (req, res) => {
+router.get('/allPost', (req, res) => {
     Post.find()
         .then((post) => {
             if (post.length === 0) {
-                return res.status(200).json({ msg : 'No have post' });
+                return res.status(200).json({ post: 'No have post' });
             }
             res.json(post);
         })
@@ -39,7 +39,7 @@ router.get('/handle/:id', (req, res) => {
             res.json(post);
         })
         .catch((err) => {
-            res.status(404).json({ msg : 'No Post found with that ID'});
+            res.status(404).json({ post: 'No Post found with that ID'});
         })
 });
 
@@ -195,7 +195,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             // res.json(post)
             post.save().then((post) => {
-                res.json({ success: true });
+                res.json(post);
             })
         })
         .catch((err) => {
@@ -203,46 +203,46 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
         });
 });
 
-// @route   DELETE api/post/comment/delete/:id
-// @desc    Delete comment in post
-// @access  Private
-router.delete('/comment/delete/:postId/:commentId', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Post.findById(req.params.postId)
-        .then((post) => {
-            // Check to see if comment exists
-            if (
-                post.comments.filter(
-                  comment => comment._id.toString() === req.params.commentId
-                ).length === 0
-            ) {
-                return res.status(404).json({ comment: 'Comment does not exist' });
-            }
+// // @route   DELETE api/post/comment/delete/:id
+// // @desc    Delete comment in post
+// // @access  Private
+// router.delete('/comment/delete/:postId/:commentId', passport.authenticate('jwt', { session: false }), (req, res) => {
+//     Post.findById(req.params.postId)
+//         .then((post) => {
+//             // Check to see if comment exists
+//             if (
+//                 post.comments.filter(
+//                   comment => comment._id.toString() === req.params.commentId
+//                 ).length === 0
+//             ) {
+//                 return res.status(404).json({ comment: 'Comment does not exist' });
+//             }
 
-            // Get remove index
-            const removeIndex = post.comments.map((item) => item._id.toString()).indexOf(req.params.commentId);
+//             // Get remove index
+//             const removeIndex = post.comments.map((item) => item._id.toString()).indexOf(req.params.commentId);
 
-            if (post.user.toString() !== req.user.id) {
-                return res.status(401).json({ post : "User not authorized" });
-            }
+//             if (post.user.toString() !== req.user.id) {
+//                 return res.status(401).json({ post : "User not authorized" });
+//             }
 
-            const rate = post.comments[removeIndex].rate
-            const sum = post.rate.sum - rate;
-            const count = post.comments.length - 1;
-            const rating = sum / count
-            post.rate = {
-                sum: sum,
-                rating: rating
-            }
-            // Splice comment out of array
-            post.comments.splice(removeIndex, 1);
+//             const rate = post.comments[removeIndex].rate
+//             const sum = post.rate.sum - rate;
+//             const count = post.comments.length - 1;
+//             const rating = sum / count
+//             post.rate = {
+//                 sum: sum,
+//                 rating: rating
+//             }
+//             // Splice comment out of array
+//             post.comments.splice(removeIndex, 1);
 
-            post.save().then((post) => {
-                res.json(post);
-            })
-        })
-        .catch((err) => {
-            res.json({ post: "No Post found with that ID"});
-        })
-});
+//             post.save().then((post) => {
+//                 res.json(post);
+//             })
+//         })
+//         .catch((err) => {
+//             res.json({ post: "No Post found with that ID"});
+//         })
+// });
 
 module.exports = router;
