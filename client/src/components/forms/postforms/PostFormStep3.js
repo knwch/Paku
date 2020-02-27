@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header } from 'semantic-ui-react';
 
 class PostFormStep3 extends Component {
 
@@ -25,10 +25,10 @@ class PostFormStep3 extends Component {
                   <Icon name='arrow left' />
                 </Button.Content>
               </Button>
-              <h4 className="mb-3">ลงประกาศที่จอดรถในขั้นตอนสุดท้าย</h4>
-              <h6 className="mb-4">ขั้นตอนที่ 3</h6>
+              <Header as='h3'><div>ลงประกาศที่จอดรถในขั้นตอนสุดท้าย</div></Header>
+              <Header as='h6'><div>ขั้นตอนที่ 3</div></Header>
               <Form>
-                <text>เพิ่มราคาที่จอดรถของคุณ</text>
+                <Header as='h3'><div>เพิ่มราคาที่จอดรถของคุณ</div></Header>
                 <Form.Input
                   fluid
                   placeholder='กรุณากรอกราคาที่คุณต้องการ (เฉพาะตัวเลข)'
@@ -36,7 +36,7 @@ class PostFormStep3 extends Component {
                   value={values.price}
                 />
 
-                <h5 className="mb-4">เพิ่มรูปภาพที่จอดรถของคุณ</h5>
+                <Header as='h4'><div>เพิ่มรูปภาพที่จอดรถของคุณ</div></Header>
                 <Form.Input
                   fluid
                 />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header } from 'semantic-ui-react';
 
 class PostFormStep2 extends Component {
 
@@ -25,10 +25,10 @@ class PostFormStep2 extends Component {
                   <Icon name='arrow left' />
                 </Button.Content>
               </Button>
-              <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
-              <h6 className="mb-4">ขั้นตอนที่ 2</h6>
+              <Header as='h3'><div>มาเริ่มลงประกาศที่จอดรถกันต่อ</div></Header>
+              <Header as='h6'><div>ขั้นตอนที่ 2</div></Header>
               <Form>
-                <text>คำอธิบายที่จอดรถของคุณ</text>
+                <Header as='h3'><div>คำอธิบายที่จอดรถของคุณ</div></Header>
                 <Form.TextArea
                   fluid
                   placeholder='อธิบายที่จอดรถของคุณให้ผู้จองได้รู้'
@@ -36,8 +36,8 @@ class PostFormStep2 extends Component {
                   value={values.detail}
                 />
 
-                <h5 className="mb-4">กฎที่จอดรถ</h5>
-                <text>เพิ่มกฎของคุณให้ผู้เช่าได้รู้ และสร้างความสบายใจให้กับทั้งสองฝ่าย</text>
+                <Header as='h4'><div>กฎที่จอดรถ</div></Header>
+                <Header as='h6'><div>เพิ่มกฎของคุณให้ผู้เช่าได้รู้ และสร้างความสบายใจให้กับทั้งสองฝ่าย</div></Header>
                 <Form.Input
                   fluid
                   placeholder='เพิ่มกฎของคุณ (ไม่บังคับ)'
@@ -51,7 +51,7 @@ class PostFormStep2 extends Component {
                   value={values.nearby}
                 />
 
-                <text>สิ่งอำนวยความสะดวก</text>
+                <Header as='h4'><div>สิ่งอำนวยความสะดวก</div></Header>
                 <Form.Group inline>
                   <Form.Radio
                     label='CCTV'
