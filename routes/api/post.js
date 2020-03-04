@@ -58,7 +58,6 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
             }
 
             if (!isValid) {
-                console.log(errors)
                 return res.status(400).json(errors);
             }
 
