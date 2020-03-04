@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 
 const Marker = (props) => {
     return (
-        <Icon size='large' name='wheelchair' />
+        <Icon size='big' name='home' color='red' fitted />
     );
 };
 

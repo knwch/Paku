@@ -111,27 +111,25 @@ class MapContainer extends Component {
 
     render() {
         return (
-            <div className="map-responsive">
-                <div style={{ height: '70vh', width: '100%' }}>
-                    <GoogleMapReact
-                        bootstrapURLKeys={{
-                            key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
-                            language: 'th'
-                        }}
-                        center={this.props.center}
-                        zoom={this.props.zoom}
-                        options={{ styles }}
-                        onClick={this.props.handleClick}
-                    >
-                        {this.props.show &&
-                            <Marker
-                                lat={this.props.lat}
-                                lng={this.props.lng}
-                            >
-                            </Marker>
-                        }
-                    </GoogleMapReact>   
-                </div>
+            <div style={{ height: '100vh', width: '100%' }}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{
+                        key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
+                        language: 'th'
+                    }}
+                    center={this.props.center}
+                    zoom={this.props.zoom}
+                    options={{ styles }}
+                    onClick={this.props.handleClick}
+                >
+                    {this.props.show &&
+                        <Marker
+                            lat={this.props.lat}
+                            lng={this.props.lng}
+                        >
+                        </Marker>
+                    }
+                </GoogleMapReact>
             </div>
         );
     }
