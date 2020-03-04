@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Input } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { addPost } from '../../redux/actions/postActions';
 import { storage } from '../../config/firebase-config';
 
 class ConfirmCard extends Component {
@@ -12,12 +15,24 @@ class ConfirmCard extends Component {
             cardfiletemp: '',
             userphoto: null,
             userfiletemp: '',
+            modalOpen: false,
             errors: {}
         }
     }
 
     fileInputRef1 = React.createRef();
     fileInputRef2 = React.createRef();
+
+    componentDidMount = () => {
+        document.title = "Paku - Confirm ID Card"
+        const { user } = this.props.auth
+        console.log(user)
+        if (user.idCard.confirm === true) {
+            this.props.history.push('/');
+        } else if (user.idCard.idCard !== 0 && user.idCard.confirm === false) {
+            this.handleOpenModal();
+        }
+    }
 
     handleChange = input => e => {
         this.setState({ [input]: e.target.value });
@@ -95,6 +110,8 @@ class ConfirmCard extends Component {
         e.preventDefault();
 
     };
+
+    handleOpenModal = () => this.setState({ modalOpen: true })
 
     render() {
 
@@ -186,6 +203,22 @@ class ConfirmCard extends Component {
                                 </div>
 
                             </Form>
+
+                            <Modal
+                                open={this.state.modalOpen}
+                                className="modal-paku"
+                                size='tiny'
+                            >
+                                <Modal.Content>
+                                    ทีมงานกำลังตรวจสอบการยืนยันบัตรประชาชนของคุณ โปรดรอ 1 - 2 วันทำการ
+                                </Modal.Content>
+                                <Modal.Actions>
+                                    <Button className='btn-paku' href='/'>
+                                        <text>กลับสู่หน้าแรก</text>
+                                    </Button>
+                                </Modal.Actions>
+                            </Modal>
+
                         </Grid.Column>
                     </Grid>
                 </Container>
@@ -195,4 +228,10 @@ class ConfirmCard extends Component {
 
 }
 
-export default ConfirmCard;
+const mapStateToProps = state => ({
+    auth: state.auth,
+    post: state.post,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, { addPost })(withRouter(ConfirmCard))
