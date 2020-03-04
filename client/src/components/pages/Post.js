@@ -5,7 +5,7 @@ import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
 import { addPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
 class Post extends Component {
@@ -49,6 +49,8 @@ class Post extends Component {
 
     componentDidMount = () => {
         document.title = "Paku - Posting"
+        const { user } = this.props.auth
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 position => {
@@ -63,6 +65,10 @@ class Post extends Component {
                     }))
                 }
             )
+        }
+
+        if (user.idCard.confirm === false) {
+            this.props.history.push('/confirmcard')
         }
     }
 
@@ -92,7 +98,6 @@ class Post extends Component {
                         preview: previewURL,
                         filetemp: fileObject
                     });
-                    // this.handleOpenModal();
                 } else {
                     err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
                     // console.log(err);
@@ -121,11 +126,11 @@ class Post extends Component {
 
     handleUpload = (e) => {
         e.preventDefault();
+        let image = []; 
         for (var i = 0; i < this.state.filetemp.length; i++) {
 
-            let imageObj = {};
-            let currentImageName = "firebase-image-" + Date.now() + "-" + i;
-            let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.filetemp[i]);
+            let currentImageName = "post-image-" + Date.now() + "-" + i;
+            let uploadImage = storage.ref(`post/${currentImageName}`).put(this.state.filetemp[i]);
 
             uploadImage.on('state_changed',
                 (snapshot) => { },
@@ -133,22 +138,14 @@ class Post extends Component {
                     alert(error);
                 },
                 () => {
-                    storage.ref('images').child(currentImageName).getDownloadURL()
+                    storage.ref('post').child(currentImageName).getDownloadURL()
                         .then(url => {
-                            this.setState({
-                                firebaseImg: url
-                            })
-
-                            imageObj = {
-                                imageURL: url
-                            }
-
-                            this.props.uploadImage(imageObj)
-
+                            image.push(url)
                         })
                 }
             )
         }
+        console.log(image)
     }
 
     handleMarker = ({ lat, lng }) => {
@@ -249,12 +246,13 @@ class Post extends Component {
         this.setState({ [input]: value });
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = (e) =>  {
         e.preventDefault();
+        this.handleUpload(e);
         this.nextStep()
         const newPost = {
             title: this.state.title,
-            location: this.state.location,
+            imagePost: this.state.photos,
             longitude: this.state.location.longitude,
             latitude: this.state.location.latitude,
             address: this.state.address,
@@ -269,7 +267,8 @@ class Post extends Component {
             facility: this.state.facility,
             price: this.state.price
         }
-        this.props.addPost(newPost);
+        // console.log(newPost);
+        // this.props.addPost(newPost);
     }
 
     render() {
