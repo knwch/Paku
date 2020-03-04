@@ -20,6 +20,7 @@ import Book from "./components/pages/Book";
 import Owner from "./components/pages/Owner";
 import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
+import ConfirmCard from "./components/pages/ConfirmCard";
 import NavMenu from "./components/NavMenu";
 import Footer from "./components/Footer";
 
@@ -63,7 +64,7 @@ class App extends Component {
               <Route exact path="/owner" component={Owner} />
               <PrivateRoute exact path="/profile" component={Profile} />
               <Route exact path="/support" component={Support} />
-              {/* <Route exact path="/not-found" component={NotFound} /> */}
+              <PrivateRoute exact path="/confirmcard" component={ConfirmCard} />
             </Switch>
             {window.location.href === login || window.location.href === register ?  null : <Footer/> }
             {/* {console.log(window.location.href)} */}

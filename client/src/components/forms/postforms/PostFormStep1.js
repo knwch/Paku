@@ -6,7 +6,6 @@ class PostFormStep1 extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       modalOpen: false
     };
@@ -17,9 +16,17 @@ class PostFormStep1 extends Component {
     this.props.nextStep();
   };
 
+  handleCancelLocation = e => {
+    e.preventDefault();
+    this.setState({
+      modalOpen: false
+    })
+    this.props.handleCancelLocation();
+  }
+
   handleOpenModal = () => this.setState({ modalOpen: true })
 
-  handleCloseModal = () => {
+  handleConfirmLocation = () => {
     this.setState({
       modalOpen: false
     })
@@ -142,7 +149,10 @@ class PostFormStep1 extends Component {
                     />
                   </Modal.Content>
                   <Modal.Actions>
-                    <Button className='btn-paku' onClick={this.handleCloseModal}>
+                    <Button basic onClick={this.handleCancelLocation}>
+                      <text>ยกเลิก</text>
+                    </Button>
+                    <Button className='btn-paku' onClick={this.handleConfirmLocation}>
                       <Icon name='checkmark' /> <text>ตกลง</text>
                     </Button>
                   </Modal.Actions>
