@@ -68,7 +68,7 @@ class PostFormStep1 extends Component {
                   basic
                   circular
                 >
-                  <Icon name='map' /> <text>ระบุตำแหน่ง</text>
+                  <Icon name='map' /> <div>ระบุตำแหน่ง</div>
                 </Button>
 
                 <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>

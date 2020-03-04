@@ -84,7 +84,7 @@ class PostFormStep3 extends Component {
                 <Form.Group widths={3}>
                   {values.preview.map((preview, index) => {
                     return (
-                      <div key={index} class="button-floated">
+                      <div key={index} className="button-floated">
                         <div className='img-center-square'>
                           <Image
                             src={preview}
@@ -104,7 +104,7 @@ class PostFormStep3 extends Component {
                   {button}
                 </Form.Group>
 
-                <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                <Button onClick={this.continue} disabled={this.props.values.statustemp} className='btn-paku' color='yellow' animated>
                   <Button.Content visible>ประกาศ</Button.Content>
                   <Button.Content hidden>
                     <Icon name='arrow right' />

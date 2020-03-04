@@ -18,9 +18,9 @@ class Post extends Component {
             photos: [],
             preview: [],
             filetemp: [],
-            price: '',
+            price: 0,
             typeofpark: '',
-            numberofcar: '',
+            numberofcar: 0,
             typeofcar: '',
             explain: '',
             rule: [],
@@ -43,6 +43,7 @@ class Post extends Component {
             },
             zoom: 17,
             show: false,
+            statustemp: true,
             errors: {}
         }
     }
@@ -80,9 +81,9 @@ class Post extends Component {
             const types = ['image/png', 'image/jpeg', 'image/jpg']
             const size = 1024000;
             // console.log(file.size);
-            if (this.state.preview.length >= 3 && this.state.filetemp.length >= 3) {
+            if (this.state.preview.length >= 3) {
                 this.state.preview.slice(0, 3)
-                this.state.filetemp.slice(0, 3)
+                // this.state.filetemp.slice(0, 3)
             } else if (types.every(type => file.type !== type)) {
                 err = { image: "ไฟล์ไม่รองรับ" }
                 this.setState({
@@ -93,11 +94,13 @@ class Post extends Component {
             } else {
                 if (file.size <= size) {
                     const previewURL = this.state.preview.concat(URL.createObjectURL(file))
-                    const fileObject = this.state.filetemp.concat(file)
+                    // const fileObject = this.state.filetemp.concat(file)
                     this.setState({
                         preview: previewURL,
-                        filetemp: fileObject
+                        // filetemp: fileObject,
+                        statustemp: true
                     });
+                    this.handleUpload(e, file);
                 } else {
                     err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
                     // console.log(err);
@@ -117,35 +120,49 @@ class Post extends Component {
             mPreview.splice(index, 1)
             return { preview: mPreview }
         })
-        this.setState(({ filetemp }) => {
-            const mFiletemp = [...filetemp]
-            mFiletemp.splice(index, 1)
-            return { filetemp: mFiletemp }
+        this.setState(({ photos, filetemp }) => {
+            const mPhotos = [...photos]
+            const mTemp = [...filetemp]
+            mPhotos.splice(index, 1)
+            let del = mTemp.splice(index, 1)
+            let delImage = storage.ref().child(`post/${del[0]}`)
+            delImage.delete().then((result) => {
+                
+            })
+            // GET info Picture
+            // delImage.getMetadata().then((result) => {
+            //     console.log(result)
+            // });
+            if (mPhotos.length === 0) {
+                this.setState({
+                    statustemp: true
+                })
+            }
+            console.log(mPhotos)
+            return { photos: mPhotos, filetemp: mTemp }
         })
     }
 
-    handleUpload = (e) => {
+    handleUpload = async (e, file) => {
         e.preventDefault();
-        let image = []; 
-        for (var i = 0; i < this.state.filetemp.length; i++) {
+        let currentImageName = "post-image-" + Date.now();
+        let uploadImage = storage.ref(`post/${currentImageName}`).put(file);
 
-            let currentImageName = "post-image-" + Date.now() + "-" + i;
-            let uploadImage = storage.ref(`post/${currentImageName}`).put(this.state.filetemp[i]);
-
-            uploadImage.on('state_changed',
-                (snapshot) => { },
-                (error) => {
-                    alert(error);
-                },
-                () => {
-                    storage.ref('post').child(currentImageName).getDownloadURL()
-                        .then(url => {
-                            image.push(url)
-                        })
-                }
-            )
-        }
-        console.log(image)
+        uploadImage.on('state_changed', (snapshot) => { }, (error) => {
+            alert(error);
+        }, async () => {
+            await storage.ref('post').child(currentImageName).getDownloadURL()
+                .then(url => {
+                    let image = this.state.photos.concat(url);
+                    let file = this.state.filetemp.concat(currentImageName);
+                    console.log(url)
+                    this.setState({
+                        filetemp: file,
+                        photos: image,
+                        statustemp: false
+                    })
+                });
+        })
     }
 
     handleMarker = ({ lat, lng }) => {
@@ -248,13 +265,12 @@ class Post extends Component {
 
     handleSubmit = (e) =>  {
         e.preventDefault();
-        this.handleUpload(e);
         this.nextStep()
         const newPost = {
             title: this.state.title,
             imagePost: this.state.photos,
-            longitude: this.state.location.longitude,
-            latitude: this.state.location.latitude,
+            longitude: this.state.location.lng,
+            latitude: this.state.location.lat,
             address: this.state.address,
             open: this.state.open,
             close: this.state.close,
@@ -267,8 +283,7 @@ class Post extends Component {
             facility: this.state.facility,
             price: this.state.price
         }
-        // console.log(newPost);
-        // this.props.addPost(newPost);
+        this.props.addPost(newPost);
     }
 
     render() {
@@ -293,7 +308,8 @@ class Post extends Component {
             show,
             price,
             preview,
-            filetemp } = this.state;
+            filetemp,
+            statustemp } = this.state;
         const values =
         {
             title,
@@ -315,7 +331,8 @@ class Post extends Component {
             addfacility,
             price,
             preview,
-            filetemp
+            filetemp,
+            statustemp
         };
 
         // eslint-disable-next-line default-case
