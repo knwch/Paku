@@ -28,7 +28,6 @@ const postSchema = new mongoose.Schema({
         },
         explain: {
             type: String,
-            required: true
         },
         rule: {
             type: [String],
