@@ -337,7 +337,7 @@ class Profile extends Component {
 
                                     <Card.Content className='card-color' textAlign='center'>
                                         <div class="button-floated">
-                                            <div className='img-center' >
+                                            <div className='img-center-circle' >
                                                 <Image src={this.state.photo} wrapped ui={false} />
                                             </div>
                                             <Button
