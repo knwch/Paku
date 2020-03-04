@@ -8,19 +8,22 @@ class ConfirmCard extends Component {
         super(props);
         this.state = {
             idCard: '',
-            photo: null,
-            filetemp: '',
+            cardphoto: null,
+            cardfiletemp: '',
+            userphoto: null,
+            userfiletemp: '',
             errors: {}
         }
     }
 
-    fileInputRef = React.createRef();
+    fileInputRef1 = React.createRef();
+    fileInputRef2 = React.createRef();
 
     handleChange = input => e => {
         this.setState({ [input]: e.target.value });
     };
 
-    fileChange = e => {
+    fileChange = input => e => {
         // console.log(e.target.files[0])
         if (typeof e.target.files[0] !== 'undefined') {
             let file = e.target.files[0];
@@ -38,7 +41,7 @@ class ConfirmCard extends Component {
             } else {
                 if (file.size <= size) {
                     this.setState({
-                        filetemp: file
+                        [input]: file
                     });
                     // this.handleOpenModal();
                 } else {
@@ -54,13 +57,13 @@ class ConfirmCard extends Component {
         }
     };
 
-    handleUpload(e) {
+    handleUploadCard(e) {
         e.preventDefault();
         let imageObj = {};
 
         let currentImageName = "firebase-image-" + Date.now();
 
-        let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.filetemp);
+        let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.cardfiletemp);
 
         uploadImage.on('state_changed',
             (snapshot) => { },
@@ -81,7 +84,7 @@ class ConfirmCard extends Component {
                         this.props.uploadImage(imageObj)
 
                         this.setState({
-                            filetemp: null
+                            cardfiletemp: null
                         })
                     })
             }
@@ -95,14 +98,25 @@ class ConfirmCard extends Component {
 
     render() {
 
-        let field;
+        let cardfield;
+        let userfield;
 
-        if (this.state.filetemp.name != null) {
-            field =
+        if (this.state.cardfiletemp.name != null) {
+            cardfield =
+                <Form.Field className="text-left">
+                    <Input iconPosition='left' disabled fluid>
+                        <Icon name='id card' />
+                        <input type="text" value={this.state.cardfiletemp.name} />
+                    </Input>
+                </Form.Field>
+        }
+
+        if (this.state.userfiletemp.name != null) {
+            userfield =
                 <Form.Field className="text-left">
                     <Input iconPosition='left' disabled fluid>
                         <Icon name='photo' />
-                        <input type="text" value={this.state.filetemp.name} />
+                        <input type="text" value={this.state.userfiletemp.name} />
                     </Input>
                 </Form.Field>
         }
@@ -111,7 +125,7 @@ class ConfirmCard extends Component {
             <Responsive>
                 <Container fluid>
                     <Grid centered className='mb-4'>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
+                        <Grid.Column mobile={16} tablet={9} computer={9}>
                             <Header className='mb-5 text-center' as='h3'><div>ยืนยันตัวตนของคุณก่อนที่จะเริ่มลงประกาศ</div></Header>
                             <Form>
                                 <Header as='h4'><div>บัตรประชาชน</div></Header>
@@ -123,23 +137,44 @@ class ConfirmCard extends Component {
                                     </Input>
                                 </Form.Field>
 
-                                {field}
+                                {cardfield}
 
-                                <Form.Field className="text-center">
-                                    <Button
-                                        className='btn-paku-light mb-3'
-                                        content=''
-                                        onClick={() => this.fileInputRef.current.click()}
-                                    >
-                                        <Button.Content visible>อัปโหลดภาพคุณกับบัตรประชาชน</Button.Content>
-                                    </Button>
-                                    <input
-                                        ref={this.fileInputRef}
-                                        type="file"
-                                        hidden
-                                        onChange={this.fileChange}
-                                    />
-                                </Form.Field>
+                                {userfield}
+
+                                <Form.Group widths='equal'>
+                                    <Form.Field className="text-center">
+                                        <Button
+                                            fluid
+                                            className='btn-paku-light mb-3'
+                                            content=''
+                                            onClick={() => this.fileInputRef1.current.click()}
+                                        >
+                                            <Button.Content visible>อัปโหลดภาพบัตรประชาชน</Button.Content>
+                                        </Button>
+                                        <input
+                                            ref={this.fileInputRef1}
+                                            type="file"
+                                            hidden
+                                            onChange={this.fileChange('cardfiletemp')}
+                                        />
+                                    </Form.Field>
+                                    <Form.Field className="text-center">
+                                        <Button
+                                            fluid
+                                            className='btn-paku-light mb-3'
+                                            content=''
+                                            onClick={() => this.fileInputRef2.current.click()}
+                                        >
+                                            <Button.Content visible>อัปโหลดภาพคุณกับบัตรประชาชน</Button.Content>
+                                        </Button>
+                                        <input
+                                            ref={this.fileInputRef2}
+                                            type="file"
+                                            hidden
+                                            onChange={this.fileChange('userfiletemp')}
+                                        />
+                                    </Form.Field>
+                                </Form.Group>
 
                                 <div className='d-flex justify-content-end'>
                                     <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
