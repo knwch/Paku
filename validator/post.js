@@ -11,8 +11,8 @@ module.exports = validatePostInput = (data) => {
     data.typeofcar = !isEmpty(data.typeofcar) ? data.typeofcar : '';
     data.explain = !isEmpty(data.explain) ? data.explain : '';
     data.address = !isEmpty(data.address) ? data.address : '';
-    data.longitude = !isEmpty(data.longitude) ? data.longitude : '';
-    data.latitude = !isEmpty(data.latitude) ? data.latitude : '';
+    // data.longitude = !isEmpty(data.longitude) ? data.longitude : '';
+    // data.latitude = !isEmpty(data.latitude) ? data.latitude : '';
     data.open = !isEmpty(data.open) ? data.open : '';
     data.close = !isEmpty(data.close) ? data.close : '';
     data.price = !isEmpty(data.price) ? data.price : '';
@@ -38,18 +38,18 @@ module.exports = validatePostInput = (data) => {
     if (Validator.isEmpty(data.typeofcar)) {
         errors.typeofcar = `Type car is required`;
     }
-    if (Validator.isEmpty(data.explain)) {
-        errors.explain = `Explain is required`;
-    }
+    // if (Validator.isEmpty(data.explain)) {
+    //     errors.explain = `Explain is required`;
+    // }
     if (Validator.isEmpty(data.address)) {
         errors.address = `Address is required`;
     }
-    if (Validator.isEmpty(data.longitude)) {
-        errors.map = `You must fix point in map`;
-    }
-    if (Validator.isEmpty(data.latitude)) {
-        errors.map = `You must fix point in map`;
-    }
+    // if (!Validator.isNumeric(data.longitude)) {
+    //     errors.longitude = `You must fix point in map`;
+    // }
+    // if (!Validator.isNumeric(data.latitude)) {
+    //     errors.longitude = `You must fix point in map`;
+    // }
     if (Validator.isEmpty(data.open)) {
         errors.open = `Opne field is required`;
     }
