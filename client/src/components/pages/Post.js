@@ -124,7 +124,7 @@ class Post extends Component {
         for (var i = 0; i < this.state.filetemp.length; i++) {
 
             let imageObj = {};
-            let currentImageName = "firebase-image-" + Date.now() + "-" + i ;
+            let currentImageName = "firebase-image-" + Date.now() + "-" + i;
             let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.filetemp[i]);
 
             uploadImage.on('state_changed',
@@ -229,6 +229,15 @@ class Post extends Component {
         }
     }
 
+    handleCancelLocation = () => {
+        this.setState({
+            location: {
+                lat: 13.7563,
+                lng: 100.5018
+            }
+        })
+    }
+
     setPrice = input => {
         this.setState({
             price: input
@@ -238,7 +247,6 @@ class Post extends Component {
     // Handle fields change
     handleChange = input => (e, { value }) => {
         this.setState({ [input]: value });
-        console.log(value);
     }
 
     handleSubmit = (e) => {
@@ -319,6 +327,7 @@ class Post extends Component {
                         nextStep={this.nextStep}
                         handleChange={this.handleChange}
                         handleMarker={this.handleMarker}
+                        handleCancelLocation={this.handleCancelLocation}
                         values={values}
                     />
                 );
