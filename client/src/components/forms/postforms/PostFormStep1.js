@@ -1,22 +1,38 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Header } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modalOpen: false
+    };
+  }
 
   continue = e => {
     e.preventDefault();
     this.props.nextStep();
   };
 
+  handleOpenModal = () => this.setState({ modalOpen: true })
+
+  handleCloseModal = () => {
+    this.setState({
+      modalOpen: false
+    })
+  }
+
   render() {
-    
+
     const options = [
-      { key: 'h', text: 'บ้าน', value: 'house' },
-      { key: 'f', text: 'ลานกว้าง', value: 'field' },
-      { key: 'o', text: 'อื่นๆ', value: 'other' }
+      { key: 'h', text: 'บ้าน', value: 'บ้าน' },
+      { key: 'f', text: 'ลานกว้าง', value: 'ลานกว้าง' },
+      { key: 'o', text: 'อื่นๆ', value: 'อื่นๆ' }
     ];
-    
+
     const { values, handleChange, handleMarker } = this.props;
 
     return (
@@ -39,14 +55,15 @@ class PostFormStep1 extends Component {
                   onChange={handleChange('address')}
                   value={values.address}
                 />
-                <MapContainer
-                  center={values.location}
-                  lat={values.location.latitude}
-                  lng={values.location.longitude}
-                  zoom={values.zoom}
-                  show={values.show}
-                  handleClick={handleMarker}
-                />
+
+                <Button
+                  onClick={this.handleOpenModal}
+                  basic
+                  circular
+                >
+                  <Icon name='map' /> <text>ระบุตำแหน่ง</text>
+                </Button>
+
                 <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>
                 <Header as='h3'><div>ที่จอดรถของคุณเป็นแบบไหน</div></Header>
                 <Form.Group widths='equal'>
@@ -69,21 +86,21 @@ class PostFormStep1 extends Component {
                 <Form.Group inline>
                   <Form.Radio
                     label='รถยนต์'
-                    checked={values.typeofcar === 'car'}
+                    checked={values.typeofcar === 'รถยนต์'}
                     onChange={handleChange('typeofcar')}
-                    value='car'
+                    value='รถยนต์'
                   />
                   <Form.Radio
                     label='รถจักรยานยนต์'
-                    checked={values.typeofcar === 'motorcycle'}
+                    checked={values.typeofcar === 'รถจักรยานยนต์'}
                     onChange={handleChange('typeofcar')}
-                    value='motorcycle'
+                    value='รถจักรยานยนต์'
                   />
                   <Form.Radio
                     label='รถบรรทุก'
-                    checked={values.typeofcar === 'truck'}
+                    checked={values.typeofcar === 'รถบรรทุก'}
                     onChange={handleChange('typeofcar')}
-                    value='truck'
+                    value='รถบรรทุก'
                   />
                 </Form.Group>
 
@@ -108,6 +125,29 @@ class PostFormStep1 extends Component {
                     <Icon name='arrow right' />
                   </Button.Content>
                 </Button>
+
+                <Modal
+                  open={this.state.modalOpen}
+                  className="modal-paku"
+                  size='small'
+                >
+                  <Modal.Content>
+                    <MapContainer
+                      center={values.location}
+                      lat={values.location.latitude}
+                      lng={values.location.longitude}
+                      zoom={values.zoom}
+                      show={values.show}
+                      handleClick={handleMarker}
+                    />
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button className='btn-paku' onClick={this.handleCloseModal}>
+                      <Icon name='checkmark' /> <text>ตกลง</text>
+                    </Button>
+                  </Modal.Actions>
+                </Modal>
+
               </Form>
             </Grid.Column>
           </Grid>

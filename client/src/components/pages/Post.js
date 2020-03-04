@@ -6,7 +6,7 @@ import PostConfirm from '../forms/postforms/PostConfirm';
 import { addPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
+import { storage } from '../../config/firebase-config';
 
 class Post extends Component {
 
@@ -15,15 +15,25 @@ class Post extends Component {
         this.state = {
             step: 1,
             title: '',
-            picture: '',
+            photos: [],
+            preview: [],
+            filetemp: [],
             price: '',
             typeofpark: '',
             numberofcar: '',
             typeofcar: '',
             explain: '',
-            rule: '',
-            nearby: '',
-            facility: '',
+            rule: [],
+            addrule: '',
+            nearby: [],
+            addnearby: '',
+            facility: [],
+            addfacility: [
+                { key: '0', text: 'CCTV', value: 'CCTV', checked: false },
+                { key: '1', text: 'ห้องน้ำ', value: 'ห้องน้ำ', checked: false },
+                { key: '2', text: 'รั้ว', value: 'รั้ว', checked: false },
+                { key: '3', text: 'หลังคากันแดด / กันฝน', value: 'หลังคากันแดด / กันฝน', checked: false }
+            ],
             open: '',
             close: '',
             address: '',
@@ -31,10 +41,11 @@ class Post extends Component {
                 lat: 13.7563,
                 lng: 100.5018
             },
-            zoom: 16,
-            show: false
+            zoom: 17,
+            show: false,
+            errors: {}
         }
-    };
+    }
 
     componentDidMount = () => {
         document.title = "Paku - Posting"
@@ -47,23 +58,107 @@ class Post extends Component {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         },
-                        zoom: 16,
+                        zoom: 17,
                         show: true
                     }))
                 }
             )
         }
-    };
+    }
+
+    fileChange = e => {
+        // console.log(e.target.files[0])
+        if (typeof e.target.files[0] !== 'undefined') {
+            let file = e.target.files[0];
+            let err = {}
+            const types = ['image/png', 'image/jpeg', 'image/jpg']
+            const size = 1024000;
+            // console.log(file.size);
+            if (this.state.preview.length >= 3 && this.state.filetemp.length >= 3) {
+                this.state.preview.slice(0, 3)
+                this.state.filetemp.slice(0, 3)
+            } else if (types.every(type => file.type !== type)) {
+                err = { image: "ไฟล์ไม่รองรับ" }
+                this.setState({
+                    ...this.state,
+                    errors: err
+                });
+                // this.validator.showMessages();
+            } else {
+                if (file.size <= size) {
+                    const previewURL = this.state.preview.concat(URL.createObjectURL(file))
+                    const fileObject = this.state.filetemp.concat(file)
+                    this.setState({
+                        preview: previewURL,
+                        filetemp: fileObject
+                    });
+                    // this.handleOpenModal();
+                } else {
+                    err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
+                    // console.log(err);
+                    this.setState({
+                        ...this.state,
+                        errors: err
+                    });
+                    // this.validator.showMessages();
+                }
+            }
+        }
+    }
+
+    removeFile = index => {
+        this.setState(({ preview }) => {
+            const mPreview = [...preview]
+            mPreview.splice(index, 1)
+            return { preview: mPreview }
+        })
+        this.setState(({ filetemp }) => {
+            const mFiletemp = [...filetemp]
+            mFiletemp.splice(index, 1)
+            return { filetemp: mFiletemp }
+        })
+    }
+
+    handleUpload = (e) => {
+        e.preventDefault();
+        for (var i = 0; i < this.state.filetemp.length; i++) {
+
+            let imageObj = {};
+            let currentImageName = "firebase-image-" + Date.now() + "-" + i ;
+            let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.filetemp[i]);
+
+            uploadImage.on('state_changed',
+                (snapshot) => { },
+                (error) => {
+                    alert(error);
+                },
+                () => {
+                    storage.ref('images').child(currentImageName).getDownloadURL()
+                        .then(url => {
+                            this.setState({
+                                firebaseImg: url
+                            })
+
+                            imageObj = {
+                                imageURL: url
+                            }
+
+                            this.props.uploadImage(imageObj)
+
+                        })
+                }
+            )
+        }
+    }
 
     handleMarker = ({ lat, lng }) => {
-        console.log(lat, lng)
         this.setState({
             location: {
                 lat: lat,
                 lng: lng
-            }
+            },
+            show: true
         })
-        this.setState({ show: true })
     }
 
     // Proceed to next step
@@ -72,7 +167,7 @@ class Post extends Component {
         this.setState({
             step: step + 1
         });
-    };
+    }
 
     // Go back to prev step
     prevStep = () => {
@@ -80,18 +175,75 @@ class Post extends Component {
         this.setState({
             step: step - 1
         });
-    };
+    }
+
+    handleAddRule = () => {
+        const ruleArray = this.state.rule.concat(this.state.addrule)
+        this.setState({
+            rule: ruleArray,
+            addrule: ''
+        })
+    }
+
+    handleAddNearby = () => {
+        const nearbyArray = this.state.nearby.concat(this.state.addnearby)
+        this.setState({
+            nearby: nearbyArray,
+            addnearby: ''
+        })
+    }
+
+    deleteRuleItem = index => {
+        this.setState(({ rule }) => {
+            const mRule = [...rule]
+            mRule.splice(index, 1)
+            return { rule: mRule }
+        })
+    }
+
+    deleteNearbyItem = index => {
+        this.setState(({ nearby }) => {
+            const mNearby = [...nearby]
+            mNearby.splice(index, 1)
+            return { nearby: mNearby }
+        })
+    }
+
+    handleFacility = (facility) => {
+        const facilityFilter = this.state.addfacility.filter((val) => val.key === facility.key)
+        const facilityObject = facilityFilter[0]
+        if (facilityObject.checked === false) {
+            facilityObject.checked = true
+            const facilityArray = this.state.facility.concat(facilityObject.value)
+            this.setState({
+                facility: facilityArray
+            })
+        } else if (facilityObject.checked === true) {
+            facilityObject.checked = false
+            this.setState(({ facility }) => {
+                const mFacility = [...facility]
+                var position = mFacility.indexOf(facilityObject.value);
+                mFacility.splice(position, 1)
+                return { facility: mFacility }
+            })
+        }
+    }
+
+    setPrice = input => {
+        this.setState({
+            price: input
+        })
+    }
 
     // Handle fields change
     handleChange = input => (e, { value }) => {
         this.setState({ [input]: value });
         console.log(value);
-        console.log(this.state.price);
     }
 
     handleSubmit = (e) => {
-        console.log(this.state)
         e.preventDefault();
+        this.nextStep()
         const newPost = {
             title: this.state.title,
             location: this.state.location,
@@ -107,7 +259,7 @@ class Post extends Component {
             rule: this.state.rule,
             nearby: this.state.nearby,
             facility: this.state.facility,
-            price: this.state.price,
+            price: this.state.price
         }
         this.props.addPost(newPost);
     }
@@ -125,12 +277,16 @@ class Post extends Component {
             typeofcar,
             explain,
             rule,
+            addrule,
             nearby,
+            addnearby,
             facility,
+            addfacility,
             zoom,
             show,
             price,
-            photos } = this.state;
+            preview,
+            filetemp } = this.state;
         const values =
         {
             title,
@@ -145,10 +301,14 @@ class Post extends Component {
             typeofcar,
             explain,
             rule,
+            addrule,
             nearby,
+            addnearby,
             facility,
+            addfacility,
             price,
-            photos
+            preview,
+            filetemp
         };
 
         // eslint-disable-next-line default-case
@@ -168,6 +328,11 @@ class Post extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                         handleChange={this.handleChange}
+                        handleAddRule={this.handleAddRule}
+                        handleAddNearby={this.handleAddNearby}
+                        deleteRuleItem={this.deleteRuleItem}
+                        deleteNearbyItem={this.deleteNearbyItem}
+                        handleFacility={this.handleFacility}
                         values={values}
                     />
                 );
@@ -177,6 +342,9 @@ class Post extends Component {
                         nextStep={this.handleSubmit}
                         prevStep={this.prevStep}
                         handleChange={this.handleChange}
+                        setPrice={this.setPrice}
+                        fileChange={this.fileChange}
+                        removeFile={this.removeFile}
                         values={values}
                     />
                 );

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Header } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Label, Image } from 'semantic-ui-react';
 
 class PostFormStep3 extends Component {
+
+  fileInputRef = React.createRef();
 
   continue = e => {
     e.preventDefault();
@@ -13,8 +15,43 @@ class PostFormStep3 extends Component {
     this.props.prevStep();
   };
 
+  setPrice = (input) => e => {
+    e.preventDefault();
+    this.props.setPrice(input);
+  };
+
+  fileChange = e => {
+    e.preventDefault();
+    this.props.fileChange(e);
+  }
+
+  removeFile = (index) => e => {
+    e.preventDefault();
+    this.props.removeFile(index);
+  }
+
   render() {
     const { values, handleChange } = this.props;
+    let button;
+
+    if (values.preview.length <= 2) {
+      button =
+        <div className='img-center-square-btn'>
+          <Image
+            src='https://react.semantic-ui.com/images/wireframe/image.png'
+            wrapped
+            ui={false}
+            onClick={() => this.fileInputRef.current.click()}
+          />
+          <input
+            ref={this.fileInputRef}
+            type="file"
+            hidden
+            onChange={this.fileChange}
+          />
+        </div>
+    }
+
     return (
       <Responsive>
         <Container fluid>
@@ -29,6 +66,13 @@ class PostFormStep3 extends Component {
               <Header as='h6'><div>ขั้นตอนที่ 3</div></Header>
               <Form>
                 <Header as='h3'><div>เพิ่มราคาที่จอดรถของคุณ</div></Header>
+                <Header as='h6'><div>ราคาแนะนำ</div></Header>
+                <Label as='a' basic className='mb-2' onClick={this.setPrice('80')}>
+                  ฿ 80
+                </Label>
+                <Label as='a' basic className='mb-2' onClick={this.setPrice('100')}>
+                  ฿ 100
+                </Label>
                 <Form.Input
                   fluid
                   placeholder='กรุณากรอกราคาที่คุณต้องการ (เฉพาะตัวเลข)'
@@ -37,9 +81,28 @@ class PostFormStep3 extends Component {
                 />
 
                 <Header as='h4'><div>เพิ่มรูปภาพที่จอดรถของคุณ</div></Header>
-                <Form.Input
-                  fluid
-                />
+                <Form.Group widths={3}>
+                  {values.preview.map((preview, index) => {
+                    return (
+                      <div key={index} class="button-floated">
+                        <div className='img-center-square'>
+                          <Image
+                            src={preview}
+                            wrapped
+                            ui={false}
+                          />
+                        </div>
+                        <Button
+                          as='a'
+                          circular
+                          icon='times'
+                          onClick={this.removeFile(index)}
+                        />
+                      </div>
+                    )
+                  })}
+                  {button}
+                </Form.Group>
 
                 <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
                   <Button.Content visible>ประกาศ</Button.Content>
