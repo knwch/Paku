@@ -53,10 +53,10 @@
 }
 
 .map-responsive {
-  overflow:hidden;
-  padding-bottom:100%;
-  position:relative;
-  height:0;
+  overflow: hidden;
+  padding-bottom: 100%;
+  position: relative;
+  height: 0;
 }
 
 .nav-flex-1 {
@@ -68,18 +68,36 @@
   white-space: nowrap ;
 }
 
-.img-center img {
+.img-center-circle img {
   width: 160px;
   height: 160px;
   border-radius: 50%;
   object-fit: cover;
 }
 
+.img-center-square img {
+  width: 160px;
+  height: 160px;
+  border-radius: 10%;
+  object-fit: cover;
+}
+
+.img-center-square-btn img {
+  width: 160px;
+  height: 160px;
+  border-radius: 10%;
+  object-fit: cover;
+}
+
+.img-center-square-btn img:hover {
+  opacity:0.5;
+  cursor: pointer;
+}
+
+
 .button-floated {    
   line-height: 0px;
   margin-top: 0px;
-  margin-left: auto;
-  margin-right: auto;
   display:inline-block;
   position:relative;
 }
