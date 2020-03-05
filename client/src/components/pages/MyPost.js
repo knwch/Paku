@@ -10,9 +10,7 @@ class MyPost extends Component {
   constructor() {
     super();
     this.state = {
-      postid: '',
-      title: '',
-      imageurl: '',
+      posts: [],
       errors: {}
     };
   }
@@ -26,17 +24,15 @@ class MyPost extends Component {
 
     const posts = nextProps.post.posts;
     const user = nextProps.auth.user;
-    const postFind = posts.find((val) => val.user === user.id)
+    const postsFind = posts.filter((val) => val.user === user.id)
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (postFind != null) {
+    if (postsFind.length !== 0) {
       this.setState({
-        postid: postFind._id,
-        title: postFind.title,
-        imageurl: postFind.photos[0]
+        posts: postsFind
       })
     }
 
@@ -46,42 +42,50 @@ class MyPost extends Component {
 
   render() {
     return (
+
       <Responsive>
         <Container fluid>
           <Grid centered className='mb-4'>
             <Grid.Column mobile={16} tablet={9} computer={9}>
 
-              <Card fluid>
-                <Card.Content>
+              {this.state.posts
+                .map((post, index) => {
+                  return (
+                    <div key={index} className='mb-4'>
+                      <Card fluid>
+                        <Card.Content>
 
-                  {this.state.title}
+                          {post.title}
 
-                  <div className='img-center-square'>
-                    <Image
-                      src={this.state.imageurl}
-                      wrapped
-                      ui={false}
-                    />
-                  </div>
-                  <Card.Description textAlign='right'>
+                          <div className='img-center-square'>
+                            <Image
+                              src={post.photos[0]}
+                              wrapped
+                              ui={false}
+                            />
+                          </div>
+                          <Card.Description textAlign='right'>
 
-                    <Button basic>
-                      <Button.Content visible>พักชั่วคราว</Button.Content>
-                    </Button>
+                            <Button basic>
+                              <Button.Content visible>พักชั่วคราว</Button.Content>
+                            </Button>
 
-                    <Button basic>
-                      <Button.Content visible>ลบ</Button.Content>
-                    </Button>
+                            <Button basic>
+                              <Button.Content visible>ลบ</Button.Content>
+                            </Button>
 
-                    <Button href={`/editpost/${this.state.postid}`} basic>
-                      <Button.Content visible>แก้ไข</Button.Content>
-                    </Button>
+                            <Button href={`/editpost/${post._id}`} basic>
+                              <Button.Content visible>แก้ไข</Button.Content>
+                            </Button>
 
-                  </Card.Description>
+                          </Card.Description>
 
-                </Card.Content>
+                        </Card.Content>
 
-              </Card>
+                      </Card>
+                    </div>
+                  )
+                })}
 
             </Grid.Column>
 
