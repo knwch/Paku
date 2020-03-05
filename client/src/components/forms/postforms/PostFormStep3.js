@@ -1,7 +1,41 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Header, Label, Image } from 'semantic-ui-react';
+import SimpleReactValidator from 'simple-react-validator';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Label, Image, Transition } from 'semantic-ui-react';
 
 class PostFormStep3 extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        thai: {  // name the rule
+          message: ':attribute ภาษาไทย',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+          }
+        }
+      },
+      element: message =>
+        <div className='mb-2'>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
+      messages: {
+        required: 'โปรดระบุ:attribute',
+        alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
+        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น'
+      }
+    });
+
+  }
 
   fileInputRef = React.createRef();
 
@@ -79,6 +113,7 @@ class PostFormStep3 extends Component {
                   onChange={handleChange('price')}
                   value={values.price}
                 />
+                {this.validator.message('คำอธิบายที่จอดรถ', values.price, 'required|integer')}
 
                 <Header as='h4'><div>เพิ่มรูปภาพที่จอดรถของคุณ</div></Header>
                 <Form.Group widths={3}>

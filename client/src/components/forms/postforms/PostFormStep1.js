@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal } from 'semantic-ui-react';
+import SimpleReactValidator from 'simple-react-validator';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
@@ -9,11 +10,47 @@ class PostFormStep1 extends Component {
     this.state = {
       modalOpen: false
     };
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        thai: {  // name the rule
+          message: ':attribute ภาษาไทย',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+          }
+        }
+      },
+      element: message =>
+        <div className='mb-2'>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
+      messages: {
+        required: 'โปรดระบุ:attribute',
+        alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
+        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น'
+      }
+    });
+
   }
 
   continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
+    if (this.validator.allValid()) {
+      e.preventDefault();
+      this.props.nextStep();
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
   };
 
   handleCancelLocation = e => {
@@ -56,12 +93,14 @@ class PostFormStep1 extends Component {
                   onChange={handleChange('title')}
                   value={values.title}
                 />
+                {this.validator.message('ชื่อที่จอดรถ', values.title, 'required')}
                 <Form.Input
                   fluid
                   placeholder='ที่อยู่'
                   onChange={handleChange('address')}
                   value={values.address}
                 />
+                {this.validator.message('ที่อยู่', values.address, 'required')}
 
                 <Button
                   onClick={this.handleOpenModal}
@@ -88,6 +127,8 @@ class PostFormStep1 extends Component {
                     value={values.numberofcar}
                   />
                 </Form.Group>
+                {this.validator.message('ประเภทที่จอดรถ', values.typeofpark, 'required')}
+                {this.validator.message('จำนวนที่จอดรถ', values.numberofcar, 'required')}
 
                 <Header as='h4'><div>ประเภทรถที่สามารถจอดได้</div></Header>
                 <Form.Group inline>
@@ -110,6 +151,7 @@ class PostFormStep1 extends Component {
                     value='รถบรรทุก'
                   />
                 </Form.Group>
+                {this.validator.message('ประเภทรถ', values.typeofcar, 'required')}
 
                 <Header as='h4'><div>ช่วงเวลาที่คุณเปิดให้บริการ</div></Header>
                 <Form.Group widths='equal'>
@@ -126,6 +168,8 @@ class PostFormStep1 extends Component {
                     value={values.close}
                   />
                 </Form.Group>
+                {this.validator.message('เวลาเปิด', values.open, 'required')}
+                {this.validator.message('เวลาปิด', values.close, 'required')}
                 <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
                   <Button.Content visible>ถัดไป</Button.Content>
                   <Button.Content hidden>

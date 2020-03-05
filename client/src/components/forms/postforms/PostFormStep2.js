@@ -1,7 +1,41 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Header, Label } from 'semantic-ui-react';
+import SimpleReactValidator from 'simple-react-validator';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Transition, Label } from 'semantic-ui-react';
 
 class PostFormStep2 extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        thai: {  // name the rule
+          message: ':attribute ภาษาไทย',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+          }
+        }
+      },
+      element: message =>
+        <div className='mb-2'>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
+      messages: {
+        required: 'โปรดระบุ:attribute',
+        alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
+        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น'
+      }
+    });
+
+  }
 
   addRule = e => {
     e.preventDefault();
@@ -29,8 +63,15 @@ class PostFormStep2 extends Component {
   };
 
   continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
+    if (this.validator.allValid()) {
+      e.preventDefault();
+      this.props.nextStep();
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
   };
 
   back = e => {
@@ -61,6 +102,7 @@ class PostFormStep2 extends Component {
                   onChange={handleChange('explain')}
                   value={values.explain}
                 />
+                {this.validator.message('คำอธิบายที่จอดรถ', values.explain, 'required')}
 
                 <Header as='h4'><div>กฎที่จอดรถ</div></Header>
                 <Header as='h6'><div>เพิ่มกฎของคุณให้ผู้เช่าได้รู้ และสร้างความสบายใจให้กับทั้งสองฝ่าย</div></Header>
@@ -98,7 +140,7 @@ class PostFormStep2 extends Component {
                 <Form.Group widths={2}>
                   <Form.Input
                     fluid
-                    placeholder='ชื่อสถานที่'
+                    placeholder='ชื่อสถานที่ (ไม่บังคับ)'
                     onChange={handleChange('addnearby')}
                     value={values.addnearby}
                   />
