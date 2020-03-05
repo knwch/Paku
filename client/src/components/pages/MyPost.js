@@ -11,6 +11,7 @@ class MyPost extends Component {
     super();
     this.state = {
       title: '',
+      imageurl: '',
       errors: {}
     };
   }
@@ -32,7 +33,8 @@ class MyPost extends Component {
 
     if (postFind != null) {
       this.setState({
-        title: postFind.title
+        title: postFind.title,
+        imageurl: postFind.photos[0]
       })
     }
 
@@ -47,13 +49,13 @@ class MyPost extends Component {
           <Grid className='mb-4'>
             <Grid.Column mobile={16} tablet={10} computer={10}>
 
-                {/* <div className='img-center-square'>
+                <div className='img-center-square'>
                   <Image
-                    src='https://react.semantic-ui.com/images/wireframe/image.png'
+                    src={this.state.imageurl}
                     wrapped
                     ui={false}
                   />
-                </div> */}
+                </div>
 
                 {this.state.title}
 
