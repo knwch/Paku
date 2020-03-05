@@ -6,6 +6,7 @@ import {
     CLEAR_CURRENT_PROFILE, 
     GET_PROFILES, 
     SET_CURRENT_USER,
+    ADD_IDCARD,
     GET_ERRORS
 } from './types';
 
@@ -113,6 +114,40 @@ export const deleteAccount = () => dispatch => {
             })
         })
 };
+
+// Add IdCard
+export const addIDcard = (dataUser) => dispatch => {
+    axios.post('/api/users/confirm', dataUser)
+        .then((res) => {
+            dispatch({
+                type: ADD_IDCARD,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
+
+// Get idCard
+export const getIDcard = () => dispatch => {
+    axios.get('/api/users/infoCard')
+        .then((res) => {
+            dispatch({
+                type: ADD_IDCARD,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        })
+}
 
 // Profile loading
 export const setProfileLoading = () => {

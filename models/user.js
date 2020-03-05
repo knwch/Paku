@@ -57,7 +57,12 @@ let userSchema = new mongoose.Schema({
         }
     },
     photo_card: {
-        type: String
+        photoCard: {
+            type: String
+        },
+        photoPerson: {
+            type: String
+        }
     },
     rate: {
         type: Number,

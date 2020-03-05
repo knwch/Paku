@@ -146,20 +146,34 @@ router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, 
     if (!isValid) {
         return res.status(400).json(errors);
     }
-
+    // console.log(req.body)
     User.findById(req.user.id)
         .then((user) => {
             user.Card.idCard = req.body.idCard
-            user.photo_card = req.body.idCardURL
+            user.photo_card.photoCard = req.body.idCardURL
+            user.photo_card.photoPerson = req.body.idCardPerson
 
             user.save().then((user) => {
-                res.json({ success: true });
+                console.log(user)
+                res.json({ Card: user.Card });
             })
         })
         .catch((err) => {
-            // res.json(err);
-            console.log(err);
+            res.status(400).json({ idCard: 'User not found'})
         });
+});
+
+// @route   GET api/users/infoCard
+// @desc    Get infocard
+// @access  Private
+router.get('/infoCard', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
+        .then((user) => {
+            res.json({ Card: user.Card });
+        })
+        .catch((err) => {
+            res.json({ idCard: 'User not found'})
+        })
 });
 
 // @route   GET api/users/current

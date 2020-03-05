@@ -4,6 +4,7 @@ import PostFormStep2 from '../forms/postforms/PostFormStep2';
 import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
 import { addPost } from '../../redux/actions/postActions';
+import { getIDcard } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
@@ -50,7 +51,6 @@ class Post extends Component {
 
     componentDidMount = () => {
         document.title = "Paku - Posting"
-        const { user } = this.props.auth
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -68,7 +68,15 @@ class Post extends Component {
             )
         }
 
-        if (user.idCard.confirm === false) {
+        this.props.getIDcard()
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+
+        if (nextProps.profile.idcard.Card.confirm === false) {
             this.props.history.push('/confirmcard')
         }
     }
@@ -387,7 +395,8 @@ class Post extends Component {
 const mapStateToProps = state => ({
     auth: state.auth,
     post: state.post,
+    profile: state.profile,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost })(withRouter(Post))
+export default connect(mapStateToProps, { addPost, getIDcard })(withRouter(Post))
