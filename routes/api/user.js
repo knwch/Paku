@@ -154,7 +154,6 @@ router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, 
             user.photo_card.photoPerson = req.body.idCardPerson
 
             user.save().then((user) => {
-                console.log(user)
                 res.json({ Card: user.Card });
             })
         })

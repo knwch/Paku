@@ -153,8 +153,6 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
             post.date.close = req.body.close;
             post.price = req.body.price;
 
-            // console.log(post);
-            // res.json(post)
             post.save().then((post) => {
                 res.json(post);
             })
