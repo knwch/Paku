@@ -67,7 +67,7 @@ class MyPost extends Component {
                   <Button.Content visible>ลบ</Button.Content>
                 </Button>
 
-                <Button basic>
+                <Button href='/editpost' basic>
                   <Button.Content visible>แก้ไข</Button.Content>
                 </Button>
 
