@@ -29,11 +29,11 @@ module.exports = validatePostInput = (data) => {
     if (Validator.isEmpty(data.typeofpark)) {
         errors.typeofpark = `Type field is required`;
     }
-    if (!Validator.isNumeric(data.numberofcar)) {
-        errors.numberofcar = `Number of car must be Integer`;
-    }
     if (Validator.isEmpty(data.numberofcar)) {
         errors.numberofcar = `Number of car is required`;
+    }
+    if (!Validator.isNumeric(data.numberofcar)) {
+        errors.numberofcar = `Number of car must be Integer`;
     }
     if (Validator.isEmpty(data.typeofcar)) {
         errors.typeofcar = `Type car is required`;
