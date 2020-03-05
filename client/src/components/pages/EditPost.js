@@ -187,7 +187,7 @@ class EditPost extends Component {
                 .then(url => {
                     let image = this.state.photos.concat(url);
                     let file = this.state.filetemp.concat(currentImageName);
-                    console.log(url)
+                    // console.log(url)
                     this.setState({
                         filetemp: file,
                         photos: image,
@@ -312,13 +312,13 @@ class EditPost extends Component {
             open: this.state.open,
             close: this.state.close,
             typeofpark: this.state.typeofpark,
-            numberofcar: this.state.numberofcar,
+            numberofcar: `${this.state.numberofcar}`,
             typeofcar: this.state.typeofcar,
             explain: this.state.explain,
             rule: this.state.rule,
             nearby: this.state.nearby,
             facility: this.state.facility,
-            price: this.state.price
+            price: `${this.state.price}`
         }
         this.props.editPost(this.state.postid, newPost)
     }
