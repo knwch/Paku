@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, Container, Button, Grid, Header, Divider, Transition, Image } from 'semantic-ui-react';
+import { Responsive, Container, Button, Grid, Header, Divider, Card, Image } from 'semantic-ui-react';
 import { getPosts } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
@@ -48,35 +48,47 @@ class MyPost extends Component {
     return (
       <Responsive>
         <Container fluid>
-          <Grid className='mb-4'>
-            <Grid.Column mobile={16} tablet={10} computer={10}>
+          <Grid centered className='mb-4'>
+            <Grid.Column mobile={16} tablet={9} computer={9}>
 
-                <div className='img-center-square'>
-                  <Image
-                    src={this.state.imageurl}
-                    wrapped
-                    ui={false}
-                  />
-                </div>
+              <Card fluid>
+                <Card.Content>
 
-                {this.state.title}
+                  {this.state.title}
 
-                <Button basic>
-                  <Button.Content visible>พักชั่วคราว</Button.Content>
-                </Button>
+                  <div className='img-center-square'>
+                    <Image
+                      src={this.state.imageurl}
+                      wrapped
+                      ui={false}
+                    />
+                  </div>
+                  <Card.Description textAlign='right'>
 
-                <Button basic>
-                  <Button.Content visible>ลบ</Button.Content>
-                </Button>
+                    <Button basic>
+                      <Button.Content visible>พักชั่วคราว</Button.Content>
+                    </Button>
 
-                <Button href={`/editpost/${this.state.postid}`} basic>
-                  <Button.Content visible>แก้ไข</Button.Content>
-                </Button>
+                    <Button basic>
+                      <Button.Content visible>ลบ</Button.Content>
+                    </Button>
+
+                    <Button href={`/editpost/${this.state.postid}`} basic>
+                      <Button.Content visible>แก้ไข</Button.Content>
+                    </Button>
+
+                  </Card.Description>
+
+                </Card.Content>
+
+              </Card>
 
             </Grid.Column>
+
           </Grid>
+
         </Container>
-      </Responsive>
+      </Responsive >
     );
   }
 }
