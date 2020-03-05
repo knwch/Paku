@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { addPost } from '../../redux/actions/postActions';
 import { storage } from '../../config/firebase-config';
+import { addIDcard, getIDcard } from '../../redux/actions/profileActions';
 
 class ConfirmCard extends Component {
 
@@ -16,6 +16,7 @@ class ConfirmCard extends Component {
             userphoto: null,
             userfiletemp: '',
             modalOpen: false,
+            statusTemp: true,
             errors: {}
         }
     }
@@ -25,11 +26,17 @@ class ConfirmCard extends Component {
 
     componentDidMount = () => {
         document.title = "Paku - Confirm ID Card"
-        const { user } = this.props.auth
-        console.log(user)
-        if (user.idCard.confirm === true) {
+        this.props.getIDcard()
+    }
+
+    componentWillReceiveProps =(nextProps) => {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+
+        if (nextProps.profile.idcard.Card.confirm === true) {
             this.props.history.push('/');
-        } else if (user.idCard.idCard !== 0 && user.idCard.confirm === false) {
+        } else if (nextProps.profile.idcard.Card.idCard !== 0 && nextProps.profile.idcard.Card.confirm === false) {
             this.handleOpenModal();
         }
     }
@@ -56,8 +63,10 @@ class ConfirmCard extends Component {
             } else {
                 if (file.size <= size) {
                     this.setState({
-                        [input]: file
+                        [input]: file,
+                        statusTemp: true
                     });
+                    this.handleUploadCard(e, input, file)
                     // this.handleOpenModal();
                 } else {
                     err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
@@ -72,13 +81,12 @@ class ConfirmCard extends Component {
         }
     };
 
-    handleUploadCard(e) {
+    handleUploadCard = (e, input, file) => {
         e.preventDefault();
-        let imageObj = {};
+    
+        let currentImageName = "idcard-image-" + Date.now();
 
-        let currentImageName = "firebase-image-" + Date.now();
-
-        let uploadImage = storage.ref(`images/${currentImageName}`).put(this.state.cardfiletemp);
+        let uploadImage = storage.ref(`idcard/${currentImageName}`).put(file);
 
         uploadImage.on('state_changed',
             (snapshot) => { },
@@ -86,29 +94,38 @@ class ConfirmCard extends Component {
                 alert(error);
             },
             () => {
-                storage.ref('images').child(currentImageName).getDownloadURL()
+                storage.ref('idcard').child(currentImageName).getDownloadURL()
                     .then(url => {
-                        this.setState({
-                            firebaseImg: url
-                        })
-
-                        imageObj = {
-                            imageURL: url
+                        if (input === 'cardfiletemp') {
+                            this.setState({
+                                cardphoto: url
+                            })
+                        } 
+                        if (input === 'userfiletemp') {
+                            this.setState({
+                                userphoto: url
+                            }) 
                         }
-
-                        this.props.uploadImage(imageObj)
-
-                        this.setState({
-                            cardfiletemp: null
-                        })
+                        if (this.state.cardphoto !== null && this.state.userphoto) {
+                            this.setState({
+                                statusTemp: false
+                            })
+                        }
                     })
             }
         )
     }
 
-    onSubmit(e) {
+    onSubmit = (e) => {
         e.preventDefault();
 
+        const cardUser = {
+            idCard: this.state.idCard,
+            idCardURL: this.state.cardphoto,
+            idCardPerson: this.state.userphoto
+        }
+
+        this.props.addIDcard(cardUser)
     };
 
     handleOpenModal = () => this.setState({ modalOpen: true })
@@ -137,7 +154,7 @@ class ConfirmCard extends Component {
                     </Input>
                 </Form.Field>
         }
-
+        
         return (
             <Responsive>
                 <Container fluid>
@@ -194,12 +211,17 @@ class ConfirmCard extends Component {
                                 </Form.Group>
 
                                 <div className='d-flex justify-content-end'>
-                                    <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
+                                    <Button onClick={this.onSubmit} disabled={this.state.statusTemp} className='btn-paku' color='yellow' animated>
                                         <Button.Content visible>ยืนยัน</Button.Content>
                                         <Button.Content hidden>
                                             <Icon name='arrow right' />
                                         </Button.Content>
                                     </Button>
+                                </div>
+                                <div>
+                                    <p>{ this.state.errors.idCard}</p>
+                                    <p>{ this.state.errors.idCardImage}</p>
+                                    <p>{ this.state.errors.idCardPerson}</p>
                                 </div>
 
                             </Form>
@@ -226,12 +248,13 @@ class ConfirmCard extends Component {
         )
     }
 
+    
 }
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    post: state.post,
+    profile: state.profile,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost })(withRouter(ConfirmCard))
+export default connect(mapStateToProps, { addIDcard, getIDcard })(withRouter(ConfirmCard))
