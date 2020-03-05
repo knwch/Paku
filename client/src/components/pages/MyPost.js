@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Responsive, Container, Button, Grid, Header, Divider, Card, Image } from 'semantic-ui-react';
-import { getPosts } from '../../redux/actions/postActions';
+import { getPosts, deletePost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
-import { storage } from '../../config/firebase-config';
+import { withRouter } from 'react-router-dom';
 
 class MyPost extends Component {
 
@@ -34,11 +33,12 @@ class MyPost extends Component {
       this.setState({
         posts: postsFind
       })
-    }
-
-
+    } 
   }
 
+  handleDel = (id) => {
+    this.props.deletePost(id)
+  }
 
   render() {
     return (
@@ -70,7 +70,7 @@ class MyPost extends Component {
                               <Button.Content visible>พักชั่วคราว</Button.Content>
                             </Button>
 
-                            <Button basic>
+                            <Button basic onClick={this.handleDel.bind(this , post._id)}>
                               <Button.Content visible>ลบ</Button.Content>
                             </Button>
 
@@ -103,4 +103,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 })
 
-export default connect(mapStateToProps, { getPosts })(withRouter(MyPost));
+export default connect(mapStateToProps, { getPosts, deletePost })(withRouter(MyPost));
