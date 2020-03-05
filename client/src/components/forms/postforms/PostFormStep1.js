@@ -68,7 +68,7 @@ class PostFormStep1 extends Component {
                   basic
                   circular
                 >
-                  <Icon name='map' /> <div>ระบุตำแหน่ง</div>
+                  <Icon name='map' /> <text>ระบุตำแหน่ง</text>
                 </Button>
 
                 <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>
@@ -141,8 +141,8 @@ class PostFormStep1 extends Component {
                   <Modal.Content>
                     <MapContainer
                       center={values.location}
-                      lat={values.location.latitude}
-                      lng={values.location.longitude}
+                      lat={values.location.lat}
+                      lng={values.location.lng}
                       zoom={values.zoom}
                       show={values.show}
                       handleClick={handleMarker}

@@ -10,6 +10,7 @@ class MyPost extends Component {
   constructor() {
     super();
     this.state = {
+      postid: '',
       title: '',
       imageurl: '',
       errors: {}
@@ -33,6 +34,7 @@ class MyPost extends Component {
 
     if (postFind != null) {
       this.setState({
+        postid: postFind._id,
         title: postFind.title,
         imageurl: postFind.photos[0]
       })
@@ -67,7 +69,7 @@ class MyPost extends Component {
                   <Button.Content visible>ลบ</Button.Content>
                 </Button>
 
-                <Button href='/editpost' basic>
+                <Button href={`/editpost/${this.state.postid}`} basic>
                   <Button.Content visible>แก้ไข</Button.Content>
                 </Button>
 

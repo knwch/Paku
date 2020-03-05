@@ -68,7 +68,7 @@ class App extends Component {
               <Route exact path="/support" component={Support} />
               <PrivateRoute exact path="/confirmcard" component={ConfirmCard} />
               <PrivateRoute exact path="/mypost" component={MyPost} />
-              <PrivateRoute exact path="/editpost" component={EditPost} />
+              <PrivateRoute exact path="/editpost/:id" component={EditPost} />
             </Switch>
             {window.location.href === login || window.location.href === register ?  null : <Footer/> }
             {/* {console.log(window.location.href)} */}

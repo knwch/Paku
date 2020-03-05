@@ -3,7 +3,7 @@ import PostFormStep1 from '../forms/postforms/PostFormStep1';
 import PostFormStep2 from '../forms/postforms/PostFormStep2';
 import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
-import { editPost, getPost, getPosts } from '../../redux/actions/postActions';
+import { editPost, getPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
@@ -14,6 +14,7 @@ class EditPost extends Component {
         super(props);
         this.state = {
             step: 1,
+            postid: '',
             title: '',
             photos: [],
             preview: [],
@@ -41,19 +42,66 @@ class EditPost extends Component {
                 lat: 13.7563,
                 lng: 100.5018
             },
+            defaultlocation: {
+                lat: 13.7563,
+                lng: 100.5018
+            },
             zoom: 17,
-            show: false,
-            statustemp: true,
+            show: true,
+            statustemp: false,
             errors: {}
         }
     }
 
     componentDidMount = () => {
-        document.title = "Paku - Posting"
+        document.title = "Paku - Edit Posting"
+
+        const postid = this.props.match.params.id
+        this.props.getPost(postid);
+
+        this.setState({
+            postid: postid
+        })
 
     }
 
+
     componentWillReceiveProps(nextProps) {
+
+        const post = nextProps.post.post;
+        const user = nextProps.auth.user;
+
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+
+        if (post.user === user.id) {
+            this.setState({
+                title: post.title,
+                photos: post.photos,
+                preview: post.photos,
+                price: post.price,
+                typeofpark: post.detail.typeofpark,
+                numberofcar: post.detail.numberofcar,
+                typeofcar: post.detail.typeofcar,
+                explain: post.detail.explain,
+                rule: post.detail.rule,
+                nearby: post.detail.nearby,
+                // facility: post.detail.facility,
+                open: post.date.open,
+                close: post.date.close,
+                address: post.location.address,
+                location: {
+                    lat: parseFloat(post.location.latitude),
+                    lng: parseFloat(post.location.longitude)
+                },
+                defaultlocation: {
+                    lat: parseFloat(post.location.latitude),
+                    lng: parseFloat(post.location.longitude)
+                }
+            })
+        }
+
 
     }
 
@@ -207,6 +255,11 @@ class EditPost extends Component {
         })
     }
 
+    // checkFacility = () => {
+    //     const facilityFilter = this.state.addfacility.filter(val => !this.state.facility.includes(val));
+    //     console.log(facilityFilter)
+    // }
+
     handleFacility = (facility) => {
         const facilityFilter = this.state.addfacility.filter((val) => val.key === facility.key)
         const facilityObject = facilityFilter[0]
@@ -230,8 +283,8 @@ class EditPost extends Component {
     handleCancelLocation = () => {
         this.setState({
             location: {
-                lat: 13.7563,
-                lng: 100.5018
+                lat: this.state.defaultlocation.lat,
+                lng: this.state.defaultlocation.lng
             }
         })
     }
@@ -267,7 +320,7 @@ class EditPost extends Component {
             facility: this.state.facility,
             price: this.state.price
         }
-        this.props.addPost(newPost);
+        this.props.editPost(this.state.postid, newPost)
     }
 
     render() {
@@ -374,4 +427,4 @@ const mapStateToProps = state => ({
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { editPost, getPost, getPosts })(withRouter(EditPost))
+export default connect(mapStateToProps, { editPost, getPost })(withRouter(EditPost))
