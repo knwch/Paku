@@ -125,6 +125,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
     Post.findOne({ _id: req.params.id })
         .then((post) => {
             if (!isValid) {
+                console.log(errors)
                 return res.status(400).json(errors)
             }
 
