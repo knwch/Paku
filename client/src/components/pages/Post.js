@@ -19,9 +19,9 @@ class Post extends Component {
             photos: [],
             preview: [],
             filetemp: [],
-            price: 0,
+            price: '0',
             typeofpark: '',
-            numberofcar: 0,
+            numberofcar: '0',
             typeofcar: '',
             explain: '',
             rule: [],
@@ -146,7 +146,7 @@ class Post extends Component {
                     statustemp: true
                 })
             }
-            console.log(mPhotos)
+            // console.log(mPhotos)
             return { photos: mPhotos, filetemp: mTemp }
         })
     }
@@ -163,7 +163,7 @@ class Post extends Component {
                 .then(url => {
                     let image = this.state.photos.concat(url);
                     let file = this.state.filetemp.concat(currentImageName);
-                    console.log(url)
+                    // console.log(url)
                     this.setState({
                         filetemp: file,
                         photos: image,
@@ -277,8 +277,8 @@ class Post extends Component {
         const newPost = {
             title: this.state.title,
             imagePost: this.state.photos,
-            longitude: this.state.location.lng,
-            latitude: this.state.location.lat,
+            longitude: this.state.location.lng.toString(),
+            latitude: this.state.location.lat.toString(),
             address: this.state.address,
             open: this.state.open,
             close: this.state.close,

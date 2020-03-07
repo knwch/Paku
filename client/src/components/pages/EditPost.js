@@ -19,9 +19,9 @@ class EditPost extends Component {
             photos: [],
             preview: [],
             filetemp: [],
-            price: 0,
+            price: '',
             typeofpark: '',
-            numberofcar: 0,
+            numberofcar: '',
             typeofcar: '',
             explain: '',
             rule: [],
@@ -306,20 +306,21 @@ class EditPost extends Component {
         const newPost = {
             title: this.state.title,
             imagePost: this.state.photos,
-            longitude: this.state.location.lng,
-            latitude: this.state.location.lat,
+            longitude: this.state.location.lng.toString(),
+            latitude: this.state.location.lat.toString(),
             address: this.state.address,
             open: this.state.open,
             close: this.state.close,
             typeofpark: this.state.typeofpark,
-            numberofcar: `${this.state.numberofcar}`,
+            numberofcar: this.state.numberofcar,
             typeofcar: this.state.typeofcar,
             explain: this.state.explain,
             rule: this.state.rule,
             nearby: this.state.nearby,
             facility: this.state.facility,
-            price: `${this.state.price}`
+            price: this.state.price
         }
+        // console.log(newPost)
         this.props.editPost(this.state.postid, newPost)
     }
 
