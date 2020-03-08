@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, Container, Button, Grid, Header, Divider, Card, Image } from 'semantic-ui-react';
+import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item } from 'semantic-ui-react';
 import { getPosts, deletePost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -33,66 +33,66 @@ class MyPost extends Component {
       this.setState({
         posts: postsFind
       })
-    } 
+    }
   }
 
   handleDel = (id) => {
     this.props.deletePost(id)
+    window.location.reload(false)
   }
 
   render() {
     return (
-
       <Responsive>
         <Container fluid>
           <Grid centered className='mb-4'>
             <Grid.Column mobile={16} tablet={9} computer={9}>
 
-              {this.state.posts
-                .map((post, index) => {
-                  return (
-                    <div key={index} className='mb-4'>
-                      <Card fluid>
-                        <Card.Content>
+              <Item.Group>
+                {this.state.posts
+                  .map((post, index) => {
+                    return (
+                      <Item key={index}>
 
-                          {post.title}
+                        <div className='mr-4 img-center-square'>
+                          <Image
+                            src={post.photos[0]}
+                            wrapped
+                            ui={false}
+                          />
+                        </div>
 
-                          <div className='img-center-square'>
-                            <Image
-                              src={post.photos[0]}
-                              wrapped
-                              ui={false}
-                            />
-                          </div>
-                          <Card.Description textAlign='right'>
+                        <Item.Content>
+                          <Item.Header>{post.title}</Item.Header>
+                          <Item.Description>{post.location.address}</Item.Description>
+                          <Item.Extra>
 
-                            <Button basic>
+                            <Button compact basic>
                               <Button.Content visible>พักชั่วคราว</Button.Content>
                             </Button>
 
-                            <Button basic onClick={this.handleDel.bind(this , post._id)}>
+                            <Button compact basic onClick={this.handleDel.bind(this, post._id)}>
                               <Button.Content visible>ลบ</Button.Content>
                             </Button>
 
-                            <Button href={`/editpost/${post._id}`} basic>
+                            <Button compact href={`/editpost/${post._id}`} basic>
                               <Button.Content visible>แก้ไข</Button.Content>
                             </Button>
 
-                          </Card.Description>
+                          </Item.Extra>
+                        </Item.Content>
+                      </Item>
+                    )
+                  })}
 
-                        </Card.Content>
+                <Divider />
 
-                      </Card>
-                    </div>
-                  )
-                })}
+              </Item.Group>
 
             </Grid.Column>
-
           </Grid>
-
         </Container>
-      </Responsive >
+      </Responsive>
     );
   }
 }
