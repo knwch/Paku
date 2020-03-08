@@ -22,6 +22,7 @@ import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
 import ConfirmCard from "./components/pages/ConfirmCard";
 import MyPost from "./components/pages/MyPost";
+import MyPostDetail from "./components/pages/MyPostDetail";
 import EditPost from "./components/pages/EditPost";
 import NavMenu from "./components/NavMenu";
 import Footer from "./components/Footer";
@@ -68,6 +69,7 @@ class App extends Component {
               <Route exact path="/support" component={Support} />
               <PrivateRoute exact path="/confirmcard" component={ConfirmCard} />
               <PrivateRoute exact path="/mypost" component={MyPost} />
+              <PrivateRoute exact path="/mypost/:id" component={MyPostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
             </Switch>
             {window.location.href === login || window.location.href === register ?  null : <Footer/> }

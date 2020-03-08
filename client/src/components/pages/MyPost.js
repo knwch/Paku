@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item } from 'semantic-ui-react';
 import { getPosts, deletePost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 class MyPost extends Component {
 
@@ -48,10 +48,10 @@ class MyPost extends Component {
           <Grid centered className='mb-4'>
             <Grid.Column mobile={16} tablet={9} computer={9}>
 
-              <Item.Group>
-                {this.state.posts
-                  .map((post, index) => {
-                    return (
+              {this.state.posts
+                .map((post, index) => {
+                  return (
+                    <Item.Group link href={`/mypost/${post._id}`}>
                       <Item key={index}>
 
                         <div className='mr-4 img-center-square'>
@@ -82,12 +82,11 @@ class MyPost extends Component {
                           </Item.Extra>
                         </Item.Content>
                       </Item>
+                      <Divider />
+                    </Item.Group>
+                  
                     )
-                  })}
-
-                <Divider />
-
-              </Item.Group>
+              })}
 
             </Grid.Column>
           </Grid>
