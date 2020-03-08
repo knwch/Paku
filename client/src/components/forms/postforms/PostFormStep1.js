@@ -190,6 +190,7 @@ class PostFormStep1 extends Component {
                       zoom={values.zoom}
                       show={values.show}
                       handleClick={handleMarker}
+                      height={'100vh'}
                     />
                   </Modal.Content>
                   <Modal.Actions>

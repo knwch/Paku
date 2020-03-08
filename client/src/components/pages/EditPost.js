@@ -87,7 +87,7 @@ class EditPost extends Component {
                 explain: post.detail.explain,
                 rule: post.detail.rule,
                 nearby: post.detail.nearby,
-                // facility: post.detail.facility,
+                facility: post.detail.facility,
                 open: post.date.open,
                 close: post.date.close,
                 address: post.location.address,
@@ -100,8 +100,8 @@ class EditPost extends Component {
                     lng: parseFloat(post.location.longitude)
                 }
             })
+            this.checkFacility(post.detail.facility)
         }
-
 
     }
 
@@ -255,10 +255,13 @@ class EditPost extends Component {
         })
     }
 
-    // checkFacility = () => {
-    //     const facilityFilter = this.state.addfacility.filter(val => !this.state.facility.includes(val));
-    //     console.log(facilityFilter)
-    // }
+    checkFacility = (input) => {
+        for (var i = 0; i < input.length; i++) {
+            const facilityFilter = this.state.addfacility.filter(val => val.value === input[i]);
+            const facilityObject = facilityFilter[0]
+            facilityObject.checked = true
+        }
+    }
 
     handleFacility = (facility) => {
         const facilityFilter = this.state.addfacility.filter((val) => val.key === facility.key)
