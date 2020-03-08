@@ -4,22 +4,17 @@ const isEmpty = require('./is-empty');
 module.exports = validateBookingInput = (data) => {
     let errors = {};
 
-    data.date = !isEmpty(data.date) ? data.date : '';
-    data.time = !isEmpty(data.time) ? data.time : '';
+    data.bookDate = !isEmpty(data.bookDate) ? data.bookDate : '';
     data.phone = !isEmpty(data.phone) ? data.phone : '';
-    data.regis = !isEmpty(data.regis) ? data.regis : '';
-    data.note = !isEmpty(data.note) ? data.note : '';
-    data.money = !isEmpty(data.money) ? data.money : '';
-    // data.price = !isEmpty(data.price) ? data.price : '';
+    data.idCar = !isEmpty(data.idCar) ? data.idCar : '';
+    data.payment = !isEmpty(data.payment) ? data.payment : '';
+    data.timeIn = !isEmpty(data.timeIn) ? data.timeIn : '';
+    data.timeOut = !isEmpty(data.timeOut) ? data.timeOut : '';
+    data.hours = !isEmpty(data.hours) ? data.hours : '';
+    data.price = !isEmpty(data.price) ? data.price : '';
 
-    if (Validator.isEmpty(data.date)) {
+    if (Validator.isEmpty(data.bookDate)) {
         errors.date = `Date field is required`;
-    }
-    if (Validator.isEmpty(data.time.in)) {
-        errors.in = `Time in field is required`;
-    }
-    if (Validator.isEmpty(data.time.out)) {
-        errors.out = `Time out field is required`;
     }
     if (Validator.isEmpty(data.phone)) {
         errors.phone = `Phone field is required`;
@@ -27,11 +22,20 @@ module.exports = validateBookingInput = (data) => {
     if (!Validator.isNumeric(data.phone)) {
         errors.phone = `Phone must be Integer`;
     }
-    if (Validator.isEmpty(data.regis)) {
+    if (Validator.isEmpty(data.idCar)) {
         errors.phone = `Car regis field is required`;
     }
-    if (!Validator.isNumeric(data.regis)) {
-        errors.phone = `Car regis must be Integer`;
+    if (Validator.isEmpty(data.payment)) {
+        errors.phone = `Payment field is required`;
+    }
+    if (Validator.isEmpty(data.timeIn)) {
+        errors.in = `Time in field is required`;
+    }
+    if (Validator.isEmpty(data.timeOut)) {
+        errors.out = `Time out field is required`;
+    }
+    if (Validator.isEmpty(data.hours)) {
+        errors.out = `Time out field is required`;
     }
     if (Validator.isEmpty(data.price)) {
         errors.price = `Price field is required`;
