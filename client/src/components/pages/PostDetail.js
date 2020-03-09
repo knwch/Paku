@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MapContainer from '../map/MapContainer';
 
-class MyPostDetail extends Component {
+class PostDetail extends Component {
 
     constructor(props) {
         super(props);
@@ -36,10 +36,10 @@ class MyPostDetail extends Component {
             close: '',
             address: '',
             location: {
-                lat: 13.7563,
-                lng: 100.5018
+                lat: null,
+                lng: null
             },
-            zoom: 17,
+            zoom: 15,
             show: true,
             statustemp: false,
             errors: {}
@@ -61,13 +61,12 @@ class MyPostDetail extends Component {
     componentWillReceiveProps(nextProps) {
 
         const post = nextProps.post.post;
-        const user = nextProps.auth.user;
 
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
 
-        if (post.user === user.id) {
+        if (post._id) {
             this.setState({
                 title: post.title,
                 photos: post.photos,
@@ -98,15 +97,19 @@ class MyPostDetail extends Component {
                 <Container fluid>
                     <Grid centered className='mb-4'>
                         <Grid.Row>
-                            <div className='mr-4 img-center-square'>
-                                <Image
-                                    src={this.state.photos[0]}
-                                    wrapped
-                                    ui={false}
-                                />
-                            </div>
+                            {this.state.photos.map((photo, index) => {
+                                return (
+                                    <div key={index} className='mb-3 mr-4 img-center-240'>
+                                        <Image
+                                            src={photo}
+                                            wrapped
+                                            ui={false}
+                                        />
+                                    </div>
+                                )
+                            })}
                         </Grid.Row>
-                        <Grid.Column mobile={16} tablet={6} computer={6}>
+                        <Grid.Column mobile={16} tablet={7} computer={7}>
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
@@ -205,7 +208,7 @@ class MyPostDetail extends Component {
 
                             </Item.Group>
                         </Grid.Column>
-                        <Grid.Column mobile={16} tablet={4} computer={4}>
+                        <Grid.Column mobile={16} tablet={5} computer={5}>
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
@@ -237,4 +240,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { getPost })(withRouter(MyPostDetail));
+export default connect(mapStateToProps, { getPost })(withRouter(PostDetail));

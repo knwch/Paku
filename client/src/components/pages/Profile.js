@@ -19,8 +19,9 @@ import {
     Loader
 } from 'semantic-ui-react';
 import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
+import { getPosts } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
 class Profile extends Component {
@@ -30,6 +31,7 @@ class Profile extends Component {
         this.state = {
             modalOpen: false,
             formOpen: false,
+            posts: [],
             filename: "",
             username: "",
             firstname: "",
@@ -74,19 +76,23 @@ class Profile extends Component {
 
     fileInputRef = React.createRef();
 
-    componentDidMount() {
+    componentWillMount() {
         document.title = "Paku - Profile"
         this.props.getCurrentProfile();
+        this.props.getPosts();
     }
 
     componentWillReceiveProps(nextProps) {
+
+        const posts = nextProps.post.posts;
+        const profile = nextProps.profile.profile;
+        const postsFind = posts.filter((val) => val.user === (profile && profile._id))
+
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
 
-        if (nextProps.profile.profile) {
-            const profile = nextProps.profile.profile;
-
+        if (profile) {
             this.setState({
                 username: profile.username,
                 firstname: profile.name.firstname,
@@ -98,6 +104,12 @@ class Profile extends Component {
                 phone: profile.phone,
                 tempphone: profile.phone,
                 photo: profile.photo_user
+            })
+        }
+
+        if (postsFind.length !== 0) {
+            this.setState({
+                posts: postsFind
             })
         }
     }
@@ -309,7 +321,7 @@ class Profile extends Component {
                     </Card.Content>
                 );
             default:
-                
+
         }
     }
 
@@ -384,11 +396,31 @@ class Profile extends Component {
                             </Grid.Column>
                             <Grid.Column mobile={15} tablet={11} computer={11}>
                                 <Card fluid>
-                                    <RecommendCardList />
+                                    <Card.Content>
+                                        <Card.Header textAlign='left' className='py-3'>
+                                            <div>ที่จอดรถของฉัน</div>
+                                        </Card.Header>
+                                        <Card.Description>
+                                            <Grid textAlign='center' stackable columns={3}>
+                                                {this.state.posts.map((post, index) => {
+                                                    return (
+                                                        <Grid.Column key={index}>
+                                                            <RecommendCard
+                                                                photo={post.photos}
+                                                                title={post.title}
+                                                                rate={post.rate.rating}
+                                                                price={post.price}
+                                                                url={`/post/${post._id}`}
+                                                            />
+                                                        </Grid.Column>
+                                                    )
+                                                })}
+                                            </Grid>
+                                        </Card.Description>
+                                    </Card.Content>
                                 </Card>
                             </Grid.Column>
                         </Grid>
-
                     </Container>
                 </Responsive >
             );
@@ -396,35 +428,11 @@ class Profile extends Component {
     }
 }
 
-function RecommendCardList() {
-    return (
-        <Card.Content>
-            <Card.Header textAlign='left' className='py-2'>
-                ที่จอดรถของฉัน
-            </Card.Header>
-            <Card.Description>
-                <Grid textAlign='center' stackable columns={3}>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Card.Description>
-        </Card.Content>
-    );
-}
-
 const mapStateToProps = state => ({
     profile: state.profile,
+    post: state.post,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, editProfile, uploadImage })(withRouter(Profile));
+export default connect(mapStateToProps, { getCurrentProfile, editProfile, uploadImage, getPosts })(withRouter(Profile));
 
