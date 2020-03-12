@@ -6,7 +6,7 @@ import PostConfirm from '../forms/postforms/PostConfirm';
 import { addPost } from '../../redux/actions/postActions';
 import { getIDcard } from '../../redux/actions/profileActions';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
 class Post extends Component {
@@ -280,8 +280,8 @@ class Post extends Component {
             longitude: this.state.location.lng.toString(),
             latitude: this.state.location.lat.toString(),
             address: this.state.address,
-            open: this.state.open,
-            close: this.state.close,
+            open: this.state.open.toString(),
+            close: this.state.close.toString(),
             typeofpark: this.state.typeofpark,
             numberofcar: this.state.numberofcar,
             typeofcar: this.state.typeofcar,
