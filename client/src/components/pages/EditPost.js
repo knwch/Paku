@@ -49,6 +49,7 @@ class EditPost extends Component {
             zoom: 17,
             show: true,
             statustemp: false,
+            isPostSuccess: null,
             errors: {}
         }
     }
@@ -303,9 +304,8 @@ class EditPost extends Component {
         this.setState({ [input]: value });
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
-        this.nextStep()
         const newPost = {
             title: this.state.title,
             imagePost: this.state.photos,
@@ -321,10 +321,20 @@ class EditPost extends Component {
             rule: this.state.rule,
             nearby: this.state.nearby,
             facility: this.state.facility,
-            price: this.state.price
+            price: this.state.price.toString()
         }
-        // console.log(newPost)
-        this.props.editPost(this.state.postid, newPost)
+        await this.props.editPost(this.state.postid, newPost)
+        if ( this.props.post.issuccess === true ) {
+            this.setState({
+                isPostSuccess: true
+            });
+            this.nextStep()
+        } else {
+            this.setState({
+                isPostSuccess: false
+            });
+            this.nextStep()
+        }
     }
 
     render() {
@@ -350,7 +360,8 @@ class EditPost extends Component {
             price,
             preview,
             filetemp,
-            statustemp } = this.state;
+            statustemp,
+            isPostSuccess } = this.state;
         const values =
         {
             title,
@@ -373,7 +384,8 @@ class EditPost extends Component {
             price,
             preview,
             filetemp,
-            statustemp
+            statustemp,
+            isPostSuccess
         };
 
         // eslint-disable-next-line default-case
