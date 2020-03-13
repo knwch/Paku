@@ -5,7 +5,7 @@ import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
 import { editPost, getPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
 class EditPost extends Component {
@@ -328,11 +328,13 @@ class EditPost extends Component {
             this.setState({
                 isPostSuccess: true
             });
+            // console.log(this.props.post.issuccess)
             this.nextStep()
         } else {
             this.setState({
                 isPostSuccess: false
             });
+            // console.log(this.props.post.issuccess)
             this.nextStep()
         }
     }
