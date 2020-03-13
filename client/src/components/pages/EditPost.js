@@ -35,8 +35,8 @@ class EditPost extends Component {
                 { key: '2', text: 'รั้ว', value: 'รั้ว', checked: false },
                 { key: '3', text: 'หลังคากันแดด / กันฝน', value: 'หลังคากันแดด / กันฝน', checked: false }
             ],
-            open: null,
-            close: null,
+            open: '',
+            close: '',
             address: '',
             location: {
                 lat: 13.7563,
