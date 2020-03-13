@@ -35,8 +35,8 @@ class Post extends Component {
                 { key: '2', text: 'รั้ว', value: 'รั้ว', checked: false },
                 { key: '3', text: 'หลังคากันแดด / กันฝน', value: 'หลังคากันแดด / กันฝน', checked: false }
             ],
-            open: null,
-            close: null,
+            open: '',
+            close: '',
             address: '',
             location: {
                 lat: 13.7563,
@@ -45,6 +45,7 @@ class Post extends Component {
             zoom: 17,
             show: false,
             statustemp: true,
+            isPostSuccess: null,
             errors: {}
         }
     }
@@ -271,9 +272,8 @@ class Post extends Component {
         this.setState({ [input]: value });
     }
 
-    handleSubmit = (e) =>  {
+    handleSubmit = async (e) =>  {
         e.preventDefault();
-        this.nextStep()
         const newPost = {
             title: this.state.title,
             imagePost: this.state.photos,
@@ -291,7 +291,18 @@ class Post extends Component {
             facility: this.state.facility,
             price: this.state.price
         }
-        this.props.addPost(newPost);
+        await this.props.addPost(newPost);
+        if ( this.props.post.issuccess === true ) {
+            this.setState({
+                isPostSuccess: true
+            });
+            this.nextStep()
+        } else {
+            this.setState({
+                isPostSuccess: false
+            });
+            this.nextStep()
+        }
     }
 
     render() {
@@ -317,7 +328,8 @@ class Post extends Component {
             price,
             preview,
             filetemp,
-            statustemp } = this.state;
+            statustemp,
+            isPostSuccess } = this.state;
         const values =
         {
             title,
@@ -340,7 +352,8 @@ class Post extends Component {
             price,
             preview,
             filetemp,
-            statustemp
+            statustemp,
+            isPostSuccess
         };
 
         // eslint-disable-next-line default-case
