@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import SimpleReactValidator from 'simple-react-validator';
-import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label, Select } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
@@ -206,32 +207,26 @@ class PostFormStep1 extends Component {
 
                 <Header as='h4'><div>ช่วงเวลาที่คุณเปิดให้บริการ</div></Header>
                 <Form.Group widths='equal'>
-                  <Form.Select
+                  <Form.Dropdown
                     fluid
+                    search
+                    selection
+                    lazyLoad
                     placeholder='ตั้งแต่'
                     onChange={handleChange('open')}
                     value={values.open}
                     options={times}
                   />
-                  <Form.Select
+                  <Form.Dropdown
                     fluid
+                    search
+                    selection
+                    lazyLoad
                     placeholder='จนถึง'
                     onChange={handleChange('close')}
                     value={values.close}
                     options={times}
                   />
-                  {/* <Form.Input
-                    fluid
-                    placeholder='ตั้งแต่'
-                    onChange={handleChange('open')}
-                    value={values.open}
-                  />
-                  <Form.Input
-                    fluid
-                    placeholder='จนถึง'
-                    onChange={handleChange('close')}
-                    value={values.close}
-                  /> */}
                 </Form.Group>
                 {this.validator.message('เวลาเปิด', values.open, 'required')}
                 {this.validator.message('เวลาปิด', values.close, 'required')}
