@@ -7,19 +7,23 @@ import {
   GET_POSTS,
   GET_POST,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  SET_POST_LOADING,
+  SET_POST_SUCCESS
 } from './types';
 
 // Add Post
 export const addPost = (postData) => dispatch => {
   dispatch(clearErrors());
+  dispatch(postStatus());
   axios
     .post('/api/posts/addPost', postData)
     .then((res) =>
       dispatch({
         type: ADD_POST,
-        payload: res.data
-      })
+        payload: res.data.post
+      }),
+      dispatch(postIssuccess())
     )
     .catch((err) =>
       dispatch({
@@ -179,3 +183,15 @@ export const clearErrors = () => {
     type: CLEAR_ERRORS
   };
 };
+
+export const postStatus = () => {
+  return {
+    type: SET_POST_LOADING
+  }
+}
+
+export const postIssuccess = () => {
+  return {
+    type: SET_POST_SUCCESS
+  } 
+}

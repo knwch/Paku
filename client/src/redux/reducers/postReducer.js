@@ -3,12 +3,15 @@ import {
   GET_POSTS,
   GET_POST,
   DELETE_POST,
-  POST_LOADING
+  POST_LOADING,
+  SET_POST_SUCCESS,
+  SET_POST_LOADING
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   post: {},
+  issuccess: false,
   loading: false
 };
 
@@ -41,6 +44,16 @@ export default function(state = initialState, action) {
         ...state,
         posts: state.posts.filter(post => post._id !== action.payload)
       };
+    case SET_POST_SUCCESS:
+      return {
+        ...state,
+        issuccess: true
+      }
+    case SET_POST_LOADING:
+      return {
+        ...state, 
+        issuccess: false
+      }
     default:
       return state;
   }
