@@ -140,6 +140,7 @@ class PostFormStep1 extends Component {
               <Form>
                 <Header as='h4'><div>ให้เรารู้จักที่จอดรถของคุณ</div></Header>
                 <Form.Input
+                  className='mt-3 mb-0'
                   fluid
                   placeholder='ชื่อที่จอดรถ'
                   onChange={handleChange('title')}
@@ -147,6 +148,7 @@ class PostFormStep1 extends Component {
                 />
                 {this.validator.message('ชื่อที่จอดรถ', values.title, 'required')}
                 <Form.Input
+                  className='mt-3 mb-0'
                   fluid
                   placeholder='ที่อยู่'
                   onChange={handleChange('address')}
@@ -155,6 +157,7 @@ class PostFormStep1 extends Component {
                 {this.validator.message('ที่อยู่', values.address, 'required')}
 
                 <Button
+                  className='mt-3 mb-0'
                   onClick={this.handleOpenModal}
                   basic
                   circular
@@ -164,7 +167,7 @@ class PostFormStep1 extends Component {
 
                 <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>
                 <Header as='h3'><div>ที่จอดรถของคุณเป็นแบบไหน</div></Header>
-                <Form.Group widths='equal'>
+                <Form.Group className='mt-3 mb-0' widths='equal'>
                   <Form.Select
                     fluid
                     placeholder='ประเภทที่จอดรถ'
@@ -183,7 +186,7 @@ class PostFormStep1 extends Component {
                 {this.validator.message('จำนวนที่จอดรถ', values.numberofcar, 'required')}
 
                 <Header as='h4'><div>ประเภทรถที่สามารถจอดได้</div></Header>
-                <Form.Group inline>
+                <Form.Group className='mt-3 mb-0' inline>
                   <Form.Radio
                     label='รถยนต์'
                     checked={values.typeofcar === 'รถยนต์'}
@@ -206,7 +209,7 @@ class PostFormStep1 extends Component {
                 {this.validator.message('ประเภทรถ', values.typeofcar, 'required')}
 
                 <Header as='h4'><div>ช่วงเวลาที่คุณเปิดให้บริการ</div></Header>
-                <Form.Group widths='equal'>
+                <Form.Group className='mt-3 mb-0' widths='equal'>
                   <Form.Dropdown
                     fluid
                     search
@@ -230,7 +233,7 @@ class PostFormStep1 extends Component {
                 </Form.Group>
                 {this.validator.message('เวลาเปิด', values.open, 'required')}
                 {this.validator.message('เวลาปิด', values.close, 'required')}
-                <Button onClick={this.continue} className='btn-paku' color='yellow' animated>
+                <Button onClick={this.continue} className='btn-paku mt-4' color='yellow' animated>
                   <Button.Content visible>ถัดไป</Button.Content>
                   <Button.Content hidden>
                     <Icon name='arrow right' />

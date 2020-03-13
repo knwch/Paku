@@ -108,6 +108,7 @@ class PostFormStep3 extends Component {
                   ฿ 100
                 </Label>
                 <Form.Input
+                  className='mt-1 mb-0'
                   fluid
                   placeholder='กรุณากรอกราคาที่คุณต้องการ (เฉพาะตัวเลข)'
                   onChange={handleChange('price')}
