@@ -315,7 +315,7 @@ class EditPost extends Component {
             open: this.state.open,
             close: this.state.close,
             typeofpark: this.state.typeofpark,
-            numberofcar: this.state.numberofcar,
+            numberofcar: this.state.numberofcar.toString(),
             typeofcar: this.state.typeofcar,
             explain: this.state.explain,
             rule: this.state.rule,

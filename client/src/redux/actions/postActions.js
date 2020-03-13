@@ -73,6 +73,7 @@ export const getPost = id => dispatch => {
 
 // Edit Post
 export const editPost = (postId, postData) => dispatch => {
+  dispatch(postStatus());
   axios
     .post(`/api/posts/edit/${postId}`, postData)
     .then((res) => {
@@ -80,6 +81,7 @@ export const editPost = (postId, postData) => dispatch => {
         type: GET_POST,
         payload: res.data
       })
+      dispatch(postIssuccess())
     })
     .catch((err) => {
       dispatch({
