@@ -51,7 +51,7 @@ class MyPost extends Component {
               {this.state.posts
                 .map((post, index) => {
                   return (
-                    <Item.Group link href={`/post/${post._id}`}>
+                    <Item.Group>
                       <Item key={index}>
 
                         <div className='mr-4 img-center-square'>
@@ -63,7 +63,7 @@ class MyPost extends Component {
                         </div>
 
                         <Item.Content>
-                          <Item.Header>{post.title}</Item.Header>
+                          <Item.Header href={`/post/${post._id}`}>{post.title}</Item.Header>
                           <Item.Description>{post.location.address}</Item.Description>
                           <Item.Extra>
 
