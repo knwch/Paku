@@ -48,9 +48,9 @@ class PostConfirm extends Component {
                     <Button href="/" compact basic>
                       <Button.Content visible>กลับสู่หน้าหลัก</Button.Content>
                     </Button>
-                    <Button href="/post" compact basic>
+                    {/* <Button href="/post" compact basic>
                       <Button.Content visible>ลองอีกครั้ง</Button.Content>
-                    </Button>
+                    </Button> */}
                   </Card.Content>
                 </Card>
               </Grid.Column>
