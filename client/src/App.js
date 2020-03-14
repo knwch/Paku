@@ -50,8 +50,8 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
-    const login = "http://localhost:3000/login";
-    const register = "http://localhost:3000/register";
+    // const login = "http://localhost:3000/login";
+    // const register = "http://localhost:3000/register";
     return (
       <Provider store={store}>
         <Router>
@@ -72,7 +72,8 @@ class App extends Component {
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
             </Switch>
-            {window.location.href === login || window.location.href === register ?  null : <Footer/> }
+            {/* {window.location.href === login || window.location.href === register ?  null :  } */}
+            <Footer/>
             {/* {console.log(window.location.href)} */}
           </div>
         </Router>
