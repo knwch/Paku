@@ -38,7 +38,59 @@ class Book extends Component {
             },
             zoom: 15,
             show: true,
-            errors: {}
+            errors: {},
+            test_start: '10.30', //test other start booking time
+            test_end: '11.30', //test other end booking time
+            times: [
+                { text: '00.00', value: '00.00' },
+                { text: '00.30', value: '00.30' },
+                { text: '01.00', value: '01.00' },
+                { text: '01.30', value: '01.30' },
+                { text: '02.00', value: '02.00' },
+                { text: '02.30', value: '02.30' },
+                { text: '03.00', value: '03.00' },
+                { text: '03.30', value: '03.30' },
+                { text: '04.00', value: '04.00' },
+                { text: '04.30', value: '04.30' },
+                { text: '05.00', value: '05.00' },
+                { text: '05.30', value: '05.30' },
+                { text: '06.00', value: '06.00' },
+                { text: '06.30', value: '06.30' },
+                { text: '07.00', value: '07.00' },
+                { text: '07.30', value: '07.30' },
+                { text: '08.00', value: '08.00' },
+                { text: '08.30', value: '08.30' },
+                { text: '09.00', value: '09.00' },
+                { text: '09.30', value: '09.30' },
+                { text: '10.00', value: '10.00' },
+                { text: '10.30', value: '10.30' },
+                { text: '11.00', value: '11.00' },
+                { text: '11.30', value: '11.30' },
+                { text: '12.00', value: '12.00' },
+                { text: '12.30', value: '12.30' },
+                { text: '13.00', value: '13.00' },
+                { text: '13.30', value: '13.30' },
+                { text: '14.00', value: '14.00' },
+                { text: '14.30', value: '14.30' },
+                { text: '15.00', value: '15.00' },
+                { text: '15.30', value: '15.30' },
+                { text: '16.00', value: '16.00' },
+                { text: '16.30', value: '16.30' },
+                { text: '17.00', value: '17.00' },
+                { text: '17.30', value: '17.30' },
+                { text: '18.00', value: '18.00' },
+                { text: '18.30', value: '18.30' },
+                { text: '19.00', value: '19.00' },
+                { text: '19.30', value: '19.30' },
+                { text: '20.00', value: '20.00' },
+                { text: '20.30', value: '20.30' },
+                { text: '21.00', value: '21.00' },
+                { text: '21.30', value: '21.30' },
+                { text: '22.00', value: '22.00' },
+                { text: '22.30', value: '22.30' },
+                { text: '23.00', value: '23.00' },
+                { text: '23.30', value: '23.30' }
+            ]
         }
     }
 
@@ -86,11 +138,11 @@ class Book extends Component {
 
     }
 
-    handleChange = input => e => {
-        this.setState({ [input]: e.target.value });
-    };
+    handleChange = input => (e, { value }) => {
+        this.setState({ [input]: value });
+    }
 
-    handleSubmit = (e) =>  {
+    handleSubmit = (e) => {
         e.preventDefault();
     }
 
@@ -100,62 +152,72 @@ class Book extends Component {
             { text: 'เงินสด', value: 'เงินสด' }
         ];
 
-        const times = [
-            { text: '00.00', value: '00.00' },
-            { text: '00.30', value: '00.30' },
-            { text: '01.00', value: '01.00' },
-            { text: '01.30', value: '01.30' },
-            { text: '02.00', value: '02.00' },
-            { text: '02.30', value: '02.30' },
-            { text: '03.00', value: '03.00' },
-            { text: '03.30', value: '03.30' },
-            { text: '04.00', value: '04.00' },
-            { text: '04.30', value: '04.30' },
-            { text: '05.00', value: '05.00' },
-            { text: '05.30', value: '05.30' },
-            { text: '06.00', value: '06.00' },
-            { text: '06.30', value: '06.30' },
-            { text: '07.00', value: '07.00' },
-            { text: '07.30', value: '07.30' },
-            { text: '08.00', value: '08.00' },
-            { text: '08.30', value: '08.30' },
-            { text: '09.00', value: '09.00' },
-            { text: '09.30', value: '09.30' },
-            { text: '10.00', value: '10.00' },
-            { text: '10.30', value: '10.30' },
-            { text: '11.00', value: '11.00' },
-            { text: '11.30', value: '11.30' },
-            { text: '12.00', value: '12.00' },
-            { text: '12.30', value: '12.30' },
-            { text: '13.00', value: '13.00' },
-            { text: '13.30', value: '13.30' },
-            { text: '14.00', value: '14.00' },
-            { text: '14.30', value: '14.30' },
-            { text: '15.00', value: '15.00' },
-            { text: '15.30', value: '15.30' },
-            { text: '16.00', value: '16.00' },
-            { text: '16.30', value: '16.30' },
-            { text: '17.00', value: '17.00' },
-            { text: '17.30', value: '17.30' },
-            { text: '18.00', value: '18.00' },
-            { text: '18.30', value: '18.30' },
-            { text: '19.00', value: '19.00' },
-            { text: '19.30', value: '19.30' },
-            { text: '20.00', value: '20.00' },
-            { text: '20.30', value: '20.30' },
-            { text: '21.00', value: '21.00' },
-            { text: '21.30', value: '21.30' },
-            { text: '22.00', value: '22.00' },
-            { text: '22.30', value: '22.30' },
-            { text: '23.00', value: '23.00' },
-            { text: '23.30', value: '23.30' }
-        ];
+        //start booking time
+        const timeStartOptions = this.state.times
+            .filter((time) => //filter times between open and close
+                parseFloat(time.value) >= parseFloat(this.state.open) &&
+                parseFloat(time.value) < parseFloat(this.state.close)
+            )
+            .filter((time) => //filter times when post was booked
+                parseFloat(time.value) <= parseFloat(this.state.test_start) - 1 || //reduce 1 hour by booked post
+                parseFloat(time.value) > parseFloat(this.state.test_end) //show options after 30 minutes of booked post
+            )
+            .map((time, index) => ({
+                key: time.key,
+                text: time.text,
+                value: time.value,
+            }))
+
+        //end booking time
+        const timeEndOptions = this.state.times
+            .filter((time) => //filter times between start booking's time and close
+                parseFloat(time.value) > parseFloat(this.state.book_start) &&
+                parseFloat(time.value) <= parseFloat(this.state.close)
+            )
+            .filter((time) => { //filter times when post was booked
+                if (parseFloat(this.state.book_start) < parseFloat(this.state.test_start)) { //if start booking below other booked time
+                    return parseFloat(time.value) < parseFloat(this.state.test_start) //30 minutes length
+                }
+                else if (parseFloat(this.state.book_start) > parseFloat(this.state.test_end)) { //if start booking above other booked time
+                    return parseFloat(time.value) > parseFloat(this.state.test_end) //30 minutes length again
+                }
+            }
+            )
+            .map((time, index) => ({
+                key: time.key,
+                text: time.text,
+                value: time.value,
+            }))
+
+        const handleCalculateCost = () => {
+            var book_start = parseFloat(this.state.book_start)
+            var book_end = parseFloat(this.state.book_end)
+            if (book_start % 1 !== 0) {
+                book_start = book_start + 0.2
+            }
+            if (book_end % 1 !== 0) {
+                book_end = book_end + 0.2
+            }
+            var bookedHours = book_end - book_start
+            var totalCost = bookedHours * parseFloat(this.state.price)
+
+            if (Number.isNaN(totalCost)) {
+                return {
+                    bookedHours: 0,
+                    totalCost: 0
+                }
+            } else {
+                return {
+                    bookedHours: bookedHours,
+                    totalCost: totalCost
+                }
+            }
+        }
 
         return (
             <Responsive>
                 <Container fluid>
                     <Grid centered className='mb-4'>
-
                         <Grid.Row>
                             {this.state.photos.map((photo, index) => {
                                 return (
@@ -169,7 +231,6 @@ class Book extends Component {
                                 )
                             })}
                         </Grid.Row>
-
                         <Grid.Column mobile={16} tablet={7} computer={7}>
                             <Card fluid>
                                 <Card.Content>
@@ -191,7 +252,7 @@ class Book extends Component {
                                                 placeholder='ตั้งแต่'
                                                 onChange={this.handleChange('book_start')}
                                                 value={this.state.book_start}
-                                                options={times}
+                                                options={timeStartOptions}
                                             />
                                             <Form.Dropdown
                                                 fluid
@@ -201,7 +262,8 @@ class Book extends Component {
                                                 placeholder='จนถึง'
                                                 onChange={this.handleChange('book_end')}
                                                 value={this.state.book_end}
-                                                options={times}
+                                                options={timeEndOptions}
+                                                disabled={this.state.book_start === ''}
                                             />
                                         </Form.Group>
                                         <Header as='h3'><div>รายละเอียดของคุณ</div></Header>
@@ -243,8 +305,8 @@ class Book extends Component {
                                             <Item>
                                                 <Item.Content>
                                                     <Item.Description>ราคาที่จอดรถ {this.state.price} บาท / ชั่วโมง</Item.Description>
-                                                    <Item.Description>จำนวน</Item.Description>
-                                                    <Item.Description>ราคารวม</Item.Description>
+                                                    <Item.Description>จำนวน {handleCalculateCost().bookedHours} ชั่วโมง</Item.Description>
+                                                    <Item.Description>ราคารวม {handleCalculateCost().totalCost} บาท</Item.Description>
                                                 </Item.Content>
                                             </Item>
                                         </Item.Group>
