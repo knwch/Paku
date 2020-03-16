@@ -25,8 +25,9 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
     if (!isValid) {
         return res.status(400).json(errors)
     }
+
     
-    Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.body.idPost,
+    Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.body.idPost, statusBook: 1,
         [Op.or]: [{
             [Op.and]: [{
                 timeIn: {
@@ -81,9 +82,9 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
 // @route   POST api/book/cancel/:postId/:bookId
 // @desc    Post Cancel Booking 
 // @access  Private
-router.post('/cancel/:postId/:bookId', (req, res) => {
+router.get('/cancel/:postId/:bookId', (req, res) => {
     let status = { statusBook: 0 }
-    Book.update(status, { where: {idPost: req.params.postId, id: req.params.bookId, idUser: req.body.id, statusBook: 1}, }) // returning: true it' not working mysql
+    Book.update(status, { where: {idPost: req.params.postId, id: req.params.bookId, idUser: req.user.id, statusBook: 1}, }) // returning: true it' not working mysql
         .then((book) => {
             if (book[0] === 0) {
                 return res.status(401).json({ Book: 'Cancel Booking fail or Booking Cancel'})
