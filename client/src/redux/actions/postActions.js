@@ -186,12 +186,14 @@ export const clearErrors = () => {
   };
 };
 
+// Set loading state
 export const postStatus = () => {
   return {
     type: SET_POST_LOADING
   }
 }
 
+// Result status
 export const postIssuccess = () => {
   return {
     type: SET_POST_SUCCESS
