@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BookingForm from '../forms/bookingforms/BookingForm';
 import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item, Form, Icon, Card } from 'semantic-ui-react';
 import { getPost } from '../../redux/actions/postActions';
+import { getBookPost, addBook } from '../../redux/actions/bookActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MapContainer from '../map/MapContainer';
@@ -12,13 +13,17 @@ class Book extends Component {
         super(props);
         this.state = {
             postid: '',
+            userid: '',
             book_date: '',
             book_start: '',
             book_end: '',
-            book_contact: '',
+            book_phone: '',
             book_plate: '',
             book_description: '',
             book_payment: 'เงินสด',
+            book_hours: 0,
+            book_price: 0,
+            bookeds: [],
             title: '',
             photos: [],
             price: '',
@@ -99,6 +104,7 @@ class Book extends Component {
 
         const postid = this.props.match.params.id
         this.props.getPost(postid);
+        this.props.getBookPost(postid);
 
         this.setState({
             postid: postid
@@ -109,9 +115,18 @@ class Book extends Component {
     componentWillReceiveProps(nextProps) {
 
         const post = nextProps.post.post;
+        const user = nextProps.auth.user;
+        const book = nextProps.book.bookPost;
+        // const bookFilter = book.filter((val) => val.idPost === post._id)
 
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
+        }
+
+        if (user.id) {
+            this.setState({
+                userid: user.id
+            })
         }
 
         if (post._id) {
@@ -136,14 +151,78 @@ class Book extends Component {
             })
         }
 
+        // if (bookFilter.length !== 0) {
+        //     this.setState({
+        //         bookeds: bookFilter
+        //     })
+        // }
+
     }
 
     handleChange = input => (e, { value }) => {
+        if (input === 'book_start') {
+            this.setState({
+                book_start: value,
+                book_end: ''
+            }, () => {
+                this.handleCalculateCost()
+            });
+        }
+        if (input === 'book_end') {
+            this.setState({
+                book_end: value
+            }, () => {
+                this.handleCalculateCost()
+            });
+        }
         this.setState({ [input]: value });
+    }
+
+    handleDateChange = input => (e) => {
+        this.setState({ [input]: e.target.value });
+    }
+
+    handleCalculateCost = () => {
+        var book_start = parseFloat(this.state.book_start)
+        var book_end = parseFloat(this.state.book_end)
+        if (book_start % 1 !== 0) {
+            book_start = book_start + 0.2
+        }
+        if (book_end % 1 !== 0) {
+            book_end = book_end + 0.2
+        }
+        var bookedHours = book_end - book_start
+        var totalCost = bookedHours * parseFloat(this.state.price)
+
+        if (Number.isNaN(totalCost)) {
+            this.setState({
+                book_hours: 0,
+                book_price: 0
+            });
+        } else {
+            this.setState({
+                book_hours: bookedHours,
+                book_price: totalCost
+            });
+        }
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
+        const newBook = {
+            bookDate: this.state.book_date,
+            timeIn: this.state.book_start,
+            timeOut: this.state.book_end,
+            phone: this.state.book_phone,
+            idCar: this.state.book_plate,
+            note: this.state.book_description,
+            payment: this.state.book_payment,
+            idPost: this.state.postid,
+            idUser: this.state.userid,
+            hours: this.state.book_hours.toString(),
+            price: this.state.book_price.toString()
+        }
+        this.props.addBook(newBook, this.state.postid);
     }
 
     render() {
@@ -189,31 +268,6 @@ class Book extends Component {
                 value: time.value,
             }))
 
-        const handleCalculateCost = () => {
-            var book_start = parseFloat(this.state.book_start)
-            var book_end = parseFloat(this.state.book_end)
-            if (book_start % 1 !== 0) {
-                book_start = book_start + 0.2
-            }
-            if (book_end % 1 !== 0) {
-                book_end = book_end + 0.2
-            }
-            var bookedHours = book_end - book_start
-            var totalCost = bookedHours * parseFloat(this.state.price)
-
-            if (Number.isNaN(totalCost)) {
-                return {
-                    bookedHours: 0,
-                    totalCost: 0
-                }
-            } else {
-                return {
-                    bookedHours: bookedHours,
-                    totalCost: totalCost
-                }
-            }
-        }
-
         return (
             <Responsive>
                 <Container fluid>
@@ -239,9 +293,8 @@ class Book extends Component {
                                         <Form.Input
                                             className='mt-3 mb-0'
                                             fluid
-                                            placeholder='เพิ่มกฎของคุณ (ไม่บังคับ)'
                                         >
-                                            <input type='date' value={this.state.book_date} onChange={this.handleChange('book_date')} />
+                                            <input type='date' value={this.state.book_date} onChange={this.handleDateChange('book_date')} />
                                         </Form.Input>
                                         <Form.Group className='mt-3 mb-0' widths='equal'>
                                             <Form.Dropdown
@@ -271,8 +324,8 @@ class Book extends Component {
                                             <Form.Input
                                                 fluid
                                                 placeholder='เบอร์ติดต่อ'
-                                                onChange={this.handleChange('book_contact')}
-                                                value={this.state.book_contact}
+                                                onChange={this.handleChange('book_phone')}
+                                                value={this.state.book_phone}
                                             />
                                             <Form.Input
                                                 fluid
@@ -305,8 +358,8 @@ class Book extends Component {
                                             <Item>
                                                 <Item.Content>
                                                     <Item.Description>ราคาที่จอดรถ {this.state.price} บาท / ชั่วโมง</Item.Description>
-                                                    <Item.Description>จำนวน {handleCalculateCost().bookedHours} ชั่วโมง</Item.Description>
-                                                    <Item.Description>ราคารวม {handleCalculateCost().totalCost} บาท</Item.Description>
+                                                    <Item.Description>จำนวน {this.state.book_hours} ชั่วโมง</Item.Description>
+                                                    <Item.Description>ราคารวม {this.state.book_price} บาท</Item.Description>
                                                 </Item.Content>
                                             </Item>
                                         </Item.Group>
@@ -442,7 +495,8 @@ class Book extends Component {
 const mapStateToProps = state => ({
     errors: state.errors,
     post: state.post,
+    book: state.book,
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { getPost })(withRouter(Book));
+export default connect(mapStateToProps, { getPost, getBookPost, addBook })(withRouter(Book));
