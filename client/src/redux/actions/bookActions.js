@@ -23,14 +23,13 @@ export const addBook = (bookData, idPost) => dispatch => {
             })
         })
         .catch((err) => {
-            console.log(err)
-            // dispatch({
-            //     type: CANCEL_BOOK
-            // })
-            // dispatch({
-            //     type: GET_ERRORS,
-            //     payload: err.response.data
-            // })
+            dispatch({
+                type: CANCEL_BOOK
+            })
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
         })
 }
 
