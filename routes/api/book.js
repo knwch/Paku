@@ -26,7 +26,6 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
         return res.status(400).json(errors)
     }
 
-    
     Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.body.idPost, statusBook: 1,
         [Op.or]: [{
             [Op.and]: [{
@@ -61,8 +60,8 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
         }]   
     }})
         .then((book) => {
-            // console.log('Book1 : ', book)
             if (book) {
+                // console.log('Book1')
                 return res.status(401).json({ book: 'Booking Errors'})
             }
             Book.create(req.body)
@@ -71,11 +70,11 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
                     res.json(book)
                 })
                 .catch((err) => {
-                    console.log(err)
+                    res.status(401).json({ book: 'Booking Errors'})
                 })
         })
         .catch((err) => {
-            console.log(err)
+            res.status(401).json({ book: 'Booking Errors'})
         })
 });
 
