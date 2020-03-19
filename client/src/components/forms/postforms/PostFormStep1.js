@@ -36,7 +36,9 @@ class PostFormStep1 extends Component {
         required: 'โปรดระบุ:attribute',
         alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
         integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
-        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น'
+        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น',
+        min: ':attributeต้องมีความยาวอย่างน้อย 6 ตัวอักษร',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น'
       }
     });
 
@@ -146,7 +148,7 @@ class PostFormStep1 extends Component {
                   onChange={handleChange('title')}
                   value={values.title}
                 />
-                {this.validator.message('ชื่อที่จอดรถ', values.title, 'required')}
+                {this.validator.message('ชื่อที่จอดรถ', values.title, 'required|min:6,string')}
                 <Form.Input
                   className='mt-3 mb-0'
                   fluid
@@ -183,7 +185,7 @@ class PostFormStep1 extends Component {
                   />
                 </Form.Group>
                 {this.validator.message('ประเภทที่จอดรถ', values.typeofpark, 'required')}
-                {this.validator.message('จำนวนที่จอดรถ', values.numberofcar, 'required')}
+                {this.validator.message('จำนวนที่จอดรถ', values.numberofcar, 'required|integer')}
 
                 <Header as='h4'><div>ประเภทรถที่สามารถจอดได้</div></Header>
                 <Form.Group className='mt-3 mb-0' inline>
