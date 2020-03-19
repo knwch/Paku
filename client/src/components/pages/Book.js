@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import BookingForm from '../forms/bookingforms/BookingForm';
-import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item, Form, Icon, Card } from 'semantic-ui-react';
+import SimpleReactValidator from 'simple-react-validator';
+import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item, Form, Icon, Card, Transition, Modal } from 'semantic-ui-react';
 import { getPost } from '../../redux/actions/postActions';
 import { getBookPost, addBook } from '../../redux/actions/bookActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import MapContainer from '../map/MapContainer';
+import moment from 'moment'
+import 'moment/locale/th';
 
 class Book extends Component {
 
@@ -23,6 +25,8 @@ class Book extends Component {
             book_payment: 'เงินสด',
             book_hours: 0,
             book_price: 0,
+            book_start_disabled: [],
+            book_end_disabled: [],
             bookeds: [],
             title: '',
             photos: [],
@@ -43,9 +47,8 @@ class Book extends Component {
             },
             zoom: 15,
             show: true,
+            modalOpen: false,
             errors: {},
-            test_start: '10.30', //test other start booking time
-            test_end: '11.30', //test other end booking time
             times: [
                 { text: '00.00', value: '00.00' },
                 { text: '00.30', value: '00.30' },
@@ -97,6 +100,38 @@ class Book extends Component {
                 { text: '23.30', value: '23.30' }
             ]
         }
+
+        this.validator = new SimpleReactValidator({
+            validators: {
+                thai: {  // name the rule
+                    message: ':attribute ภาษาไทย',
+                    rule: (val, params, validator) => {
+                        return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+                    }
+                }
+            },
+            element: message =>
+                <div className='mb-2'>
+                    <Transition
+                        animation='shake'
+                        duration={250}
+                        transitionOnMount={true}
+                    >
+                        <Label basic color='red' pointing>{message}</Label>
+                    </Transition>
+                    <br />
+                </div>,
+            messages: {
+                required: 'โปรดระบุ:attribute',
+                alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
+                integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
+                string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น',
+                phone: 'โปรดระบุเบอร์โทรศัพท์ 10 หลัก',
+                after_or_equal: 'จองได้ตั้งแต่วันนี้เป็นต้นไป',
+                before_or_equal: 'จองล่วงหน้าได้สูงสุด 3 วัน'
+            }
+        });
+
     }
 
     componentDidMount = () => {
@@ -117,7 +152,13 @@ class Book extends Component {
         const post = nextProps.post.post;
         const user = nextProps.auth.user;
         const book = nextProps.book.bookPost;
-        // const bookFilter = book.filter((val) => val.idPost === post._id)
+
+        if (book.Book !== "No have booking") {
+            const bookFilter = book.filter((val) => val.idPost === post._id)
+            this.setState({
+                bookeds: bookFilter
+            })
+        }
 
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
@@ -151,12 +192,6 @@ class Book extends Component {
             })
         }
 
-        // if (bookFilter.length !== 0) {
-        //     this.setState({
-        //         bookeds: bookFilter
-        //     })
-        // }
-
     }
 
     handleChange = input => (e, { value }) => {
@@ -165,6 +200,7 @@ class Book extends Component {
                 book_start: value,
                 book_end: ''
             }, () => {
+                this.handleEndBookingDate()
                 this.handleCalculateCost()
             });
         }
@@ -179,7 +215,13 @@ class Book extends Component {
     }
 
     handleDateChange = input => (e) => {
-        this.setState({ [input]: e.target.value });
+        this.setState({
+            book_date: e.target.value,
+            book_start: '',
+            book_end: ''
+        }, () => {
+            this.handleStartBookingDate()
+        });
     }
 
     handleCalculateCost = () => {
@@ -207,7 +249,95 @@ class Book extends Component {
         }
     }
 
-    handleSubmit = (e) => {
+    handleStartBookingDate = async () => {
+        var Array = []
+        const date = this.state.bookeds
+            .filter((date) =>
+                date.bookDate === this.state.book_date
+            )
+        for (var i = 0; i < date.length; i++) {
+            var start = parseFloat(date[i].timeIn)
+            var end = parseFloat(date[i].timeOut)
+            if (end % 1 !== 0) {
+                end = end + 0.7
+            } else if (end % 1 === 0) {
+                end = end + 0.3
+            }
+            if (start % 1 !== 0) {
+                start = start - 0.3
+            } else if (start % 1 === 0) {
+                start = start - 0.7
+            }
+            while (start !== end) {
+                Array.push(start)
+                if (start % 1 !== 0) {
+                    start = start + 0.7
+                } else if (start % 1 === 0) {
+                    start = start + 0.3
+                }
+            }
+        }
+        this.setState({
+            book_start_disabled: Array
+        });
+    }
+
+    handleEndBookingDate = async () => {
+        var Array = []
+        const date = this.state.bookeds
+            .filter((date) =>
+                date.bookDate === this.state.book_date
+            )
+        for (var i = 0; i < date.length; i++) {
+            var start = parseFloat(this.state.book_start)
+            var end = parseFloat(date[i].timeIn)
+
+            if (start < end) {
+
+                // if (start % 1 !== 0) {
+                //     start = start - 0.3
+                // } else if (start % 1 === 0) {
+                //     start = start - 0.7
+                // }
+
+                while (start !== end) {
+                    Array.push(start)
+                    if (start % 1 !== 0) {
+                        start = start + 0.7
+                    } else if (start % 1 === 0) {
+                        start = start + 0.3
+                    }
+                }
+                break;
+
+            }
+
+        }
+        if (Array.length === 0) {
+            var start = parseFloat(this.state.book_start)
+            var end = parseFloat(this.state.close)
+
+            if (end % 1 !== 0) {
+                end = end + 0.7
+            } else if (end % 1 === 0) {
+                end = end + 0.3
+            }
+
+            while (start < end) {
+                Array.push(start)
+                if (start % 1 !== 0) {
+                    start = start + 0.7
+                } else if (start % 1 === 0) {
+                    start = start + 0.3
+                }
+            }
+        }
+        this.setState({
+            book_end_disabled: Array
+        });
+    }
+
+    handleSubmit = async (e) => {
         e.preventDefault();
         const newBook = {
             bookDate: this.state.book_date,
@@ -222,8 +352,23 @@ class Book extends Component {
             hours: this.state.book_hours.toString(),
             price: this.state.book_price.toString()
         }
-        this.props.addBook(newBook, this.state.postid);
+        await this.props.addBook(newBook, this.state.postid);
+        this.props.history.push('/mypost')
     }
+
+    handleOpenModal = (e) => {
+        if (this.validator.allValid()) {
+            e.preventDefault();
+            this.setState({ modalOpen: true })
+        } else {
+            this.validator.showMessages();
+            // rerender to show messages for the first time
+            // you can use the autoForceUpdate option to do this automatically`
+            this.forceUpdate();
+        }
+    }
+
+    handleCloseModal = () => this.setState({ modalOpen: false })
 
     render() {
 
@@ -231,21 +376,15 @@ class Book extends Component {
             { text: 'เงินสด', value: 'เงินสด' }
         ];
 
-        //start booking time
+        // start booking time
         const timeStartOptions = this.state.times
             .filter((time) => //filter times between open and close
                 parseFloat(time.value) >= parseFloat(this.state.open) &&
                 parseFloat(time.value) < parseFloat(this.state.close)
             )
-            .filter((time) => //filter times when post was booked
-                parseFloat(time.value) <= parseFloat(this.state.test_start) - 1 || //reduce 1 hour by booked post
-                parseFloat(time.value) > parseFloat(this.state.test_end) //show options after 30 minutes of booked post
-            )
-            .map((time, index) => ({
-                key: time.key,
-                text: time.text,
-                value: time.value,
-            }))
+            .filter((time) => {
+                return !this.state.book_start_disabled.includes(parseFloat(time.value));
+            })
 
         //end booking time
         const timeEndOptions = this.state.times
@@ -253,20 +392,9 @@ class Book extends Component {
                 parseFloat(time.value) > parseFloat(this.state.book_start) &&
                 parseFloat(time.value) <= parseFloat(this.state.close)
             )
-            .filter((time) => { //filter times when post was booked
-                if (parseFloat(this.state.book_start) < parseFloat(this.state.test_start)) { //if start booking below other booked time
-                    return parseFloat(time.value) < parseFloat(this.state.test_start) //30 minutes length
-                }
-                else if (parseFloat(this.state.book_start) > parseFloat(this.state.test_end)) { //if start booking above other booked time
-                    return parseFloat(time.value) > parseFloat(this.state.test_end) //30 minutes length again
-                }
-            }
-            )
-            .map((time, index) => ({
-                key: time.key,
-                text: time.text,
-                value: time.value,
-            }))
+            .filter((time) => {
+                return this.state.book_end_disabled.includes(parseFloat(time.value));
+            })
 
         return (
             <Responsive>
@@ -296,6 +424,11 @@ class Book extends Component {
                                         >
                                             <input type='date' value={this.state.book_date} onChange={this.handleDateChange('book_date')} />
                                         </Form.Input>
+                                        {this.validator.message(
+                                            'วันที่จอง',
+                                            this.state.book_date && moment(this.state.book_date, 'YYYY-MM-DD'),
+                                            ['required', { after_or_equal: moment() }, { before_or_equal: moment().add(3, 'day') }]
+                                        )}
                                         <Form.Group className='mt-3 mb-0' widths='equal'>
                                             <Form.Dropdown
                                                 fluid
@@ -306,6 +439,7 @@ class Book extends Component {
                                                 onChange={this.handleChange('book_start')}
                                                 value={this.state.book_start}
                                                 options={timeStartOptions}
+                                                disabled={this.state.book_date === ''}
                                             />
                                             <Form.Dropdown
                                                 fluid
@@ -319,12 +453,17 @@ class Book extends Component {
                                                 disabled={this.state.book_start === ''}
                                             />
                                         </Form.Group>
+                                        {this.validator.message('เวลาเริ่ม', this.state.book_start, 'required')}
+                                        {this.validator.message('เวลาสิ้นสุด', this.state.book_end, 'required')}
                                         <Header as='h3'><div>รายละเอียดของคุณ</div></Header>
                                         <Form.Group className='mt-3 mb-0' widths='equal'>
                                             <Form.Input
                                                 fluid
                                                 placeholder='เบอร์ติดต่อ'
                                                 onChange={this.handleChange('book_phone')}
+                                                input={{
+                                                    maxlength: '10'
+                                                }}
                                                 value={this.state.book_phone}
                                             />
                                             <Form.Input
@@ -334,6 +473,8 @@ class Book extends Component {
                                                 value={this.state.book_plate}
                                             />
                                         </Form.Group>
+                                        {this.validator.message('เบอร์ติดต่อ', this.state.book_phone, 'required|phone')}
+                                        {this.validator.message('ทะเบียนรถ', this.state.book_plate, 'required')}
                                         <Form.Input
                                             className='mt-3 mb-0'
                                             fluid
@@ -364,7 +505,7 @@ class Book extends Component {
                                             </Item>
                                         </Item.Group>
 
-                                        <Button onClick={this.handleSubmit} className='btn-paku' color='yellow' floated='right'>
+                                        <Button onClick={this.handleOpenModal} disabled={!this.props.auth.isAuthenticated} className='btn-paku' color='yellow' floated='right'>
                                             <Button.Content visible>จองทันที</Button.Content>
                                         </Button>
 
@@ -372,6 +513,29 @@ class Book extends Component {
                                 </Card.Content>
                             </Card>
                         </Grid.Column>
+
+                        <Modal
+                            open={this.state.modalOpen}
+                            className="modal-paku"
+                            size='tiny'
+                        >
+                            <Modal.Content>
+                                <Header icon='calendar alternate' content='ตรวจสอบความถูกต้อง' />
+                                <Divider />
+                                <Modal.Description>
+                                    <p>วันที่จอง {moment(new Date(this.state.book_date)).format('D MMMM YYYY')}</p>
+                                    <p>ตั้งแต่เวลา {this.state.book_start} จนถึง {this.state.book_end}</p>
+                                </Modal.Description>
+                            </Modal.Content>
+                            <Modal.Actions>
+                                <Button basic onClick={this.handleCloseModal}>
+                                    <text>ยกเลิก</text>
+                                </Button>
+                                <Button className='btn-paku' onClick={this.handleSubmit}>
+                                    <Icon name='checkmark' /> <text>ยืนยัน</text>
+                                </Button>
+                            </Modal.Actions>
+                        </Modal>
 
                         <Grid.Column mobile={16} tablet={7} computer={7}>
                             <Item.Group>
@@ -470,18 +634,20 @@ class Book extends Component {
 
                                 <Divider />
 
-                            </Item.Group>
+                                <Item>
+                                    <Item.Content>
+                                        <MapContainer
+                                            center={this.state.location}
+                                            lat={this.state.location.lat}
+                                            lng={this.state.location.lng}
+                                            zoom={this.state.zoom}
+                                            show={this.state.show}
+                                            height={'40vh'}
+                                        />
+                                    </Item.Content>
+                                </Item>
 
-                            <Grid.Row>
-                                <MapContainer
-                                    center={this.state.location}
-                                    lat={this.state.location.lat}
-                                    lng={this.state.location.lng}
-                                    zoom={this.state.zoom}
-                                    show={this.state.show}
-                                    height={'40vh'}
-                                />
-                            </Grid.Row>
+                            </Item.Group>
 
                         </Grid.Column>
 
