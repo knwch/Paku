@@ -252,8 +252,10 @@ class Book extends Component {
     handleStartBookingDate = async () => {
         var Array = []
         const date = this.state.bookeds
-            .filter((date) =>
-                date.bookDate === this.state.book_date
+            .filter((date) => {
+                if (date.bookDate === this.state.book_date && date.statusBook === 1)
+                    return date
+            }
             )
         for (var i = 0; i < date.length; i++) {
             var start = parseFloat(date[i].timeIn)
@@ -285,8 +287,10 @@ class Book extends Component {
     handleEndBookingDate = async () => {
         var Array = []
         const date = this.state.bookeds
-            .filter((date) =>
-                date.bookDate === this.state.book_date
+            .filter((date) => {
+                if (date.bookDate === this.state.book_date && date.statusBook === 1)
+                    return date
+            }
             )
         for (var i = 0; i < date.length; i++) {
             var start = parseFloat(this.state.book_start)
