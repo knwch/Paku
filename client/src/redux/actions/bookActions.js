@@ -35,7 +35,7 @@ export const addBook = (bookData, idPost) => dispatch => {
 // Cancel Book 
 export const cancelBook = (idPost, idBook) => dispatch => {
     dispatch(setBookLoading())
-    axios.get(`/api/book/cancel/${idPost}/${idBook}`)
+    axios.post(`/api/book/cancel/${idPost}/${idBook}`)
         .then((res) => {
             dispatch({
                 type: CANCEL_BOOK,
