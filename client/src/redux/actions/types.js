@@ -13,6 +13,7 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_POST = 'GET_POST';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const AVAILABLE_POST = 'AVAILABLE_POST';
 export const ADD_IDCARD = 'ADD_IDCARD';
 export const SET_POST_SUCCESS = 'SET_POST_SUCCESS';
 export const SET_POST_LOADING = 'SET_POST_LOADING';
