@@ -133,6 +133,16 @@ class PostFormStep1 extends Component {
 
     const { values, handleChange, handleMarker } = this.props;
 
+    const timeStartOptions = times
+      .filter((time) =>
+        time.value !== values.close
+      )
+
+    const timeEndOptions = times
+      .filter((time) =>
+        time.value !== values.open
+      )
+
     return (
       <Responsive>
         <Container fluid>
@@ -220,7 +230,7 @@ class PostFormStep1 extends Component {
                     placeholder='ตั้งแต่'
                     onChange={handleChange('open')}
                     value={values.open}
-                    options={times}
+                    options={timeStartOptions}
                   />
                   <Form.Dropdown
                     fluid
@@ -230,7 +240,7 @@ class PostFormStep1 extends Component {
                     placeholder='จนถึง'
                     onChange={handleChange('close')}
                     value={values.close}
-                    options={times}
+                    options={timeEndOptions}
                   />
                 </Form.Group>
                 {this.validator.message('เวลาเปิด', values.open, 'required')}
