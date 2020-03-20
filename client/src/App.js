@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import jwt_decode from "jwt-decode";
@@ -71,9 +71,12 @@ class App extends Component {
               <PrivateRoute exact path="/mypost" component={MyPost} />
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
+              <Route exact path="*">
+                <Redirect to="/" />
+              </Route>
             </Switch>
             {/* {window.location.href === login || window.location.href === register ?  null :  } */}
-            <Footer/>
+            <Footer />
             {/* {console.log(window.location.href)} */}
           </div>
         </Router>
