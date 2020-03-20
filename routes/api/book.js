@@ -70,20 +70,20 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
                     res.json(book)
                 })
                 .catch((err) => {
-                    res.status(401).json({ book: 'Booking Errors'})
+                    res.json({ book: 'Booking Errors'})
                 })
         })
         .catch((err) => {
-            res.status(401).json({ book: 'Booking Errors'})
+            res.json({ book: 'Booking Errors'})
         })
 });
 
 // @route   POST api/book/cancel/:postId/:bookId
 // @desc    Post Cancel Booking 
 // @access  Private
-router.get('/cancel/:postId/:bookId', (req, res) => {
+router.post('/cancel/:postId/:bookId', passport.authenticate('jwt', { session: false }), (req, res) => {
     let status = { statusBook: 0 }
-    Book.update(status, { where: {idPost: req.params.postId, id: req.params.bookId, idUser: req.user.id, statusBook: 1}, }) // returning: true it' not working mysql
+    Book.update(status, { where: {idPost: req.params.postId, id: req.params.bookId, idUser: req.user.id, statusBook: 1} }) // returning: true it' not working mysql
         .then((book) => {
             if (book[0] === 0) {
                 return res.status(401).json({ Book: 'Cancel Booking fail or Booking Cancel'})
@@ -91,6 +91,7 @@ router.get('/cancel/:postId/:bookId', (req, res) => {
             res.json(book)
         })
         .catch((err) => {
+            console.log(err)
             res.json({ Server: 'Server errors'})
         })
 }); 
