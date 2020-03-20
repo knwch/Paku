@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, Container, Button, Grid, Header, Menu, Divider, Image, Item, Card } from 'semantic-ui-react';
+import { Responsive, Container, Button, Grid, Header, Menu, Divider, Image, Item, Card, Modal, Icon } from 'semantic-ui-react';
 import { getPosts, deletePost } from '../../redux/actions/postActions';
 import { getBookUser, cancelBook } from '../../redux/actions/bookActions';
 import { connect } from 'react-redux';
@@ -16,7 +16,11 @@ class MyPost extends Component {
       posts: [],
       books: [],
       activeItem: 'postmenu',
-      errors: {}
+      errors: {},
+      modalBookOpen: false,
+      modalPostOpen: false,
+      temp_bookdata: null,
+      temp_postdata: null
     };
   }
 
@@ -90,6 +94,14 @@ class MyPost extends Component {
     window.location.reload(false)
   }
 
+  handleOpenModal = () => {
+    this.setState({ modalOpen: true })
+  }
+
+  handleCloseModal = () => {
+    this.setState({ modalOpen: false })
+  }
+
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   showPostList = () => {
@@ -119,7 +131,7 @@ class MyPost extends Component {
                           <Button.Content visible>พักชั่วคราว</Button.Content>
                         </Button>
 
-                        <Button compact basic onClick={this.handleDeletePost.bind(this, post._id)}>
+                        <Button compact basic onClick={() => { this.setState({ temp_postdata: post, modalPostOpen: true }) }}>
                           <Button.Content visible>ลบ</Button.Content>
                         </Button>
 
@@ -134,65 +146,112 @@ class MyPost extends Component {
               </Card.Content>
             </Card>
           )
-        })
+        }, this)
     )
   }
 
   cancelBooking = (postid, bookid) => {
     this.props.cancelBook(postid, bookid.toString())
-    // window.location.reload(false)
+    window.location.reload(false)
   }
 
   showBookList = () => {
     return (
       this.state.books
         .map((book, index) => {
-          return (
-            <Card key={index} className='mb-4' fluid>
-              <Card.Content>
-                <Item.Group>
-                  <Item>
+          if (book.statusBook === 1)
+            return (
+              <Card key={index} className='mb-4' fluid>
+                <Card.Content>
+                  <Item.Group>
+                    <Item>
 
-                    <div className='mr-4 img-center-square'>
-                      <Image
-                        src={book.photos[0]}
-                        wrapped
-                        ui={false}
-                      />
-                    </div>
+                      <div className='mr-4 img-center-square'>
+                        <Image
+                          src={book.photos[0]}
+                          wrapped
+                          ui={false}
+                        />
+                      </div>
 
-                    <Item.Content>
-                      <Item.Header href={`/post/${book.idPost}`}>{book.title}</Item.Header>
-                      <Item.Description>{book.address}</Item.Description>
+                      <Item.Content>
+                        <Item.Header href={`/post/${book.idPost}`}>{book.title}</Item.Header>
+                        <Item.Description>{book.address}</Item.Description>
 
-                      <Divider />
+                        <Divider />
 
-                      <Item.Description>
-                        <p>วันที่จอง {moment(new Date(book.bookDate)).format('D MMMM YYYY')}</p>
-                        <p>ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}</p>
-                      </Item.Description>
+                        <Item.Description>
+                          <p>วันที่จอง {moment(new Date(book.bookDate)).format('D MMMM YYYY')}</p>
+                          <p>ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}</p>
+                        </Item.Description>
 
-                      <Item.Extra>
+                        <Item.Extra>
 
-                        <Button compact basic disabled={book.statusBook === 0} onClick={this.cancelBooking.bind(this, book.idPost, book.id)}>
-                          <Button.Content visible>ยกเลิก</Button.Content>
-                        </Button>
+                          <Button
+                            compact
+                            basic
+                            disabled={book.statusBook === 0}
+                            onClick={() => { this.setState({ temp_bookdata: book, modalBookOpen: true }) }}
+                          >
+                            <Button.Content visible>ยกเลิก</Button.Content>
+                          </Button>
 
-                        <Button compact basic>
-                          <Button.Content visible>เช็คอิน</Button.Content>
-                        </Button>
+                          <Button compact basic>
+                            <Button.Content visible>เช็คอิน</Button.Content>
+                          </Button>
 
-                        <Button compact basic>
-                          <Button.Content visible>เช็คเอาท์</Button.Content>
-                        </Button>
+                          <Button compact basic>
+                            <Button.Content visible>เช็คเอาท์</Button.Content>
+                          </Button>
 
-                      </Item.Extra>
-                    </Item.Content>
-                  </Item>
-                </Item.Group>
-              </Card.Content>
-            </Card>
-          )
+                        </Item.Extra>
+                      </Item.Content>
+                    </Item>
+
+                  </Item.Group>
+                </Card.Content>
+              </Card >
+            )
+        }, this)
+    )
+  }
+
+  showCompleteList = () => {
+    return (
+      this.state.books
+        .map((book, index) => {
+          if (book.statusBook === 0)
+            return (
+              <Card key={index} className='mb-4' fluid>
+                <Card.Content>
+                  <Item.Group>
+                    <Item>
+
+                      <div className='mr-4 img-center-square'>
+                        <Image
+                          src={book.photos[0]}
+                          wrapped
+                          ui={false}
+                        />
+                      </div>
+
+                      <Item.Content>
+                        <Item.Header href={`/post/${book.idPost}`}>{book.title}</Item.Header>
+                        <Item.Description>{book.address}</Item.Description>
+
+                        <Divider />
+
+                        <Item.Description>
+                          <p>วันที่จองเมื่อ {moment(new Date(book.bookDate)).format('D MMMM YYYY')}</p>
+                          <p>ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}</p>
+                        </Item.Description>
+
+                      </Item.Content>
+                    </Item>
+                  </Item.Group>
+                </Card.Content>
+              </Card>
+            )
         })
     )
   }
@@ -200,12 +259,63 @@ class MyPost extends Component {
   render() {
 
     var rendererList
+    var modalPopup
 
     if (this.state.activeItem === 'postmenu') {
       rendererList = this.showPostList()
     }
-    else if (this.state.activeItem === 'bookmenu') {
+    if (this.state.activeItem === 'bookmenu') {
       rendererList = this.showBookList()
+    }
+    if (this.state.activeItem === 'completemenu') {
+      rendererList = this.showCompleteList()
+    }
+
+    if (this.state.temp_bookdata !== null) {
+      modalPopup =
+        <Modal
+          open={this.state.modalBookOpen}
+          className="modal-paku"
+          size='tiny'
+        >
+          <Modal.Content>
+            <Header icon='delete calendar' content='คุณต้องการยกเลิกใช่หรือไม่' />
+            <Divider />
+            <Modal.Description>
+              <p>วันที่จอง {moment(new Date(this.state.temp_bookdata.bookDate)).format('D MMMM YYYY')}</p>
+              <p>ตั้งแต่เวลา {this.state.temp_bookdata.timeIn} จนถึง {this.state.temp_bookdata.timeOut}</p>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic onClick={() => { this.setState({ temp_bookdata: null, modalBookOpen: false }) }}>
+              <text>กลับ</text>
+            </Button>
+            <Button className='btn-paku' onClick={this.cancelBooking.bind(this, this.state.temp_bookdata.idPost, this.state.temp_bookdata.id)}>
+              <text>ยืนยัน</text>
+            </Button>
+          </Modal.Actions>
+        </Modal>
+    }
+
+    if (this.state.temp_postdata !== null) {
+      modalPopup =
+        <Modal
+          open={this.state.modalPostOpen}
+          className="modal-paku"
+          size='tiny'
+        >
+          <Modal.Content>
+            <Header icon='delete' content='คุณต้องการลบใช่หรือไม่' />
+          </Modal.Content>
+          <Modal.Actions>
+            <Button basic onClick={() => { this.setState({ temp_postdata: null, modalPostOpen: false }) }}>
+              <text>กลับ</text>
+            </Button>
+            <Button className='btn-paku' onClick={this.handleDeletePost.bind(this, this.state.temp_postdata._id)}>
+              <text>ลบ</text>
+            </Button>
+          </Modal.Actions>
+        </Modal>
     }
 
     return (
@@ -231,13 +341,13 @@ class MyPost extends Component {
                   name='รอการยืนยัน'
                 />
                 <Menu.Item
-                  name='ยกเลิกแล้ว'
-                />
-                <Menu.Item
                   name='รอรีวิว'
                 />
                 <Menu.Item
-                  name='เสร็จสิ้น'
+                  content='เสร็จสิ้น'
+                  name='completemenu'
+                  active={this.state.activeItem === 'completemenu'}
+                  onClick={this.handleItemClick}
                 />
               </Menu>
             </Grid.Row>
@@ -245,10 +355,12 @@ class MyPost extends Component {
             <Grid.Column mobile={16} tablet={9} computer={9}>
 
               {rendererList}
-              {console.log(this.state.books)}
 
             </Grid.Column>
           </Grid>
+
+          {modalPopup}
+
         </Container>
       </Responsive>
     );
