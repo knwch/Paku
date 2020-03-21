@@ -179,6 +179,10 @@ export const availablePost = (availableData, idPost) => dispatch => {
   axios.post(`/api/posts/available/${idPost}`, availableData)
     .then((res) => {
       dispatch({
+        type: DELETE_POST,
+        payload: res.data._id
+      })
+      dispatch({
         type: AVAILABLE_POST,
         payload: res.data
       })

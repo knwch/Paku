@@ -48,7 +48,6 @@ export default function(state = initialState, action) {
     case AVAILABLE_POST:
       return {
         ...state,
-        posts: state.posts.filter(post => post._id !== action.payload._id),
         posts: [action.payload, ...state.posts],
         loading: false
       }
