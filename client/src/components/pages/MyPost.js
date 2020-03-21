@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Responsive, Container, Button, Grid, Header, Menu, Divider, Image, Item, Card, Modal, Icon } from 'semantic-ui-react';
-import { getPosts, deletePost } from '../../redux/actions/postActions';
+import { getPosts, deletePost, availablePost } from '../../redux/actions/postActions';
 import { getBookUser, cancelBook } from '../../redux/actions/bookActions';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
@@ -94,6 +94,13 @@ class MyPost extends Component {
     window.location.reload(false)
   }
 
+
+  handlePausePost = (bool, id) => {
+    console.log(bool, id)
+    this.props.availablePost(bool, id)
+    // window.location.reload(false)
+  }
+
   handleOpenModal = () => {
     this.setState({ modalOpen: true })
   }
@@ -127,7 +134,7 @@ class MyPost extends Component {
                       <Item.Description>{post.location.address}</Item.Description>
                       <Item.Extra>
 
-                        <Button compact basic>
+                        <Button compact basic disabled={!post.available} onClick={this.handlePausePost.bind(this, post.available, post._id)}>
                           <Button.Content visible>พักชั่วคราว</Button.Content>
                         </Button>
 
@@ -361,6 +368,8 @@ class MyPost extends Component {
 
           {modalPopup}
 
+          {console.log(this.state.posts)}
+
         </Container>
       </Responsive>
     );
@@ -374,4 +383,4 @@ const mapStateToProps = state => ({
   book: state.book
 })
 
-export default connect(mapStateToProps, { getPosts, deletePost, getBookUser, cancelBook })(withRouter(MyPost));
+export default connect(mapStateToProps, { getPosts, deletePost, getBookUser, cancelBook, availablePost })(withRouter(MyPost));
