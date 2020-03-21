@@ -176,7 +176,7 @@ export const addComment = (postId, commentData) => dispatch => {
 // Available post
 export const availablePost = (availableData, idPost) => dispatch => {
   dispatch(setPostLoading())
-  axios.post(`/api/available/${idPost}`, availableData)
+  axios.post(`/api/posts/available/${idPost}`, availableData)
     .then((res) => {
       dispatch({
         type: AVAILABLE_POST,
