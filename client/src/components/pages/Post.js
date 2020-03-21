@@ -52,7 +52,20 @@ class Post extends Component {
 
     componentDidMount = () => {
         document.title = "Paku - Posting"
+        this.props.getIDcard()
+    }
 
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+
+        if (nextProps.profile.idcard.Card.confirm === false) {
+            this.props.history.push('/confirmcard')
+        }
+    }
+
+    requestCurrentLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 position => {
@@ -67,18 +80,6 @@ class Post extends Component {
                     }))
                 }
             )
-        }
-
-        this.props.getIDcard()
-    }
-
-    componentWillReceiveProps = (nextProps) => {
-        if (nextProps.errors) {
-            this.setState({ errors: nextProps.errors });
-        }
-
-        if (nextProps.profile.idcard.Card.confirm === false) {
-            this.props.history.push('/confirmcard')
         }
     }
 
@@ -136,7 +137,7 @@ class Post extends Component {
             let del = mTemp.splice(index, 1)
             let delImage = storage.ref().child(`post/${del[0]}`)
             delImage.delete().then((result) => {
-                
+
             })
             // GET info Picture
             // delImage.getMetadata().then((result) => {
@@ -272,7 +273,7 @@ class Post extends Component {
         this.setState({ [input]: value });
     }
 
-    handleSubmit = async (e) =>  {
+    handleSubmit = async (e) => {
         e.preventDefault();
         const newPost = {
             title: this.state.title,
@@ -292,7 +293,7 @@ class Post extends Component {
             price: this.state.price
         }
         await this.props.addPost(newPost);
-        if ( this.props.post.issuccess === true ) {
+        if (this.props.post.issuccess === true) {
             this.setState({
                 isPostSuccess: true
             });
@@ -364,6 +365,7 @@ class Post extends Component {
                         nextStep={this.nextStep}
                         handleChange={this.handleChange}
                         handleMarker={this.handleMarker}
+                        requestCurrentLocation={this.requestCurrentLocation}
                         handleCancelLocation={this.handleCancelLocation}
                         values={values}
                     />

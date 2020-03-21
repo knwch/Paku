@@ -64,7 +64,10 @@ class PostFormStep1 extends Component {
     this.props.handleCancelLocation();
   }
 
-  handleOpenModal = () => this.setState({ modalOpen: true })
+  handleOpenModal = () => {
+    this.props.requestCurrentLocation();
+    this.setState({ modalOpen: true })
+  }
 
   handleConfirmLocation = () => {
     this.setState({
