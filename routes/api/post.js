@@ -125,7 +125,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
     Post.findOne({ _id: req.params.id })
         .then((post) => {
             if (!isValid) {
-                console.log(errors)
+                // console.log(errors)
                 return res.status(400).json(errors)
             }
 
@@ -243,4 +243,30 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 //         })
 // });
 
-module.exports = router;
+// @route   POST api/post/avalible/:id
+// @desc    Post avalible post 
+// @access  Private
+router.post('/available/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    if (!req.body) {
+        return res.status(400).json({ post: 'available is require'})
+    }
+
+    Post.findById(req.params.id)
+        .then((post) => {
+            if (req.user.id != post.user) {
+                return res.status(400).json({ post: 'User not authorized'})
+            }
+
+            if (req.body.available === post.available) {
+                post.available = !post.available
+                post.save().then((post) => res.json(post))
+            } else {
+                return res.status(400).json({ post: 'Input isn t reqiured  '})
+            }
+        })
+        .catch((err) => {
+            res.status(404).json({ post: 'No Post found with that ID'})
+        })
+})
+
+module.exports = router

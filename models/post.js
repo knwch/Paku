@@ -71,8 +71,8 @@ const postSchema = new mongoose.Schema({
         ref: 'users'
     },
     available: {
-        type: Number,
-        default: 1
+        type: Boolean,
+        default: true
     },
     price: {
         type: Number,

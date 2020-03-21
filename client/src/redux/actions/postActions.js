@@ -8,6 +8,7 @@ import {
   GET_POST,
   POST_LOADING,
   DELETE_POST,
+  AVAILABLE_POST,
   SET_POST_LOADING,
   SET_POST_SUCCESS
 } from './types';
@@ -171,6 +172,24 @@ export const addComment = (postId, commentData) => dispatch => {
 //       })
 //     );
 // };
+
+// Available post
+export const availablePost = (availableData, idPost) => dispatch => {
+  dispatch(setPostLoading())
+  axios.post(`/api/available/${idPost}`, availableData)
+    .then((res) => {
+      dispatch({
+        type: AVAILABLE_POST,
+        payload: res.data
+      })
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    })
+}
 
 // Set loading state
 export const setPostLoading = () => {
