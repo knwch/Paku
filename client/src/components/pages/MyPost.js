@@ -96,8 +96,10 @@ class MyPost extends Component {
 
 
   handlePausePost = (bool, id) => {
-    console.log(bool, id)
-    this.props.availablePost(bool, id)
+    const newAvailable = {
+      available: bool
+    }
+    this.props.availablePost(newAvailable, id)
     // window.location.reload(false)
   }
 
