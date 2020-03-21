@@ -16,6 +16,7 @@ class Book extends Component {
         this.state = {
             postid: '',
             userid: '',
+            renterid: '',
             book_date: '',
             book_start: '',
             book_end: '',
@@ -173,6 +174,7 @@ class Book extends Component {
         if (post._id) {
             this.setState({
                 title: post.title,
+                renterid: post.user,
                 photos: post.photos,
                 price: post.price,
                 typeofpark: post.detail.typeofpark,
@@ -353,6 +355,7 @@ class Book extends Component {
             payment: this.state.book_payment,
             idPost: this.state.postid,
             idUser: this.state.userid,
+            renter: this.state.renterid,
             hours: this.state.book_hours.toString(),
             price: this.state.book_price.toString()
         }
@@ -651,7 +654,7 @@ class Book extends Component {
                                     </Item.Content>
                                 </Item>
 
-                            </Item.Group>
+                            </Item.Group> {console.log(this.state)}
 
                         </Grid.Column>
 
