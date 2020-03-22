@@ -41,6 +41,11 @@ module.exports = (sequelize) => {
             allowNull: false,
             required: true
         },
+        idCheck: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            required: true
+        },
         timeIn: {
             type: DataTypes.STRING,
             allowNull: false,
