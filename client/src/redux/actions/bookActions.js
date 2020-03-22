@@ -24,8 +24,9 @@ export const addBook = (bookData, idPost) => dispatch => {
         })
         .catch((err) => {
             dispatch({
-                type: CANCEL_BOOK   
-            },{
+                type: CANCEL_BOOK  
+            })
+            dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
             })
