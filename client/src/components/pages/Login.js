@@ -128,61 +128,75 @@ class Login extends Component {
 
   render() {
     const errors = this.state.errors;
-    return (
-      <Responsive>
-        <Container fluid>
-          <Grid className='mb-4'>
+    const { auth, loading } = this.props.auth
+    if (auth === null || loading) {
+      return (
+        <Modal
+          open={true}
+          className="modal-paku"
+          size='mini'
+          basic
+        >
+          <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
+        </Modal>
+      );
+    } else {
+      return (
+        <Responsive>
+          <Container fluid>
+            <Grid className='mb-4'>
 
-            <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
+              <Grid.Row style={{ "margin-top": "20vh" }} only='computer tablet' />
 
-            <Grid.Column mobile={16} tablet={7} computer={6}>
-              <h4 className="text-center mb-4"><div>เข้าสู่ระบบ</div></h4>
-              <Form>
+              <Grid.Column mobile={16} tablet={7} computer={6}>
+                <h4 className="text-center mb-4"><div>เข้าสู่ระบบ</div></h4>
+                <Form>
 
-                <Form.Field className="text-left">
-                  <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
-                    <Icon name='user' />
-                    <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
-                  </Input>
-                  {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required')}
-                </Form.Field>
+                  <Form.Field className="text-left">
+                    <Input fluid iconPosition='left' placeholder='ชื่อผู้ใช้'>
+                      <Icon name='user' />
+                      <input type="text" className="form-control" onChange={this.handleChange('username')} defaultValue={this.state.username} />
+                    </Input>
+                    {this.validator.message('ชื่อผู้ใช้', this.state.username, 'required')}
+                  </Form.Field>
 
-                <Form.Field className="text-left">
-                  <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
-                    <Icon name='lock' />
-                    <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
-                  </Input>
-                  {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
-                  {this.validator.message('errors', this.state.errors.username, 'error')}
-                  {this.validator.message('errors', this.state.errors.password, 'error')}
-                  {console.log(this.state.errors.username + " " + this.state.errors.password)}
-                </Form.Field>
+                  <Form.Field className="text-left">
+                    <Input fluid iconPosition='left' placeholder='รหัสผ่าน'>
+                      <Icon name='lock' />
+                      <input type="password" className="form-control" onChange={this.handleChange('password')} defaultValue={this.state.password} />
+                    </Input>
+                    {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
+                    {this.validator.message('errors', this.state.errors.username, 'error')}
+                    {this.validator.message('errors', this.state.errors.password, 'error')}
+                    {console.log(this.state.errors.username + " " + this.state.errors.password)}
+                  </Form.Field>
 
-                <Modal
-                  open={this.state.modalLoader}
-                  className="modal-paku"
-                  size='mini'
-                  basic
-                >
-                  <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
-                </Modal>
+                  <Modal
+                    open={this.state.modalLoader}
+                    className="modal-paku"
+                    size='mini'
+                    basic
+                  >
+                    <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
+                  </Modal>
 
-                <div className='text-center'>
-                  <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
-                    <Button.Content visible>เข้าสู่ระบบ</Button.Content>
-                    <Button.Content hidden>
-                      <Icon name='arrow right' />
-                    </Button.Content>
-                  </Button>
-                </div>
+                  <div className='text-center'>
+                    <Button onClick={this.onSubmit} className='btn-paku' color='yellow' animated>
+                      <Button.Content visible>เข้าสู่ระบบ</Button.Content>
+                      <Button.Content hidden>
+                        <Icon name='arrow right' />
+                      </Button.Content>
+                    </Button>
+                  </div>
 
-              </Form>
-            </Grid.Column>
-          </Grid>
-          <this.successRegistModal />
-        </Container>
-      </Responsive>
-    );
+                </Form>
+              </Grid.Column>
+            </Grid>
+            <this.successRegistModal />
+          </Container>
+        </Responsive>
+      );
+    }
   }
 }
 
