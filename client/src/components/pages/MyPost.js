@@ -100,7 +100,7 @@ class MyPost extends Component {
       available: bool
     }
     this.props.availablePost(newAvailable, id)
-    // window.location.reload(false)
+    window.location.reload(false)
   }
 
   handleOpenModal = () => {
@@ -136,7 +136,11 @@ class MyPost extends Component {
                       <Item.Description>{post.location.address}</Item.Description>
                       <Item.Extra>
 
-                        <Button compact basic disabled={!post.available} onClick={this.handlePausePost.bind(this, post.available, post._id)}>
+                        <Button compact basic hidden={post.available} onClick={this.handlePausePost.bind(this, post.available, post._id)}>
+                          <Button.Content visible>เปิดให้เช่า</Button.Content>
+                        </Button>
+
+                        <Button compact basic hidden={!post.available} onClick={this.handlePausePost.bind(this, post.available, post._id)}>
                           <Button.Content visible>พักชั่วคราว</Button.Content>
                         </Button>
 
