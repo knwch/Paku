@@ -19,9 +19,13 @@ const checkSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
-        match: {
-            type: Number,
-            default: 0
+        user: {
+            type: Boolean,
+            default: false
+        },
+        renter: {
+            type: Boolean,
+            default: false
         }
     },
     checkOut: {
@@ -29,9 +33,13 @@ const checkSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
-        match: {
-            type: Number,
-            default: 0
+        user: {
+            type: Boolean,
+            default: false
+        },
+        renter: {
+            type: Boolean,
+            default: false
         }
     }
 });
