@@ -320,8 +320,8 @@ class Book extends Component {
 
         }
         if (Array.length === 0) {
-            var start = parseFloat(this.state.book_start)
-            var end = parseFloat(this.state.close)
+            start = parseFloat(this.state.book_start)
+            end = parseFloat(this.state.close)
 
             if (end % 1 !== 0) {
                 end = end + 0.7

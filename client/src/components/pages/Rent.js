@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import MapContainer from '../map/MapContainer';
 import GoogleMapReact from 'google-map-react';
 import styles from '../map/mapStyles';
-import Marker from '../map/Marker';
 import NearbyCard from '../cards/NearbyCard';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { getPosts } from '../../redux/actions/postActions';
-import { Grid, Responsive, Container, Icon, Popup, Image } from 'semantic-ui-react';
+import { Grid, Responsive, Container, Icon, Popup } from 'semantic-ui-react';
 
 // // Return map bounds based on list of places
 // const getMapBounds = (map, maps, places) => {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import SimpleReactValidator from 'simple-react-validator';
-import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label, Select } from 'semantic-ui-react';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {

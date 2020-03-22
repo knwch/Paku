@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, Container, Button, Grid, Header, Label, Divider, Image, Item } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Divider, Image, Item } from 'semantic-ui-react';
 import { getPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';

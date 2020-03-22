@@ -127,7 +127,7 @@ class Login extends Component {
   }
 
   render() {
-    const errors = this.state.errors;
+    // const errors = this.state.errors;
     const { auth, loading } = this.props.auth
     if (auth === null || loading) {
       return (

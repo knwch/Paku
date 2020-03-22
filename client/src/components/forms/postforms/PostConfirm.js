@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, Responsive, Container, Button, Icon, Card, Modal, Transition, Label } from 'semantic-ui-react';
+import { Grid, Responsive, Container, Button, Card } from 'semantic-ui-react';
 
 class PostConfirm extends Component {
 

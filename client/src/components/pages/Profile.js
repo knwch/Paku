@@ -21,7 +21,7 @@ import {
 import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
 import { getPosts } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
 class Profile extends Component {
