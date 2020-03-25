@@ -1,4 +1,4 @@
-const express = require('express');
+ express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const { Op } = require('sequelize')
@@ -6,7 +6,7 @@ const { Op } = require('sequelize')
 // Import Models 
 const User = require('../../models/user');
 const Post = require('../../models/post');
-const Book = require('../../controller/sequelize')
+const { Book, Check } = require('../../controller/sequelize')
 
 // import input validation
 const validateBookInput = require('../../validator/book');
@@ -21,11 +21,16 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests post system' }));
 // @access  Private
 router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { errors, isValid } = validateBookInput(req.body);
-
+    let body = req.body
+    let check
     if (!isValid) {
         return res.status(400).json(errors)
     }
 
+    if (req.body.renter === req.user.id) {
+        return res.status(400).json({ Book: 'User Only'})
+    }
+    
     Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.body.idPost, statusBook: 1,
         [Op.or]: [{
             [Op.and]: [{
@@ -61,19 +66,27 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
     }})
         .then((book) => {
             if (book) {
-                // console.log('Book1')
                 return res.status(401).json({ book: 'Booking Errors'})
             }
-            Book.create(req.body)
+            Book.create(body)
                 .then((book) => {
-                    // console.log(book)
-                    res.json(book)
+                    check = {
+                        idRenter: body.renter,
+                        idUser: body.idUser,
+                        bookId: book.id
+                    }
+                    Check.create(check)
+                        .then((check) => {
+                            res.json(book)
+                        })
                 })
                 .catch((err) => {
+                    console.log(err)
                     res.json({ book: 'Booking Errors'})
                 })
         })
         .catch((err) => {
+            console.log(err)
             res.json({ book: 'Booking Errors'})
         })
 });
@@ -116,7 +129,7 @@ router.get('/post/:id', (req, res) => {
 // @desc    Get Booking of user 
 // @access  Private
 router.get('/user/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Book.findAll({ where: { idUser: req.params.id }})
+    Book.findAll({ where: { idUser: req.params.id }, include: [{ model: Check }] })
         .then((book) => {
             if (book.length === 0) {
                 return res.json({ Book: 'No have booking'})
@@ -132,7 +145,7 @@ router.get('/user/:id', passport.authenticate('jwt', { session: false }), (req, 
 // @desc    Get Booking  
 // @access  Private
 router.get('/:id',(req, res) => {
-    Book.findOne({ where: { id: req.params.id }})
+    Book.findOne({ where: { id: req.params.id }, include: [{ model: Check }]})
         .then((book) => {
             if (!book) {
                 return res.json({ Book: 'Book not found'})
@@ -144,4 +157,97 @@ router.get('/:id',(req, res) => {
         })
 });
 
-module.exports = router;
+// @route   POST api/book/check/:id
+// @desc    Post Check  
+// @access  Private 
+router.post('/check/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    let temp 
+    Check.findOne({ where: { id: req.params.id }})
+        .then((check) => {
+            temp = {
+                idRenter: check.idRenter,
+                idUser: check.idUser,
+                checkInStatus: check.checkInStatus,
+                checkInUser: check.checkInUser,
+                checkInRenter: check.checkInRenter,
+                checkOutStatus: check.checkOutStatus,
+                checkOutUser: check.checkOutUser,
+                checkOutRenter: check.checkOutRenter
+            }
+            if (check.idUser !== req.user.id && check.idRenter !== req.user.id) return res.status(401).json({ Check: 'User not authorized'})
+            if (req.user.id === check.idUser) {
+                if (req.body.check === true) {
+                    if (temp.checkInStatus === false) {
+                        temp.checkInUser = true
+                        if (temp.checkInUser === true &&  temp.checkInRenter === true) {
+                            temp.checkInStatus = true
+                        }
+                        Check.update(temp ,{ where: { id: req.params.id }})
+                            .then((check) => {
+                                if (check[0] === 0) {
+                                    return res.status(401).json({ Check: 'Error'})
+                                }
+                                res.json(check)
+                            })
+                    } else {
+                        res.json({ Check: true })
+                    }
+                } else {
+                    if (temp.checkOutStatus === false) {
+                        temp.checkOutUser = true
+                        if (temp.checkOutUser === true &&  temp.checkOutRenter === true) {
+                            temp.checkOutStatus = true
+                        }
+                        Check.update(temp ,{ where: { id: req.params.id }})
+                            .then((check) => {
+                                if (check[0] === 0) {
+                                    return res.status(401).json({ Check: 'Error'})
+                                }
+                                res.json(check)
+                            })
+                    } else {
+                        res.json({ Check: true })
+                    }
+                }
+            } else {
+                if (req.body.check === true) {
+                    if (temp.checkInStatus === false) {
+                        temp.checkInRenter = true
+                        if (temp.checkInUser === true &&  temp.checkInRenter === true) {
+                            temp.checkInStatus = true
+                        }
+                        Check.update(temp ,{ where: { id: req.params.id }})
+                            .then((check) => {
+                                if (check[0] === 0) {
+                                    return res.status(401).json({ Check: 'Error'})
+                                }
+                                res.json(check)
+                            })
+                    } else {
+                        res.json({ Check: true })
+                    }
+                } else {
+                    if (temp.checkOutStatus === false) {
+                        temp.checkOutRenter = true
+                        if (temp.checkOutUser === true &&  temp.checkOutRenter === true) {
+                            temp.checkOutStatus = true
+                        }
+                        Check.update(temp ,{ where: { id: req.params.id }})
+                            .then((check) => {
+                                if (check[0] === 0) {
+                                    return res.status(401).json({ Check: 'Error'})
+                                }
+                                res.json(check)
+                            })
+                    } else {
+                        res.json({ Check: true })
+                    }
+                }
+            }
+        })
+        .catch((err) => {
+            res.json({ Check: 'No Check found with that ID'})
+        })
+})
+
+module.exports = router
