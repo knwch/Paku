@@ -8,6 +8,7 @@ import {
     GET_USER_BOOK,
     CLEAR_ERRORS,
     BOOK_LOADING,
+    CHECK_BOOK,
     GET_ERRORS
 } from './types'
 
@@ -100,6 +101,24 @@ export const getBook = (idBook) => dispatch => {
             dispatch({
                 type: GET_BOOK,
                 payload: null
+            })
+        })
+}
+
+// Check book
+export const checkBook = (idCheck, dataCheck) => dispatch => {
+    dispatch(setBookLoading())
+    axios.post(`/api/book/check/${idCheck}`, dataCheck)
+        .then((res) => {
+            dispatch({
+                type: CHECK_BOOK,
+                payload: res.data
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
             })
         })
 }

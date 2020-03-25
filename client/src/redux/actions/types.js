@@ -23,3 +23,4 @@ export const GET_POST_BOOK = 'GET_POST_BOOK';
 export const GET_USER_BOOK = 'GET_USER_BOOK';
 export const GET_BOOK = 'GET_BOOK';
 export const BOOK_LOADING = 'BOOK_LOADING';
+export const CHECK_BOOK = 'CHECK_BOOK';
