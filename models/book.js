@@ -1,11 +1,9 @@
-const { DataTypes } = require('sequelize')
-
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
     return sequelize.define('book', {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
+            type: DataTypes.UUID,
             primaryKey: true,
-            autoIncrement: true,
+            defaultValue: DataTypes.UUIDV4,
             allowNull: false
         },
         bookDate: {
@@ -37,11 +35,6 @@ module.exports = (sequelize) => {
             required: true
         },
         idUser: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            required: true
-        },
-        idCheck: {
             type: DataTypes.STRING,
             allowNull: false,
             required: true
