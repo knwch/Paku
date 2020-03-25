@@ -4,6 +4,7 @@ import {
     GET_BOOK,
     GET_POST_BOOK,
     GET_USER_BOOK,
+    CHECK_BOOK,
     BOOK_LOADING
 } from '../actions/types'
 
@@ -11,6 +12,7 @@ const initialState = {
     book: {},
     bookPost: [],
     bookUser: [],
+    check: [],
     loading: false
 }
 
@@ -48,6 +50,12 @@ export default (state = initialState, action)  => {
         case CANCEL_BOOK: 
             return {
                 ...state,
+                loading: false
+            }
+        case CHECK_BOOK: 
+            return {
+                ...state,
+                check: action.payload,
                 loading: false
             }
         default:
