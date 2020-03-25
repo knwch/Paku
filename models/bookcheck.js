@@ -1,47 +1,44 @@
-const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Schema;
-
-const checkSchema = new mongoose.Schema({
-    post: {
-        type: ObjectId,
-        ref: 'post'
-    },
-    user: {
-        type: ObjectId,
-        ref: 'users'
-    },
-    renter: {
-        type: ObjectId,
-        ref: 'users'
-    },
-    checkIn: {
-        status: {
-            type: Boolean,
-            default: false
+module.exports = (sequelize, DataTypes) => {
+    return sequelize.define('check', {
+        id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false
         },
-        user: {
-            type: Boolean,
-            default: false
+        idRenter: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            required: true
         },
-        renter: {
-            type: Boolean,
-            default: false
+        idUser: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            required: true
+        },
+        checkInStatus: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        checkInUser: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        checkInRenter: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        checkOutStatus: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        checkOutUser: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        checkOutRenter: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
-    },
-    checkOut: {
-        status: {
-            type: Boolean,
-            default: false
-        },
-        user: {
-            type: Boolean,
-            default: false
-        },
-        renter: {
-            type: Boolean,
-            default: false
-        }
-    }
-});
-
-module.exports = mongoose.model('check', checkSchema);
+    })
+}
