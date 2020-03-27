@@ -161,6 +161,10 @@ class Book extends Component {
             })
         }
 
+        if(user.id === post.user) {
+            this.props.history.push(`/post/${post._id}`)
+        }
+
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }

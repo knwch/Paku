@@ -61,29 +61,34 @@ class MyPost extends Component {
       })
     }
 
+    // console.log(books.length)
+
     if (books.length !== 0) {
+      if (books.Book !== 'No have booking') {
 
-      var booksArray = []
+        var booksArray = []
 
-      for (var i = 0; i < posts.length; i++) {
-        var bookFilter = books.filter((val) => {
-          if (val.idPost === posts[i]._id) {
-            val.title = posts[i].title
-            val.photos = posts[i].photos
-            val.address = posts[i].location.address
-            return val
+        for (var i = 0; i < posts.length; i++) {
+          var bookFilter = books.filter((val) => {
+            if (val.idPost === posts[i]._id) {
+              val.title = posts[i].title
+              val.photos = posts[i].photos
+              val.address = posts[i].location.address
+              return val
+            }
+          })
+          if (bookFilter.length !== 0) {
+            bookFilter.map(function (book) {
+              booksArray.push(book)
+            });
           }
-        })
-        if (bookFilter.length !== 0) {
-          bookFilter.map(function (book) {
-            booksArray.push(book)
-          });
         }
-      }
 
-      this.setState({
-        books: booksArray
-      })
+        this.setState({
+          books: booksArray
+        })
+
+      }
 
     }
 
@@ -373,8 +378,6 @@ class MyPost extends Component {
           </Grid>
 
           {modalPopup}
-
-          {console.log(this.state.posts)}
 
         </Container>
       </Responsive>
