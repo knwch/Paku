@@ -49,7 +49,7 @@ export const getProfileByHandle = handle => dispatch => {
 // Get all profile
 export const getProfiles = () => dispatch => {
     dispatch(setProfileLoading());
-    axios.get('/api/profile/all')
+    axios.get('/api/profile/alluser')
         .then((res) => {
             dispatch({
                 type: GET_PROFILES,
