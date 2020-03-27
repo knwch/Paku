@@ -31,7 +31,7 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
         return res.status(400).json({ Book: 'User Only'})
     }
     
-    Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.body.idPost, statusBook: 1,
+    Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.params.id, statusBook: 1,
         [Op.or]: [{
             [Op.and]: [{
                 timeIn: {
@@ -86,7 +86,6 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
                 })
         })
         .catch((err) => {
-            console.log(err)
             res.json({ book: 'Booking Errors'})
         })
 });
