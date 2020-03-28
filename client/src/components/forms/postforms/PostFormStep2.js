@@ -122,7 +122,7 @@ class PostFormStep2 extends Component {
                     onChange={handleChange('addrule')}
                     value={values.addrule}
                   />
-                  <Button as='div' className='btn-paku' onClick={this.addRule}>
+                  <Button disabled={values.addrule.length === 0} as='div' className='btn-paku' onClick={this.addRule}>
                     <Button.Content>
                       <Icon name='plus' />เพิ่มกฎ
                     </Button.Content>
@@ -145,7 +145,7 @@ class PostFormStep2 extends Component {
                     onChange={handleChange('addnearby')}
                     value={values.addnearby}
                   />
-                  <Button as='div' className='btn-paku' onClick={this.addNearby}>
+                  <Button disabled={values.addnearby.length === 0} as='div' className='btn-paku' onClick={this.addNearby}>
                     <Button.Content>
                       <Icon name='plus' />เพิ่มสถานที่
                     </Button.Content>
