@@ -127,7 +127,6 @@ class Login extends Component {
   }
 
   render() {
-    // const errors = this.state.errors;
     const { auth, loading } = this.props.auth
     if (auth === null || loading) {
       return (
@@ -168,7 +167,6 @@ class Login extends Component {
                     {this.validator.message('รหัสผ่าน', this.state.password, 'required')}
                     {this.validator.message('errors', this.state.errors.username, 'error')}
                     {this.validator.message('errors', this.state.errors.password, 'error')}
-                    {console.log(this.state.errors.username + " " + this.state.errors.password)}
                   </Form.Field>
 
                   <Modal
