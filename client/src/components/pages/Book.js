@@ -173,7 +173,7 @@ class Book extends Component {
       });
     }
 
-    if (!_.isEmpty({})) {
+    if (!_.isEmpty(user)) {
       if (user.id === post.user) {
         this.props.history.push(`/post/${post._id}`);
       }
