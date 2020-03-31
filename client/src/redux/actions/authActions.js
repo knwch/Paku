@@ -2,13 +2,17 @@ import axios from 'axios';
 import setAuthToken from '../../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, SET_USER_LOADING } from './types';
 
 // Register User 
 export const registerUser = (userData, history) => dispatch => {
+    dispatch(setUserLoading());
     axios
         .post('/api/users/register', userData)
-        .then((res) => history.push({ pathname: '/login', state: true }))
+        .then((res) => {
+            dispatch(setUsersLoading());
+            history.push({ pathname: '/login', state: true });
+        })
         .catch((err) => {
             dispatch({
                 type: GET_ERRORS,
@@ -22,6 +26,7 @@ export const loginUser = userData => dispatch => {
     axios
         .post('/api/users/login', userData)
         .then((res) => {
+            dispatch(setUserLoading());
             // Save to localStorage
             const { token } = res.data;
             // Set token to ls 
@@ -47,6 +52,19 @@ export const setCurrentUser = (decoded) => {
         type: SET_CURRENT_USER,
         payload: decoded
     }
+}
+
+// User loading
+export const setUserLoading = () => {
+    return {
+        type: USER_LOADING
+    };
+};
+
+export const setUsersLoading = () => {
+    return {
+        type: SET_USER_LOADING
+    };
 }
 
 // Log user out 

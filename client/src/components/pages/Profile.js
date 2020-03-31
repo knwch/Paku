@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import RecommendCard from '../cards/RecommendCard';
-import { Card, Icon, Input, Divider, Button, Image, Modal, Grid, Container, Responsive, Form, TextArea, Label, Transition } from 'semantic-ui-react';
+import {
+    Card,
+    Icon,
+    Input,
+    Divider,
+    Button,
+    Image,
+    Modal,
+    Grid,
+    Container,
+    Responsive,
+    Form,
+    TextArea,
+    Label,
+    Transition,
+    Loader
+} from 'semantic-ui-react';
 import { getCurrentProfile, editProfile, uploadImage } from '../../redux/actions/profileActions';
+import { getPosts } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
@@ -14,6 +31,7 @@ class Profile extends Component {
         this.state = {
             modalOpen: false,
             formOpen: false,
+            posts: [],
             filename: "",
             username: "",
             firstname: "",
@@ -23,7 +41,6 @@ class Profile extends Component {
             temp: "",
             email: "",
             phone: "",
-            temp: "",
             tempphone: "",
             photo: null,
             preview: null,
@@ -59,19 +76,23 @@ class Profile extends Component {
 
     fileInputRef = React.createRef();
 
-    componentDidMount() {
+    componentWillMount() {
         document.title = "Paku - Profile"
         this.props.getCurrentProfile();
+        this.props.getPosts();
     }
 
     componentWillReceiveProps(nextProps) {
+
+        const posts = nextProps.post.posts;
+        const profile = nextProps.profile.profile;
+        const postsFind = posts.filter((val) => val.user === (profile && profile._id))
+
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
 
-        if (nextProps.profile.profile) {
-            const profile = nextProps.profile.profile;
-
+        if (profile) {
             this.setState({
                 username: profile.username,
                 firstname: profile.name.firstname,
@@ -83,6 +104,12 @@ class Profile extends Component {
                 phone: profile.phone,
                 tempphone: profile.phone,
                 photo: profile.photo_user
+            })
+        }
+
+        if (postsFind.length !== 0) {
+            this.setState({
+                posts: postsFind
             })
         }
     }
@@ -151,7 +178,7 @@ class Profile extends Component {
                     });
                     this.handleOpenModal();
                 } else {
-                    err = { image: "ขนาดไฟล์ไม่เกิน 1 MB" };
+                    err = { image: "รองรับขนาดไฟล์ไม่เกิน 1 MB" };
                     // console.log(err);
                     this.setState({
                         ...this.state,
@@ -293,107 +320,119 @@ class Profile extends Component {
                         </Form>
                     </Card.Content>
                 );
+            default:
+
         }
     }
 
     render() {
+        const { profile, loading } = this.props.profile
         let errors = this.state.errors
-        return (
-            <Responsive>
-                <Container fluid>
-                    <Grid className='mb-4' centered>
-                        <Grid.Column mobile={15} tablet={5} computer={5}>
-                            <Card fluid>
+        if (profile === null || loading) {
+            return (
+                <Modal
+                    open={true}
+                    className="modal-paku"
+                    size='mini'
+                    basic
+                >
+                    <Loader size='large' active inline='centered'><p>โปรดรอสักครู่</p></Loader>
+                </Modal>
+            );
+        } else {
+            return (
+                <Responsive>
+                    <Container fluid>
+                        <Grid className='mb-4' centered>
+                            <Grid.Column mobile={15} tablet={5} computer={5}>
+                                <Card fluid>
 
-                                <Card.Content className='card-color' textAlign='center'>
-                                    <div class="button-floated">
-                                        <div className='img-center' >
-                                            <Image src={this.state.photo} wrapped ui={false} />
-                                        </div>
-                                        <Button
-                                            as='a'
-                                            circular
-                                            icon='photo'
-                                            onClick={() => this.fileInputRef.current.click()}
-                                        />
-                                        <input
-                                            ref={this.fileInputRef}
-                                            type="file"
-                                            hidden
-                                            onChange={this.fileChange}
-                                        />
-                                    </div>
-
-                                    {this.validator.message('err', errors.image, `imgerror:${errors.image}`)}
-
-                                    <Modal
-                                        open={this.state.modalOpen}
-                                        className="modal-paku"
-                                        size='mini'
-                                    >
-                                        <Modal.Content className='text-center'>
-                                            <div className='img-center' >
-                                                <Image src={this.state.preview} size='small' centered wrapped />
+                                    <Card.Content className='card-color' textAlign='center'>
+                                        <div class="button-floated">
+                                            <div className='img-center-circle' >
+                                                <Image src={this.state.photo} wrapped ui={false} />
                                             </div>
-                                        </Modal.Content>
-                                        <Modal.Actions>
-                                            <Button basic onClick={this.handleCloseModal}>
-                                                <text>ยกเลิก</text>
-                                            </Button>
-                                            <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
-                                                <Icon name='checkmark' /> <text>อัพโหลด</text>
-                                            </Button>
-                                        </Modal.Actions>
-                                    </Modal>
+                                            <Button
+                                                as='a'
+                                                circular
+                                                icon='photo'
+                                                onClick={() => this.fileInputRef.current.click()}
+                                            />
+                                            <input
+                                                ref={this.fileInputRef}
+                                                type="file"
+                                                hidden
+                                                onChange={this.fileChange}
+                                            />
+                                        </div>
 
-                                </Card.Content>
+                                        {this.validator.message('err', errors.image, `imgerror:${errors.image}`)}
 
-                                {this.ProfileForm(this.state.formOpen)}
+                                        <Modal
+                                            open={this.state.modalOpen}
+                                            className="modal-paku"
+                                            size='mini'
+                                        >
+                                            <Modal.Content className='text-center'>
+                                                <div className='img-center' >
+                                                    <Image src={this.state.preview} size='small' centered wrapped />
+                                                </div>
+                                            </Modal.Content>
+                                            <Modal.Actions>
+                                                <Button basic onClick={this.handleCloseModal}>
+                                                    <text>ยกเลิก</text>
+                                                </Button>
+                                                <Button className='btn-paku' onClick={(e) => this.handleUpload(e)}>
+                                                    <Icon name='checkmark' /> <text>อัพโหลด</text>
+                                                </Button>
+                                            </Modal.Actions>
+                                        </Modal>
 
-                            </Card>
-                        </Grid.Column>
-                        <Grid.Column mobile={15} tablet={11} computer={11}>
-                            <Card fluid>
-                                <RecommendCardList />
-                            </Card>
-                        </Grid.Column>
-                    </Grid>
+                                    </Card.Content>
 
-                </Container>
-            </Responsive >
-        );
+                                    {this.ProfileForm(this.state.formOpen)}
+
+                                </Card>
+                            </Grid.Column>
+                            <Grid.Column mobile={15} tablet={11} computer={11}>
+                                <Card fluid>
+                                    <Card.Content>
+                                        <Card.Header textAlign='left' className='py-3'>
+                                            <div>ที่จอดรถของฉัน</div>
+                                        </Card.Header>
+                                        <Card.Description>
+                                            <Grid textAlign='center' stackable columns={3}>
+                                                {this.state.posts.map((post, index) => {
+                                                    return (
+                                                        <Grid.Column key={index}>
+                                                            <RecommendCard
+                                                                photo={post.photos}
+                                                                title={post.title}
+                                                                rate={post.rate.rating}
+                                                                price={post.price}
+                                                                url={`/post/${post._id}`}
+                                                            />
+                                                        </Grid.Column>
+                                                    )
+                                                })}
+                                            </Grid>
+                                        </Card.Description>
+                                    </Card.Content>
+                                </Card>
+                            </Grid.Column>
+                        </Grid>
+                    </Container>
+                </Responsive >
+            );
+        }
     }
-}
-
-function RecommendCardList() {
-    return (
-        <Card.Content>
-            <Card.Header textAlign='left' className='py-2'>
-                ที่จอดรถของฉัน
-            </Card.Header>
-            <Card.Description>
-                <Grid textAlign='center' stackable columns={3}>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <RecommendCard />
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Card.Description>
-        </Card.Content>
-    );
 }
 
 const mapStateToProps = state => ({
     profile: state.profile,
+    post: state.post,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { getCurrentProfile, editProfile, uploadImage })(withRouter(Profile));
+export default connect(mapStateToProps, { getCurrentProfile, editProfile, uploadImage, getPosts })(withRouter(Profile));
 

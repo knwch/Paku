@@ -1,59 +1,290 @@
 import React, { Component } from 'react';
+import SimpleReactValidator from 'simple-react-validator';
+import { Grid, Form, Responsive, Container, Button, Icon, Header, Modal, Transition, Label } from 'semantic-ui-react';
 import MapContainer from '../../map/MapContainer';
 
 class PostFormStep1 extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalOpen: false
+    };
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        thai: {  // name the rule
+          message: ':attribute ภาษาไทย',
+          rule: (val, params, validator) => {
+            return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+          }
+        }
+      },
+      element: message =>
+        <div className='mb-2'>
+          <Transition
+            animation='shake'
+            duration={250}
+            transitionOnMount={true}
+          >
+            <Label basic color='red' pointing>{message}</Label>
+          </Transition>
+          <br />
+        </div>,
+      messages: {
+        required: 'โปรดระบุ:attribute',
+        alpha_num: 'โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น',
+        string: 'โปรดระบุเฉพาะตัวอักษรเท่านั้น',
+        min: ':attributeต้องมีความยาวอย่างน้อย 6 ตัวอักษร',
+        integer: 'โปรดระบุเฉพาะตัวเลขเท่านั้น'
+      }
+    });
+
+  }
+
   continue = e => {
-    e.preventDefault();
-    this.props.nextStep();
+    if (this.validator.allValid()) {
+      e.preventDefault();
+      this.props.nextStep();
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
   };
 
+  handleCancelLocation = e => {
+    e.preventDefault();
+    this.setState({
+      modalOpen: false
+    })
+    this.props.handleCancelLocation();
+  }
+
+  handleOpenModal = () => {
+    this.props.requestCurrentLocation();
+    this.setState({ modalOpen: true })
+  }
+
+  handleConfirmLocation = () => {
+    this.setState({
+      modalOpen: false
+    })
+  }
+
   render() {
-    const { values, handleChange } = this.props;
+
+    const options = [
+      { key: 'h', text: 'บ้าน', value: 'บ้าน' },
+      { key: 'f', text: 'ลานกว้าง', value: 'ลานกว้าง' },
+      { key: 'o', text: 'อื่นๆ', value: 'อื่นๆ' }
+    ];
+
+    const times = [
+      { text: '00.00', value: '00.00' },
+      { text: '00.30', value: '00.30' },
+      { text: '01.00', value: '01.00' },
+      { text: '01.30', value: '01.30' },
+      { text: '02.00', value: '02.00' },
+      { text: '02.30', value: '02.30' },
+      { text: '03.00', value: '03.00' },
+      { text: '03.30', value: '03.30' },
+      { text: '04.00', value: '04.00' },
+      { text: '04.30', value: '04.30' },
+      { text: '05.00', value: '05.00' },
+      { text: '05.30', value: '05.30' },
+      { text: '06.00', value: '06.00' },
+      { text: '06.30', value: '06.30' },
+      { text: '07.00', value: '07.00' },
+      { text: '07.30', value: '07.30' },
+      { text: '08.00', value: '08.00' },
+      { text: '08.30', value: '08.30' },
+      { text: '09.00', value: '09.00' },
+      { text: '09.30', value: '09.30' },
+      { text: '10.00', value: '10.00' },
+      { text: '10.30', value: '10.30' },
+      { text: '11.00', value: '11.00' },
+      { text: '11.30', value: '11.30' },
+      { text: '12.00', value: '12.00' },
+      { text: '12.30', value: '12.30' },
+      { text: '13.00', value: '13.00' },
+      { text: '13.30', value: '13.30' },
+      { text: '14.00', value: '14.00' },
+      { text: '14.30', value: '14.30' },
+      { text: '15.00', value: '15.00' },
+      { text: '15.30', value: '15.30' },
+      { text: '16.00', value: '16.00' },
+      { text: '16.30', value: '16.30' },
+      { text: '17.00', value: '17.00' },
+      { text: '17.30', value: '17.30' },
+      { text: '18.00', value: '18.00' },
+      { text: '18.30', value: '18.30' },
+      { text: '19.00', value: '19.00' },
+      { text: '19.30', value: '19.30' },
+      { text: '20.00', value: '20.00' },
+      { text: '20.30', value: '20.30' },
+      { text: '21.00', value: '21.00' },
+      { text: '21.30', value: '21.30' },
+      { text: '22.00', value: '22.00' },
+      { text: '22.30', value: '22.30' },
+      { text: '23.00', value: '23.00' },
+      { text: '23.30', value: '23.30' }
+    ];
+
+    const { values, handleChange, handleMarker } = this.props;
+
+    const timeStartOptions = times
+      .filter((time) =>
+        time.value !== values.close
+      )
+
+    const timeEndOptions = times
+      .filter((time) =>
+        time.value !== values.open
+      )
+
     return (
-      <div className="col-md-5 text-left pr-auto">
-        <h4 className="mb-3">ลงประกาศที่จอดรถ</h4>
-        <form>
-          <text>ให้เรารู้จักที่จอดรถของคุณ</text>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('name')} defaultValue={values.name} placeholder="ชื่อที่จอดรถ" />
-          </div>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('location')} defaultValue={values.location} placeholder="ตำแหน่งที่จอดรถ" />
-          </div>
-          <MapContainer/>
-          <h6>ขั้นตอนที่ 1</h6>
-          <h5 className="mb-4">ที่จอดรถของคุณเป็นแบบไหน</h5>
-          <div className="row">
-            <div className="form-group col-md-6 pr-1">
-              <select class="form-control" onChange={handleChange('parkingtype')} defaultValue={values.parkingtype}>
-                <option selected disabled>ประเภทที่จอดรถ</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-              </select>
-            </div>
-            <div className="form-group col-md-6 pl-1">
-              <input type="text" className="form-control" onChange={handleChange('slot')} defaultValue={values.slot} placeholder="จำนวนที่จอดรถ" />
-            </div>
-          </div>
-          <text>ประเภทรถที่สามารถจอดได้</text>
-          <div className="form-group">
-            <input type="text" className="form-control" onChange={handleChange('cartype')} defaultValue={values.cartype} placeholder="..." />
-          </div>
-          <text>ประเภทรถที่สามารถจอดได้</text>
-          <div className="row">
-            <div className="form-group col-md-6 pr-1">
-              <input type="text" className="form-control" onChange={handleChange('open')} defaultValue={values.open} placeholder="ตั้งแต่" />
-            </div>
-            <div className="form-group col-md-6 pl-1">
-              <input type="text" className="form-control" onChange={handleChange('close')} defaultValue={values.close} placeholder="จนถึง" />
-            </div>
-          </div>
-          <button onClick={this.continue} className="btn btn-primary">ถัดไป</button>
-        </form>
-      </div>
+      <Responsive>
+        <Container fluid>
+          <Grid className='mb-4'>
+            <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
+              <Header as='h3'><div>มาเริ่มลงประกาศที่จอดรถกันเถอะ</div></Header>
+              <Form>
+                <Header as='h4'><div>ให้เรารู้จักที่จอดรถของคุณ</div></Header>
+                <Form.Input
+                  className='mt-3 mb-0'
+                  fluid
+                  placeholder='ชื่อที่จอดรถ'
+                  onChange={handleChange('title')}
+                  value={values.title}
+                />
+                {this.validator.message('ชื่อที่จอดรถ', values.title, 'required|min:6,string')}
+                <Form.Input
+                  className='mt-3 mb-0'
+                  fluid
+                  placeholder='ที่อยู่'
+                  onChange={handleChange('address')}
+                  value={values.address}
+                />
+                {this.validator.message('ที่อยู่', values.address, 'required')}
+
+                <Button
+                  className='mt-3 mb-0'
+                  onClick={this.handleOpenModal}
+                  basic
+                  circular
+                >
+                  <Icon name='map' /> <text>ระบุตำแหน่ง</text>
+                </Button>
+
+                <Header as='h6'><div>ขั้นตอนที่ 1</div></Header>
+                <Header as='h3'><div>ที่จอดรถของคุณเป็นแบบไหน</div></Header>
+                <Form.Group className='mt-3 mb-0' widths='equal'>
+                  <Form.Select
+                    fluid
+                    placeholder='ประเภทที่จอดรถ'
+                    onChange={handleChange('typeofpark')}
+                    value={values.typeofpark}
+                    options={options}
+                  />
+                  <Form.Input
+                    fluid
+                    placeholder='จำนวนที่จอดรถ'
+                    onChange={handleChange('numberofcar')}
+                    value={values.numberofcar}
+                  />
+                </Form.Group>
+                {this.validator.message('ประเภทที่จอดรถ', values.typeofpark, 'required')}
+                {this.validator.message('จำนวนที่จอดรถ', values.numberofcar, 'required|integer')}
+
+                <Header as='h4'><div>ประเภทรถที่สามารถจอดได้</div></Header>
+                <Form.Group className='mt-3 mb-0' inline>
+                  <Form.Radio
+                    label='รถยนต์'
+                    checked={values.typeofcar === 'รถยนต์'}
+                    onChange={handleChange('typeofcar')}
+                    value='รถยนต์'
+                  />
+                  <Form.Radio
+                    label='รถจักรยานยนต์'
+                    checked={values.typeofcar === 'รถจักรยานยนต์'}
+                    onChange={handleChange('typeofcar')}
+                    value='รถจักรยานยนต์'
+                  />
+                  <Form.Radio
+                    label='รถบรรทุก'
+                    checked={values.typeofcar === 'รถบรรทุก'}
+                    onChange={handleChange('typeofcar')}
+                    value='รถบรรทุก'
+                  />
+                </Form.Group>
+                {this.validator.message('ประเภทรถ', values.typeofcar, 'required')}
+
+                <Header as='h4'><div>ช่วงเวลาที่คุณเปิดให้บริการ</div></Header>
+                <Form.Group className='mt-3 mb-0' widths='equal'>
+                  <Form.Dropdown
+                    fluid
+                    search
+                    selection
+                    lazyLoad
+                    placeholder='ตั้งแต่'
+                    onChange={handleChange('open')}
+                    value={values.open}
+                    options={timeStartOptions}
+                  />
+                  <Form.Dropdown
+                    fluid
+                    search
+                    selection
+                    lazyLoad
+                    placeholder='จนถึง'
+                    onChange={handleChange('close')}
+                    value={values.close}
+                    options={timeEndOptions}
+                  />
+                </Form.Group>
+                {this.validator.message('เวลาเปิด', values.open, 'required')}
+                {this.validator.message('เวลาปิด', values.close, 'required')}
+                <Button onClick={this.continue} className='btn-paku mt-4' color='yellow' animated>
+                  <Button.Content visible>ถัดไป</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name='arrow right' />
+                  </Button.Content>
+                </Button>
+
+                <Modal
+                  open={this.state.modalOpen}
+                  className="modal-paku"
+                  size='small'
+                >
+                  <Modal.Content>
+                    <MapContainer
+                      center={values.location}
+                      lat={values.location.lat}
+                      lng={values.location.lng}
+                      zoom={values.zoom}
+                      show={values.show}
+                      handleClick={handleMarker}
+                      height={'100vh'}
+                    />
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button basic onClick={this.handleCancelLocation}>
+                      <text>ยกเลิก</text>
+                    </Button>
+                    <Button className='btn-paku' onClick={this.handleConfirmLocation}>
+                      <Icon name='checkmark' /> <text>ตกลง</text>
+                    </Button>
+                  </Modal.Actions>
+                </Modal>
+
+              </Form>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </Responsive>
     );
   }
 }

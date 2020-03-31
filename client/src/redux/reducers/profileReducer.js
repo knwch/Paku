@@ -1,12 +1,15 @@
 import {
     GET_PROFILE,
+    GET_PROFILES,
     PROFILE_LOADING,
-    CLEAR_CURRENT_PROFILE
+    ADD_IDCARD,
+    CLEAR_CURRENT_PROFILE,
 } from '../actions/types';
 
 const initialState = {
     profile: null,
     profiles: null,
+    idcard: null,
     loading: false
 }
 
@@ -23,11 +26,23 @@ export default (state = initialState, action) => {
                 profile: action.payload,
                 loading: false
             };
+        case GET_PROFILES:
+            return {
+                ...state,
+                profiles: action.payload,
+                loading: false
+            }
         case CLEAR_CURRENT_PROFILE:
             return {
                 ...state,
                 profile: null,
-            }    
+                idcard: null
+            }
+        case ADD_IDCARD: 
+            return {
+                ...state,
+                idcard: action.payload
+            }
         default:
             return state;
     }

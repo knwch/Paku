@@ -9,13 +9,13 @@ class NavMenu extends Component {
 
     onLogout(e) {
         e.preventDefault();
-        window.location.href = "/";
         this.props.clearCurrentProfile();
         this.props.logoutUser();
+        window.location.href = "/";
     }
 
     render() {
-        const { isAuthenticated, user } = this.props.auth;
+        const { isAuthenticated } = this.props.auth;
         const guestLinks = (
             <Nav className="nav-mobile ml-auto nowrap">
                 <Nav.Link className="nav-color mr-3" href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
@@ -27,12 +27,12 @@ class NavMenu extends Component {
         );
         const authLinks = (
             <Nav className="ml-auto nowrap">
-                <Nav.Link className="nav-color mr-3" href="/owner">เพิ่มที่จอดรถ</Nav.Link>
+                <Nav.Link className="nav-color mr-3" href="/post">เพิ่มที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/rent">จองที่จอดรถ</Nav.Link>
-                <Nav.Link className="nav-color mr-3" href="/owner">รายการของฉัน</Nav.Link>
+                <Nav.Link className="nav-color mr-3" href="/mypost">รายการของฉัน</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/support">ช่วยเหลือ</Nav.Link>
-                <Nav.Link><Icon name="black bell"/></Nav.Link>
-                <NavDropdown alignRight title={<Icon name="black user"/>} id="basic-nav-dropdown">
+                <Nav.Link><Icon name="bell" color='black'/></Nav.Link>
+                <NavDropdown alignRight title={<Icon name="user" color='black'/>} id="basic-nav-dropdown">
                     <NavDropdown.Item href="/profile">โปรไฟล์</NavDropdown.Item>
                     <NavDropdown.Item onClick={this.onLogout.bind(this)}>ออกจากระบบ</NavDropdown.Item>
                 </NavDropdown>

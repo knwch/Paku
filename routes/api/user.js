@@ -10,6 +10,7 @@ const fs = require('fs');
 // import input validation
 const validateRegisterInput = require('../../validator/register');
 const validateLoginInput = require('../../validator/login');
+const validateIDCradInput = require('../../validator/idcard');
 
 // import User Model
 const User = require('../../models/user');
@@ -115,8 +116,8 @@ router.post('/login', (req, res) => {
                 if (isMath) {
                     // User Matched
                     // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
-                    const payload = { id:user.id, name: user.name, email: user.email };
-                    console.log('succeess');
+                    const payload = { id:user.id, name: user.name, email: user.email, idCard: user.Card };
+                    // console.log('succeess');
                     // Sign Token
                     jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
                         res.json({ 
@@ -134,6 +135,44 @@ router.post('/login', (req, res) => {
         .catch((err) => {
             console.log(err);
         });
+});
+
+// @route   POST api/users/confirmIdCard
+// @desc    Confirm IdCard of user
+// @access  Private
+router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { errors, isValid } = validateIDCradInput(req.body); 
+
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+    // console.log(req.body)
+    User.findById(req.user.id)
+        .then((user) => {
+            user.Card.idCard = req.body.idCard
+            user.photo_card.photoCard = req.body.idCardURL
+            user.photo_card.photoPerson = req.body.idCardPerson
+
+            user.save().then((user) => {
+                res.json({ Card: user.Card });
+            })
+        })
+        .catch((err) => {
+            res.status(400).json({ idCard: 'User not found'})
+        });
+});
+
+// @route   GET api/users/infoCard
+// @desc    Get infocard
+// @access  Private
+router.get('/infoCard', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
+        .then((user) => {
+            res.json({ Card: user.Card });
+        })
+        .catch((err) => {
+            res.json({ idCard: 'User not found'})
+        })
 });
 
 // @route   GET api/users/current

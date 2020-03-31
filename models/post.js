@@ -8,15 +8,11 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    photos: [{
-        data: Buffer,
-        contentType: String
-    }],
+    photos: {
+        type: [String],
+        required: true
+    },
     detail: {
-        point: {
-            type: String,
-            required: true
-        },
         typeofpark: {
             type: String,
             required: true
@@ -32,23 +28,19 @@ const postSchema = new mongoose.Schema({
         },
         explain: {
             type: String,
-            required: true
         },
-        rule: [{
-            text: {
-                type: String,
-            }
-        }],
-        nearby: [{
-            text: {
-                type: String,
-            }
-        }],
-        facility: [{
-            text: {
-                type: String,
-            }
-        }]
+        rule: {
+            type: [String],
+            default: undefined
+        },
+        nearby: {
+            type: [String],
+            default: undefined
+        },
+        facility: {
+            type: [String],
+            default: undefined
+        }
     },
     location: {
         address: {
@@ -78,24 +70,42 @@ const postSchema = new mongoose.Schema({
         type: ObjectId,
         ref: 'users'
     },
+    available: {
+        type: Boolean,
+        default: true
+    },
     price: {
         type: Number,
         min: 0,
         required: true
     },
     rate: {
-        type: Number,
-        default: 0
+        sum: {
+            type: Number,
+            default: 0
+        },
+        rating: {
+            type: Number,
+            default: 0
+        }
     },
     comments: [{
-        text: String,
+        user: {
+            type: ObjectId,
+            ref: 'users'
+        },
+        comment: {
+            type: String,
+            default: ""
+        },
+        photoUser: String,
+        rate: {
+            type: Number,
+            required: true
+        },
         created: {
             type: Date,
             default: Date.now
-        },
-        postedBy: {
-            type: ObjectId,
-            ref: 'users'
         }
     }],
     updated: Date,

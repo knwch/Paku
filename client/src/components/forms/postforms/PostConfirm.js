@@ -1,82 +1,64 @@
 import React, { Component } from 'react';
+import { Grid, Responsive, Container, Button, Card } from 'semantic-ui-react';
 
 class PostConfirm extends Component {
 
-  continue = e => {
-    e.preventDefault();
-    // PROCESS FORM //
-    this.props.nextStep();
-  };
-
-  back = e => {
-    e.preventDefault();
-    this.props.prevStep();
-  };
-
   render() {
-    const {
-      values: {
-        name,
-        location,
-        parkingtype,
-        slot,
-        cartype,
-        open,
-        close,
-        detail,
-        rule,
-        nearby,
-        facility,
-        price,
-        picture }
-    } = this.props;
+    const { values } = this.props;
 
-    return (
-      <div className="col-md-5 ml-auto mr-auto">
-        <li>
-          {name}
-        </li>
-        <li>
-          {location}
-        </li>
-        <li>
-          {parkingtype}
-        </li>
-        <li>
-          {slot}
-        </li>
-        <li>
-          {cartype}
-        </li>
-        <li>
-          {open}
-        </li>
-        <li>
-          {close}
-        </li>
-        <li>
-          {detail}
-        </li>
-        <li>
-          {rule}
-        </li>
-        <li>
-          {nearby}
-        </li>
-        <li>
-          {facility}
-        </li>
-        <li>
-          {price}
-        </li>
-        <li>
-          {picture}
-        </li>
-        <button onClick={this.back} className="btn btn-danger">ย้อนกลับ</button>
-        <button onClick={this.continue} className="btn btn-primary">ยืนยัน</button>
-      </div>
-
-    );
+    if (values.isPostSuccess === true) {
+      return (
+        <Responsive>
+          <Container fluid>
+            <Grid centered className='mb-4'>
+              <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
+                <Card className='margin-bottom' link fluid>
+                  <Card.Content>
+                    <Card.Header textAlign='center'>
+                      <div>ลงประกาศสำเร็จ</div>
+                    </Card.Header>
+                  </Card.Content>
+                  <Card.Content>
+                    <Button href="/" compact basic>
+                      <Button.Content visible>กลับสู่หน้าหลัก</Button.Content>
+                    </Button>
+                    <Button href="/mypost" compact basic>
+                      <Button.Content visible>ไปยังหน้ารายการของคุณ</Button.Content>
+                    </Button>
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </Responsive>
+      );
+    } else {
+      return (
+        <Responsive>
+          <Container fluid>
+            <Grid centered className='mb-4'>
+              <Grid.Column className='text-left pr-auto' mobile={16} tablet={8} computer={8}>
+                <Card className='margin-bottom' link fluid>
+                  <Card.Content>
+                    <Card.Header textAlign='center'>
+                      <div>เกิดบางอย่างผิดพลาด</div>
+                    </Card.Header>
+                  </Card.Content>
+                  <Card.Content>
+                    <Button href="/" compact basic>
+                      <Button.Content visible>กลับสู่หน้าหลัก</Button.Content>
+                    </Button>
+                    {/* <Button href="/post" compact basic>
+                      <Button.Content visible>ลองอีกครั้ง</Button.Content>
+                    </Button> */}
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            </Grid>
+          </Container>
+        </Responsive>
+      );
+    }
   }
 }
 

@@ -3,18 +3,18 @@ import PostFormStep1 from '../forms/postforms/PostFormStep1';
 import PostFormStep2 from '../forms/postforms/PostFormStep2';
 import PostFormStep3 from '../forms/postforms/PostFormStep3';
 import PostConfirm from '../forms/postforms/PostConfirm';
-import { addPost } from '../../redux/actions/postActions';
-import { getIDcard } from '../../redux/actions/profileActions';
+import { editPost, getPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { storage } from '../../config/firebase-config';
 
-class Post extends Component {
+class EditPost extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             step: 1,
+            postid: '',
             title: '',
             photos: [],
             preview: [],
@@ -42,45 +42,68 @@ class Post extends Component {
                 lat: 13.7563,
                 lng: 100.5018
             },
+            defaultlocation: {
+                lat: 13.7563,
+                lng: 100.5018
+            },
             zoom: 17,
-            show: false,
-            statustemp: true,
+            show: true,
+            statustemp: false,
             isPostSuccess: null,
             errors: {}
         }
     }
 
     componentDidMount = () => {
-        document.title = "Paku - Posting"
-        this.props.getIDcard()
+        document.title = "Paku - Edit Posting"
+
+        const postid = this.props.match.params.id
+        this.props.getPost(postid);
+
+        this.setState({
+            postid: postid
+        })
+
     }
 
-    componentWillReceiveProps = (nextProps) => {
+
+    componentWillReceiveProps(nextProps) {
+
+        const post = nextProps.post.post;
+        const user = nextProps.auth.user;
+
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
 
-        if (nextProps.profile.idcard.Card.confirm === false) {
-            this.props.history.push('/confirmcard')
-        }
-    }
-
-    requestCurrentLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    this.setState(prevState => ({
-                        location: {
-                            ...prevState.currentLatLng,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        },
-                        zoom: 17,
-                        show: true
-                    }))
+        if (post.user === user.id) {
+            this.setState({
+                title: post.title,
+                photos: post.photos,
+                preview: post.photos,
+                price: post.price,
+                typeofpark: post.detail.typeofpark,
+                numberofcar: post.detail.numberofcar,
+                typeofcar: post.detail.typeofcar,
+                explain: post.detail.explain,
+                rule: post.detail.rule,
+                nearby: post.detail.nearby,
+                facility: post.detail.facility,
+                open: post.date.open,
+                close: post.date.close,
+                address: post.location.address,
+                location: {
+                    lat: parseFloat(post.location.latitude),
+                    lng: parseFloat(post.location.longitude)
+                },
+                defaultlocation: {
+                    lat: parseFloat(post.location.latitude),
+                    lng: parseFloat(post.location.longitude)
                 }
-            )
+            })
+            this.checkFacility(post.detail.facility)
         }
+
     }
 
     fileChange = e => {
@@ -148,7 +171,7 @@ class Post extends Component {
                     statustemp: true
                 })
             }
-            // console.log(mPhotos)
+            console.log(mPhotos)
             return { photos: mPhotos, filetemp: mTemp }
         })
     }
@@ -233,6 +256,14 @@ class Post extends Component {
         })
     }
 
+    checkFacility = (input) => {
+        for (var i = 0; i < input.length; i++) {
+            const facilityFilter = this.state.addfacility.filter(val => val.value === input[i]);
+            const facilityObject = facilityFilter[0]
+            facilityObject.checked = true
+        }
+    }
+
     handleFacility = (facility) => {
         const facilityFilter = this.state.addfacility.filter((val) => val.key === facility.key)
         const facilityObject = facilityFilter[0]
@@ -256,8 +287,8 @@ class Post extends Component {
     handleCancelLocation = () => {
         this.setState({
             location: {
-                lat: 13.7563,
-                lng: 100.5018
+                lat: this.state.defaultlocation.lat,
+                lng: this.state.defaultlocation.lng
             }
         })
     }
@@ -284,24 +315,26 @@ class Post extends Component {
             open: this.state.open,
             close: this.state.close,
             typeofpark: this.state.typeofpark,
-            numberofcar: this.state.numberofcar,
+            numberofcar: this.state.numberofcar.toString(),
             typeofcar: this.state.typeofcar,
             explain: this.state.explain,
             rule: this.state.rule,
             nearby: this.state.nearby,
             facility: this.state.facility,
-            price: this.state.price
+            price: this.state.price.toString()
         }
-        await this.props.addPost(newPost);
-        if (this.props.post.issuccess === true) {
+        await this.props.editPost(this.state.postid, newPost)
+        if ( this.props.post.issuccess === true ) {
             this.setState({
                 isPostSuccess: true
             });
+            // console.log(this.props.post.issuccess)
             this.nextStep()
         } else {
             this.setState({
                 isPostSuccess: false
             });
+            // console.log(this.props.post.issuccess)
             this.nextStep()
         }
     }
@@ -365,7 +398,6 @@ class Post extends Component {
                         nextStep={this.nextStep}
                         handleChange={this.handleChange}
                         handleMarker={this.handleMarker}
-                        requestCurrentLocation={this.requestCurrentLocation}
                         handleCancelLocation={this.handleCancelLocation}
                         values={values}
                     />
@@ -410,8 +442,7 @@ class Post extends Component {
 const mapStateToProps = state => ({
     auth: state.auth,
     post: state.post,
-    profile: state.profile,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, { addPost, getIDcard })(withRouter(Post))
+export default connect(mapStateToProps, { editPost, getPost })(withRouter(EditPost))

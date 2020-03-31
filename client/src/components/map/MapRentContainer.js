@@ -5,17 +5,17 @@ import Marker from './Marker';
 
 class MapContainer extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         currentlocation: {
-    //             lat: 13.7563,
-    //             lng: 100.5018
-    //         },
-    //         zoom: 16,
-    //         show: false
-    //     }
-    // };
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentlocation: {
+                lat: 13.7563,
+                lng: 100.5018
+            },
+            zoom: 16,
+            show: false
+        }
+    };
 
     // constructor(props) {
     //     super(props);
@@ -79,57 +79,47 @@ class MapContainer extends Component {
     //     }
     // };
 
-    // componentDidMount = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             position => {
-    //                 console.log(position.coords);
-    //                 this.setState(prevState => ({
-    //                     currentlocation: {
-    //                         ...prevState.currentLatLng,
-    //                         lat: position.coords.latitude,
-    //                         lng: position.coords.longitude
-    //                     },
-    //                     zoom: 16,
-    //                     show: true
-    //                 }))
-    //             }
-    //         )
-    //     }
-    // };
-
-    // handleMarker = ({ lat, lng }) => {
-    //     console.log(lat, lng)
-    //     this.setState({
-    //         currentlocation: {
-    //             lat: lat,
-    //             lng: lng
-    //         }
-    //     })
-    //     this.setState({ show: true })
-    // }
+    componentDidMount = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    console.log(position.coords);
+                    this.setState(prevState => ({
+                        currentlocation: {
+                            ...prevState.currentLatLng,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        zoom: 16,
+                        show: true
+                    }))
+                }
+            )
+        }
+    };
 
     render() {
         return (
-            <div style={{ height: this.props.height, width: '100%' }}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{
-                        key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
-                        language: 'th'
-                    }}
-                    center={this.props.center}
-                    zoom={this.props.zoom}
-                    options={{ styles }}
-                    onClick={this.props.handleClick}
-                >
-                    {this.props.show &&
-                        <Marker
-                            lat={this.props.lat}
-                            lng={this.props.lng}
-                        >
-                        </Marker>
-                    }
-                </GoogleMapReact>
+            <div class="map-responsive">
+                <div style={{ height: '100vh', width: '100%' }}>
+                    <GoogleMapReact
+                        bootstrapURLKeys={{
+                            key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
+                            language: 'th'
+                        }}
+                        center={this.state.currentlocation}
+                        zoom={this.state.zoom}
+                        options={{ styles }}
+                    >
+                        {this.state.show &&
+                            <Marker
+                                lat={this.state.currentlocation.lat}
+                                lng={this.state.currentlocation.lng}
+                            >
+                            </Marker>
+                        }
+                    </GoogleMapReact>
+                </div>
             </div>
         );
     }
@@ -137,3 +127,8 @@ class MapContainer extends Component {
 }
 
 export default MapContainer;
+
+// export default GoogleApiWrapper({
+//     apiKey: 'AIzaSyBvzeljl7lR56XZfMcbSpHiPmqZlD0zpDY', //KorrawichK APIKey
+//     language: 'th'
+// })(MapContainer);

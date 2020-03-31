@@ -25,7 +25,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
             res.json(profile)
         })
         .catch((err) => {
-            res.status(404).json(err)
+            res.status(404).json({ profile: 'User not found'});
         });
 });
 
@@ -53,7 +53,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
     
     // Check Validation
     if (!isValid) {
-        console.log(errors);
+        // console.log(errors);
         return res.status(400).json(errors);
     }
 
@@ -68,7 +68,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
                 })
         })
         .catch((err) => {
-            res.json({ error: 'User not found'});
+            res.status(404).json({ error: 'No Post found with that ID'});
         });
 })
 
@@ -76,7 +76,7 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
 // @desc    Get current users profile
 // @access  Private
 router.delete('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Post.findOneAndRemove({ postBy: req.user.id}).then(
+    Post.findOneAndRemove({ user: req.user.id}).then(
         User.findByIdAndDelete({ _id: req.user.id }).then(
             res.json({ success: true })
         )
@@ -86,13 +86,13 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
     )
 });
 
-// @route   GET api/profile/handle/:userName
+// @route   GET api/profile/handle/:id
 // @desc    Get the profile data of the params passed
 // @access  Private
-router.get('/handle/:userName', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/handle/:id', (req, res) => {
     let errors = {};
 
-    User.findOne({ username: req.parms.userName })
+    User.findOne({ username: req.parms.id })
         .then((profile) => {
             if (!profile) {
                 errors.msg = 'User not found';
@@ -101,7 +101,8 @@ router.get('/handle/:userName', passport.authenticate('jwt', { session: false })
             res.json(profile)
         })
         .catch((err) => {
-            res.state(404).json(err);
+            console.log(err);
+            res.state(404).json({ profile: 'No User found with that ID'});
         });
 });
 
@@ -112,7 +113,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
     const { errors, isValid } = validateImageURL(req.body);
 
     if (!isValid) {
-        return res.status(200).json(errors);
+        return res.status(400).json(errors);
     }
     
     User.findById(req.user.id)
@@ -128,7 +129,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
                 })
         })
         .catch((err) => {
-            res.state(404).json(err);
+            res.state(404).json({image: 'No User found with that ID'});
         })
 });
 

@@ -56,10 +56,14 @@ let userSchema = new mongoose.Schema({
             default: 'false'
         }
     },
-    // photo_card: {
-    //     data: Buffer,
-    //     contentType
-    // },
+    photo_card: {
+        photoCard: {
+            type: String
+        },
+        photoPerson: {
+            type: String
+        }
+    },
     rate: {
         type: Number,
         default: 0
