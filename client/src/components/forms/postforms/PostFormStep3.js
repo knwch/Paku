@@ -116,7 +116,7 @@ class PostFormStep3 extends Component {
                 />
                 {this.validator.message('คำอธิบายที่จอดรถ', values.price, 'required|integer')}
 
-                <Header as='h4'><div>เพิ่มรูปภาพที่จอดรถของคุณ</div></Header>
+                <Header as='h4'><div>เพิ่มรูปภาพที่จอดรถของคุณ (อย่างน้อย 1 รูป)</div></Header>
                 <Form.Group widths={3}>
                   {values.preview.map((preview, index) => {
                     return (
@@ -140,7 +140,7 @@ class PostFormStep3 extends Component {
                   {button}
                 </Form.Group>
 
-                <Button onClick={this.continue} disabled={this.props.values.statustemp} className='btn-paku' color='yellow' animated>
+                <Button onClick={this.continue} disabled={this.props.values.statustemp || values.preview.length === 0} className='btn-paku' color='yellow' animated>
                   <Button.Content visible>ประกาศ</Button.Content>
                   <Button.Content hidden>
                     <Icon name='arrow right' />

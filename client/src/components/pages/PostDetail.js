@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, Container, Grid, Divider, Image, Item } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Divider, Image, Item, Icon, Header } from 'semantic-ui-react';
 import { getPost } from '../../redux/actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -113,8 +113,8 @@ class PostDetail extends Component {
                             <Item.Group>
                                 <Item>
                                     <Item.Content>
-                                        <Item.Header><div>{this.state.title}</div></Item.Header>
-                                        <Item.Description>{this.state.address}</Item.Description>
+                                        <Header size='huge'><div>{this.state.title}</div></Header>
+                                        <Item.Description><Icon name='map pin' /> {this.state.address}</Item.Description>
                                     </Item.Content>
                                 </Item>
 
@@ -123,22 +123,22 @@ class PostDetail extends Component {
                                 <Item>
                                     <Item.Content>
                                         <Item.Header><div>ประเภทที่สามารถจอดได้</div></Item.Header>
-                                        <Item.Description>{this.state.typeofpark}</Item.Description>
-                                        <Item.Description>จำนวนที่จอดรถ {this.state.numberofcar} คัน</Item.Description>
+                                        <Item.Description><Icon name='home' /> {this.state.typeofpark}</Item.Description>
+                                        <Item.Description><Icon name='warehouse' /> จำนวนที่จอดรถ {this.state.numberofcar} คัน</Item.Description>
                                     </Item.Content>
                                 </Item>
 
                                 <Item>
                                     <Item.Content>
                                         <Item.Header><div>ประเภทที่จอดรถ</div></Item.Header>
-                                        <Item.Description>{this.state.typeofcar}</Item.Description>
+                                        <Item.Description><Icon name='car' /> {this.state.typeofcar}</Item.Description>
                                     </Item.Content>
                                 </Item>
 
                                 <Item>
                                     <Item.Content>
                                         <Item.Header><div>ช่วงเวลาที่เปิดให้บริการ</div></Item.Header>
-                                        <Item.Description>ตั้งแต่ {this.state.open} จนถึง {this.state.close}</Item.Description>
+                                        <Item.Description><Icon name='clock' /> ตั้งแต่ {this.state.open} จนถึง {this.state.close}</Item.Description>
                                     </Item.Content>
                                 </Item>
 
@@ -210,6 +210,9 @@ class PostDetail extends Component {
                         </Grid.Column>
                         <Grid.Column mobile={16} tablet={5} computer={5}>
                             <Item.Group>
+
+                                <Header><div><Icon name='map'/>แผนที่</div></Header>
+
                                 <Item>
                                     <Item.Content>
                                         <MapContainer
