@@ -15,7 +15,8 @@ import {
   Icon,
   Card,
   Transition,
-  Modal
+  Modal,
+  Comment
 } from "semantic-ui-react";
 import { getPost } from "../../redux/actions/postActions";
 import { getBookPost, addBook } from "../../redux/actions/bookActions";
@@ -57,6 +58,8 @@ class Book extends Component {
       open: "",
       close: "",
       address: "",
+      rate: "",
+      comments: [],
       location: {
         lat: null,
         lng: null
@@ -205,6 +208,8 @@ class Book extends Component {
         open: post.date.open,
         close: post.date.close,
         address: post.location.address,
+        comments: post.comments,
+        rate: post.rate.rating,
         location: {
           lat: parseFloat(post.location.latitude),
           lng: parseFloat(post.location.longitude)
@@ -616,10 +621,10 @@ class Book extends Component {
               <Item.Group>
                 <Item>
                   <Item.Content>
-                    <Item.Header>
+                    <Header size="huge">
                       <div>{this.state.title}</div>
-                    </Item.Header>
-                    <Item.Description>{this.state.address}</Item.Description>
+                    </Header>
+                    <Item.Description><Icon name="map pin" /> {this.state.address}</Item.Description>
                   </Item.Content>
                 </Item>
 
@@ -630,9 +635,9 @@ class Book extends Component {
                     <Item.Header>
                       <div>ประเภทที่สามารถจอดได้</div>
                     </Item.Header>
-                    <Item.Description>{this.state.typeofpark}</Item.Description>
+                    <Item.Description><Icon name="home" /> {this.state.typeofpark}</Item.Description>
                     <Item.Description>
-                      จำนวนที่จอดรถ {this.state.numberofcar} คัน
+                    <Icon name="warehouse" /> จำนวนที่จอดรถ {this.state.numberofcar} คัน
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -642,7 +647,7 @@ class Book extends Component {
                     <Item.Header>
                       <div>ประเภทที่จอดรถ</div>
                     </Item.Header>
-                    <Item.Description>{this.state.typeofcar}</Item.Description>
+                    <Item.Description><Icon name="car" /> {this.state.typeofcar}</Item.Description>
                   </Item.Content>
                 </Item>
 
@@ -652,7 +657,7 @@ class Book extends Component {
                       <div>ช่วงเวลาที่เปิดให้บริการ</div>
                     </Item.Header>
                     <Item.Description>
-                      ตั้งแต่ {this.state.open} จนถึง {this.state.close}
+                    <Icon name="clock" /> ตั้งแต่ {this.state.open} จนถึง {this.state.close}
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -740,6 +745,38 @@ class Book extends Component {
                   </Item.Content>
                 </Item>
               </Item.Group>
+            </Grid.Column>
+
+            <Grid.Column
+              className="pt-0"
+              textAlign="left"
+              mobile={16}
+              tablet={12}
+              computer={12}
+            >
+              <Divider />
+              <Comment.Group minimal>
+                <Header as="h3">
+                  <div>ความคิดเห็น</div>
+                </Header>
+                {this.state.comments.map((comment, index) => {
+                  if (comment.comment !== "")
+                    return (
+                      <Comment key={index}>
+                        <Comment.Avatar as="a" src={comment.photoUser} />
+                        <Comment.Content>
+                          <Comment.Author as="a">คุณลูกค้า</Comment.Author>
+                          <Comment.Metadata>
+                            <span>
+                              {moment(new Date(comment.created)).fromNow()}
+                            </span>
+                          </Comment.Metadata>
+                          <Comment.Text>{comment.comment}</Comment.Text>
+                        </Comment.Content>
+                      </Comment>
+                    );
+                })}
+              </Comment.Group>
             </Grid.Column>
           </Grid>
         </Container>
