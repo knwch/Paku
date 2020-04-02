@@ -51,6 +51,10 @@ let userSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
+        laser: {
+            type: String,
+            default: ""
+        },
         confirm: {
             type: Boolean,
             default: 'false'
