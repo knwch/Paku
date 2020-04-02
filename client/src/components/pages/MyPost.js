@@ -11,12 +11,18 @@ import {
   Item,
   Card,
   Modal,
-  Loader
+  Loader,
+  Rating,
+  Input,
+  Transition,
+  Label,
+  Icon
 } from "semantic-ui-react";
 import {
   getPosts,
   deletePost,
-  availablePost
+  availablePost,
+  addComment
 } from "../../redux/actions/postActions";
 import { getProfiles } from "../../redux/actions/profileActions";
 import {
@@ -27,6 +33,7 @@ import {
 } from "../../redux/actions/bookActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import SimpleReactValidator from "simple-react-validator";
 import moment from "moment";
 import "moment/locale/th";
 
@@ -44,9 +51,29 @@ class MyPost extends Component {
       errors: {},
       modalBookOpen: false,
       modalPostOpen: false,
+      modalCheckOutOpen: false,
       temp_bookdata: null,
-      temp_postdata: null
+      temp_postdata: null,
+      temp_checkoutdata: null,
+      rating: "",
+      comment: ""
     };
+
+    this.validator = new SimpleReactValidator({
+      element: message => (
+        <div className="mb-2">
+          <Transition animation="shake" duration={250} transitionOnMount={true}>
+            <Label basic color="red" pointing>
+              {message}
+            </Label>
+          </Transition>
+          <br />
+        </div>
+      ),
+      messages: {
+        required: "โปรดระบุ:attribute"
+      }
+    });
   }
 
   componentWillMount() {
@@ -66,7 +93,7 @@ class MyPost extends Component {
   }
 
   componentDidMount() {
-    document.title = "Paku - Login";
+    document.title = "Paku - My Post";
   }
 
   componentWillReceiveProps(nextProps) {
@@ -234,9 +261,35 @@ class MyPost extends Component {
                   <Item.Header href={`/post/${post._id}`}>
                     {post.title}
                   </Item.Header>
-                  <Item.Description>{post.location.address}</Item.Description>
 
-                  {console.log(post)}
+                  {(() => {
+                    if (post.rate.rating !== 0) {
+                      if (post.rate.rating <= 2.5) {
+                        return (
+                          <Item.Description>
+                            <Icon fitted name="yellow star half" />{" "}
+                            {post.rate.rating.toFixed(1)}
+                          </Item.Description>
+                        );
+                      } else if (post.rate.rating > 2.5) {
+                        return (
+                          <Item.Description>
+                            <Icon fitted name="yellow star" />{" "}
+                            {post.rate.rating.toFixed(1)}
+                          </Item.Description>
+                        );
+                      }
+                    } else {
+                      return (
+                        <Item.Description>
+                          <Icon fitted name="yellow star outline" />{" "}
+                          ไม่มีคะแนน
+                        </Item.Description>
+                      );
+                    }
+                  })()}
+
+                  <Item.Description>{post.location.address}</Item.Description>
 
                   <Item.Description>
                     <p>
@@ -304,12 +357,38 @@ class MyPost extends Component {
     window.location.reload(false);
   };
 
+  handleRate = (e, { rating, maxRating }) =>
+    this.setState({ rating, maxRating });
+
   handleCheckInOut = (bookid, bool) => {
     const checkData = {
       check: bool
     };
     this.props.checkBook(bookid, checkData);
     window.location.reload(false);
+  };
+
+  handleCommentChange = e => {
+    this.setState({
+      comment: e.target.value
+    });
+  };
+
+  onSubmitCheckOut = async (e, { postid, checkid }) => {
+    if (this.validator.allValid()) {
+      e.preventDefault();
+      const newComment = {
+        comment: this.state.comment,
+        rate: this.state.rating
+      };
+      this.props.addComment(postid, newComment);
+      this.handleCheckInOut(checkid, false);
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
   };
 
   showBookList = () => {
@@ -371,11 +450,12 @@ class MyPost extends Component {
                             <Button
                               compact
                               className="btn-paku-light"
-                              onClick={this.handleCheckInOut.bind(
-                                this,
-                                book.check.id,
-                                false
-                              )}
+                              onClick={() => {
+                                this.setState({
+                                  temp_checkoutdata: book,
+                                  modalCheckOutOpen: true
+                                });
+                              }}
                             >
                               <Button.Content visible>เช็คเอาท์</Button.Content>
                             </Button>
@@ -388,6 +468,17 @@ class MyPost extends Component {
                             <Button compact disabled>
                               <Button.Content visible>
                                 รอการยืนยัน
+                              </Button.Content>
+                            </Button>
+                          );
+                        } else if (
+                          book.check.checkOutUser === true &&
+                          book.check.checkOutRenter === false
+                        ) {
+                          return (
+                            <Button basic compact disabled>
+                              <Button.Content visible>
+                                เช็คเอาท์สำเร็จ
                               </Button.Content>
                             </Button>
                           );
@@ -674,6 +765,64 @@ class MyPost extends Component {
       );
     }
 
+    if (this.state.temp_checkoutdata !== null) {
+      modalPopup = (
+        <Modal
+          open={this.state.modalCheckOutOpen}
+          className="modal-paku"
+          size="tiny"
+        >
+          <Header icon="calendar check" content="กรุณาให้คะแนนความพึงพอใจ" />
+          <Modal.Content className="text-center">
+            <Rating
+              icon="star"
+              maxRating={5}
+              onRate={this.handleRate}
+              size="massive"
+              className="pt-2 pb-4"
+            />
+
+            {this.validator.message("คะแนน", this.state.rating, "required")}
+
+            <Divider />
+
+            <Header icon="comment" content="ความคิดเห็นเพิ่มเติม" />
+            <Input
+              placeholder="ความคิดเห็นของคุณเกี่ยวกับที่จอดรถ"
+              onChange={this.handleCommentChange}
+              fluid
+            />
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              basic
+              onClick={() => {
+                this.setState({
+                  temp_checkoutdata: null,
+                  modalCheckOutOpen: false,
+                  rating: "",
+                  comment: ""
+                });
+              }}
+            >
+              <text>กลับ</text>
+            </Button>
+            <Button
+              className="btn-paku"
+              onClick={e => {
+                this.onSubmitCheckOut(e, {
+                  postid: this.state.temp_checkoutdata.idPost,
+                  checkid: this.state.temp_checkoutdata.check.id
+                });
+              }}
+            >
+              <text>ยืนยัน</text>
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      );
+    }
+
     const { book, loading } = this.props.book;
     let errors = this.state.errors;
     if (book === null || loading) {
@@ -726,7 +875,6 @@ class MyPost extends Component {
 
             {modalPopup}
 
-            {console.log(this.state.bookuser)}
           </Container>
         </Responsive>
       );
@@ -750,5 +898,6 @@ export default connect(mapStateToProps, {
   cancelBook,
   availablePost,
   checkBook,
-  getBookPost
+  getBookPost,
+  addComment
 })(withRouter(MyPost));

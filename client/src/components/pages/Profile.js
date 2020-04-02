@@ -240,11 +240,6 @@ class Profile extends Component {
                             {this.state.username}
                         </Card.Meta>
 
-                        <Card.Description className='pb-1' textAlign='left'>
-                            <Icon name='yellow star' />
-                            {this.state.rate}
-                        </Card.Description>
-
                         <Divider />
 
                         <Card.Description className='pb-1' textAlign='left'>
@@ -401,7 +396,7 @@ class Profile extends Component {
                                             <div>ที่จอดรถของฉัน</div>
                                         </Card.Header>
                                         <Card.Description>
-                                            <Grid textAlign='center' stackable columns={3}>
+                                            <Grid stackable columns={3}>
                                                 {this.state.posts.map((post, index) => {
                                                     return (
                                                         <Grid.Column key={index}>
