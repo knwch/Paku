@@ -14,6 +14,8 @@ import { getPost } from "../../redux/actions/postActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import MapContainer from "../map/MapContainer";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
 import moment from "moment";
 import "moment/locale/th";
 
@@ -111,6 +113,7 @@ class PostDetail extends Component {
   render() {
     return (
       <Responsive>
+        <NavMenu />
         <Container fluid>
           <Grid centered className="mb-4">
             <Grid.Row>
@@ -310,6 +313,7 @@ class PostDetail extends Component {
             </Grid.Column>
           </Grid>
         </Container>
+        <Footer />
       </Responsive>
     );
   }

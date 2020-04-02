@@ -22,6 +22,8 @@ import { getPost } from "../../redux/actions/postActions";
 import { getBookPost, addBook } from "../../redux/actions/bookActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
 import MapContainer from "../map/MapContainer";
 import moment from "moment";
 import "moment/locale/th";
@@ -432,6 +434,7 @@ class Book extends Component {
 
     return (
       <Responsive>
+        <NavMenu />
         <Container fluid>
           <Grid centered className="mb-4">
             <Grid.Row>
@@ -624,7 +627,9 @@ class Book extends Component {
                     <Header size="huge">
                       <div>{this.state.title}</div>
                     </Header>
-                    <Item.Description><Icon name="map pin" /> {this.state.address}</Item.Description>
+                    <Item.Description>
+                      <Icon name="map pin" /> {this.state.address}
+                    </Item.Description>
                   </Item.Content>
                 </Item>
 
@@ -635,9 +640,12 @@ class Book extends Component {
                     <Item.Header>
                       <div>ประเภทที่สามารถจอดได้</div>
                     </Item.Header>
-                    <Item.Description><Icon name="home" /> {this.state.typeofpark}</Item.Description>
                     <Item.Description>
-                    <Icon name="warehouse" /> จำนวนที่จอดรถ {this.state.numberofcar} คัน
+                      <Icon name="home" /> {this.state.typeofpark}
+                    </Item.Description>
+                    <Item.Description>
+                      <Icon name="warehouse" /> จำนวนที่จอดรถ{" "}
+                      {this.state.numberofcar} คัน
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -647,7 +655,9 @@ class Book extends Component {
                     <Item.Header>
                       <div>ประเภทที่จอดรถ</div>
                     </Item.Header>
-                    <Item.Description><Icon name="car" /> {this.state.typeofcar}</Item.Description>
+                    <Item.Description>
+                      <Icon name="car" /> {this.state.typeofcar}
+                    </Item.Description>
                   </Item.Content>
                 </Item>
 
@@ -657,7 +667,8 @@ class Book extends Component {
                       <div>ช่วงเวลาที่เปิดให้บริการ</div>
                     </Item.Header>
                     <Item.Description>
-                    <Icon name="clock" /> ตั้งแต่ {this.state.open} จนถึง {this.state.close}
+                      <Icon name="clock" /> ตั้งแต่ {this.state.open} จนถึง{" "}
+                      {this.state.close}
                     </Item.Description>
                   </Item.Content>
                 </Item>
@@ -785,6 +796,7 @@ class Book extends Component {
             </Grid.Column>
           </Grid>
         </Container>
+        <Footer />
       </Responsive>
     );
   }

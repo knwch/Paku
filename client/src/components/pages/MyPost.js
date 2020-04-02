@@ -31,6 +31,8 @@ import {
   checkBook,
   getBookPost
 } from "../../redux/actions/bookActions";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import SimpleReactValidator from "simple-react-validator";
@@ -282,8 +284,7 @@ class MyPost extends Component {
                     } else {
                       return (
                         <Item.Description>
-                          <Icon fitted name="yellow star outline" />{" "}
-                          ไม่มีคะแนน
+                          <Icon fitted name="yellow star outline" /> ไม่มีคะแนน
                         </Item.Description>
                       );
                     }
@@ -439,6 +440,19 @@ class MyPost extends Component {
                           );
                         }
                       })()}
+
+                      <Button
+                        compact
+                        className="btn-paku-light"
+                        onClick={() => {
+                          this.setState({
+                            temp_checkoutdata: book,
+                            modalCheckOutOpen: true
+                          });
+                        }}
+                      >
+                        <Button.Content visible>test</Button.Content>
+                      </Button>
 
                       {(() => {
                         if (
@@ -836,6 +850,7 @@ class MyPost extends Component {
     } else {
       return (
         <Responsive>
+          <NavMenu />
           <Container fluid>
             <Grid centered className="mb-4">
               <Grid.Row>
@@ -874,8 +889,8 @@ class MyPost extends Component {
             </Grid>
 
             {modalPopup}
-
           </Container>
+          <Footer />
         </Responsive>
       );
     }

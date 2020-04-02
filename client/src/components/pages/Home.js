@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import RecommendCard from '../cards/RecommendCard';
-import { Grid } from 'semantic-ui-react';
-import SearchBox from '../SearchBox';
+import React, { Component } from "react";
+import RecommendCard from "../cards/RecommendCard";
+import { Grid } from "semantic-ui-react";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
+import SearchBox from "../SearchBox";
 
 class Home extends Component {
-
   componentDidMount() {
-    document.title = "Paku - Home"
-    document.body.classList.add('Background-Yellow');
+    document.title = "Paku - Home";
+    document.body.classList.add("Background-Yellow");
   }
 
   // state = {
@@ -46,16 +47,19 @@ class Home extends Component {
   //     </Modal>
   //   );
   // }
-  
+
   render() {
     return (
       <div>
+        <NavMenu />
         <SearchBox />
         <div className="container-fluid mt-5">
           <div className="text-left mb-4">
-            <h4><div>ที่จอดรถแนะนำ</div></h4>
+            <h4>
+              <div>ที่จอดรถแนะนำ</div>
+            </h4>
           </div>
-          <Grid textAlign='center' columns={4}>
+          <Grid textAlign="center" columns={4}>
             <Grid.Row>
               <Grid.Column mobile={16} tablet={4} computer={4}>
                 <RecommendCard />
@@ -72,6 +76,7 @@ class Home extends Component {
             </Grid.Row>
           </Grid>
         </div>
+        <Footer />
       </div>
     );
   }
