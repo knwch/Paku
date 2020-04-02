@@ -754,28 +754,33 @@ class Book extends Component {
               tablet={12}
               computer={12}
             >
-              <Divider />
               <Comment.Group minimal>
                 <Header as="h3">
                   <div>ความคิดเห็น</div>
                 </Header>
-                {this.state.comments.map((comment, index) => {
-                  if (comment.comment !== "")
-                    return (
-                      <Comment key={index}>
-                        <Comment.Avatar as="a" src={comment.photoUser} />
-                        <Comment.Content>
-                          <Comment.Author as="a">คุณลูกค้า</Comment.Author>
-                          <Comment.Metadata>
-                            <span>
-                              {moment(new Date(comment.created)).fromNow()}
-                            </span>
-                          </Comment.Metadata>
-                          <Comment.Text>{comment.comment}</Comment.Text>
-                        </Comment.Content>
-                      </Comment>
-                    );
-                })}
+                {(() => {
+                  if (this.state.comments.length === 0) {
+                    return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
+                  } else if (this.state.comments.length > 0) {
+                    return this.state.comments.map((comment, index) => {
+                      if (comment.comment !== "")
+                        return (
+                          <Comment key={index}>
+                            <Comment.Avatar as="a" src={comment.photoUser} />
+                            <Comment.Content>
+                              <Comment.Author as="a">คุณลูกค้า</Comment.Author>
+                              <Comment.Metadata>
+                                <span>
+                                  {moment(new Date(comment.created)).fromNow()}
+                                </span>
+                              </Comment.Metadata>
+                              <Comment.Text>{comment.comment}</Comment.Text>
+                            </Comment.Content>
+                          </Comment>
+                        );
+                    });
+                  }
+                })()}
               </Comment.Group>
             </Grid.Column>
           </Grid>
