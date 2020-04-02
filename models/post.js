@@ -94,6 +94,16 @@ const postSchema = new mongoose.Schema({
             type: ObjectId,
             ref: 'users'
         },
+        name: {
+            firstname: {
+                type: String,
+                required: true
+            },
+            lastname: {
+                type: String,
+                required: true 
+            }
+        },
         comment: {
             type: String,
             default: ""
