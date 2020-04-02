@@ -175,6 +175,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             const newComment = {
                 user: req.user.id,
+                name: req.user.name,
                 comment: req.body.comment,
                 photoUser: req.user.photo_user,
                 rate: req.body.rate
