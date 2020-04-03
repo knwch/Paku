@@ -50,9 +50,9 @@ class Register extends Component {
         },
         thai: {
           // name the rule
-          message: ":attribute ภาษาไทย",
+          message: "โปรดระบุ:attributeเป็นภาษาไทย หรือภาษาอังกฤษ",
           rule: (val, params, validator) => {
-            return validator.helpers.testRegex(val, /^[ก-์]*$/i);
+            return validator.helpers.testRegex(val, /^[a-zA-Zก-๙]*$/i);
           }
         }
       },
