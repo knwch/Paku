@@ -22,6 +22,7 @@ class ConfirmCard extends Component {
     super(props);
     this.state = {
       idCard: "",
+      laserno: "",
       cardphoto: null,
       cardfiletemp: "",
       userphoto: null,
@@ -140,7 +141,8 @@ class ConfirmCard extends Component {
     const cardUser = {
       idCard: this.state.idCard,
       idCardURL: this.state.cardphoto,
-      idCardPerson: this.state.userphoto
+      idCardPerson: this.state.userphoto,
+      laser: this.state.laserno
     };
 
     this.props.addIDcard(cardUser);
@@ -199,9 +201,25 @@ class ConfirmCard extends Component {
                   >
                     <input
                       type="text"
+                      maxLength="13"
                       className="form-control"
                       onChange={this.handleChange("idCard")}
                       value={this.state.idCard}
+                    />
+                  </Input>
+                </Form.Field>
+
+                <Form.Field className="text-left">
+                  <Input
+                    fluid
+                    placeholder="เลขหลังบัตรประชาชน (ไม่ต้องเติมขีดหรือเว้นว่าง)"
+                  >
+                    <input
+                      type="text"
+                      maxLength="12"
+                      className="form-control"
+                      onChange={this.handleChange("laserno")}
+                      value={this.state.laserno}
                     />
                   </Input>
                 </Form.Field>
