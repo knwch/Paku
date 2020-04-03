@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const key = require('../../config/db.mongodb');
 const passport = require('passport');
-const formidable = require('formidable');
-const fs = require('fs');
 
 // import input validation
 const validateRegisterInput = require('../../validator/register');
@@ -150,6 +148,7 @@ router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, 
     User.findById(req.user.id)
         .then((user) => {
             user.Card.idCard = req.body.idCard
+            user.Card.laser = req.body.laser
             user.photo_card.photoCard = req.body.idCardURL
             user.photo_card.photoPerson = req.body.idCardPerson
 

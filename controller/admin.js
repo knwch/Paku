@@ -9,8 +9,6 @@ const Admin = require('../models/admin')
 const User = require('../models/user')
 const Post = require('../models/post')
 
-const errors = {}
-
 exports.register = (req, res) => {
     const errors = {}
 
@@ -92,6 +90,8 @@ exports.login = (req, res) => {
 }   
 
 exports.userall = (req, res) => {
+    const errors = {}
+
     User.find()
         .then((user) => {
             if (user.length === 0) {
@@ -107,6 +107,8 @@ exports.userall = (req, res) => {
 }
 
 exports.userConfirm = (req, res) => {
+    const errors = {}
+
     User.find({Card:{confirm: false}})
         .then((user) => {
             if (user.length === 0) {
@@ -122,6 +124,8 @@ exports.userConfirm = (req, res) => {
 }
 
 exports.userById = (req, res) => {
+    const errors = {}
+
     User.findById(req.params.id)
         .then((user) => {
             res.json(user)
@@ -133,13 +137,20 @@ exports.userById = (req, res) => {
 }
 
 exports.confirmUser = (req, res) => {
+    const errors = {}
+
     User.findById(req.params.id)
         .then((user) => {
             if (user.Card.idCard === 0 || user.Card.laser === "") {
                 errors.user = `Idcard is not empty`
                 return res.status(400).json(errors)
             }
+            if (user.Card.confirm === true) {
+                return res.json({ user: `User confirm success`})
+            }
             user.Card = {
+                idCard: user.Card.idCard,
+                laser: user.Card.laser,
                 confirm: true
             }
             user.save().then((user) => res.json(user))
@@ -151,8 +162,17 @@ exports.confirmUser = (req, res) => {
 }
 
 exports.unConfirmUser = (req, res) => {
+    const errors = {}
+
     User.findById(req.params.id)
         .then((user) => {
+            if (user.Card.idCard === 0 || user.Card.laser === "") {
+                errors.user = `Idcard is not empty`
+                return res.status(400).json(errors)
+            }
+            if (user.Card.confirm === true) {
+                return res.status(400).json({ user: `User confirm success`})
+            }
             user.Card = {
                 idCard: 0,
                 laser: "",
@@ -167,10 +187,28 @@ exports.unConfirmUser = (req, res) => {
 }
 
 exports.delUser = (req, res) => {
-    User.findByIdAndDelete({ _id: req.user.id }).then(
-        Post.findByIdAndDelete({ user: req.user.id })
-            .then(res.json({ success: true }))
-            .catch((err) => res.json(err))
-    )
-    .catch((err) => (err) => res.json(err))
+    const errors = {}
+
+    User.findByIdAndDelete({ _id: req.params.id }).then((user) => {
+        if (!user) {
+            errors.user = `No User found with that ID`
+            res.status(404).json(errors)
+        }
+        Post.deleteMany({ user: req.params.id })
+            .then((del) => {
+                if (del.ok !== 1) {
+                    errors.user = `Delete fail`
+                    return res.status(400).json(errors)
+                }
+                res.json({ success: true})
+            })
+            .catch((err) => {
+                errors.user = err.message
+                res.json(errors)
+            })
+    })
+    .catch((err) => {
+        errors.user = `No User found with that ID`
+        res.json(errors)
+    })
 }
