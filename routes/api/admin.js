@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
+const passportAdmin = require('passport');
 const {
     register,
     login,
@@ -29,17 +29,26 @@ router.post('/login', login)
 
 // @route       GET api/admin/user
 // @desc        Get All user
-// @access      Public
-router.get('/user', passport.authenticate('jwt', { session: false }), userall)
+// @access      Private
+router.get('/user', passportAdmin.authenticate('jwt', { session: false }), userall)
 
-router.get('/confirm', passport.authenticate('jwt', { session: false }), userConfirm)
+// @route       GET api/admin/confirm
+// @desc        Get user require confirm
+// @access      Private
+router.get('/confirm', passportAdmin.authenticate('jwt', { session: false }), userConfirm)
 
-router.get('/user/:id', passport.authenticate('jwt', { session: false }), userById)
+// @route       GET api/admin/user/:id
+// @desc        Get user by id
+// @access      Private
+router.get('/user/:id', passportAdmin.authenticate('jwt', { session: false }), userById)
 
-router.get('/confirmUser/:id', passport.authenticate('jwt', { session: false }), confirmUser)
+router.get('/confirmUser/:id', passportAdmin.authenticate('jwt', { session: false }), confirmUser)
 
-router.get('/unConfirm/:id', passport.authenticate('jwt', { session: false }), unConfirmUser)
+router.get('/unConfirm/:id', passportAdmin.authenticate('jwt', { session: false }), unConfirmUser)
 
-router.delete('/del/:id', passport.authenticate('jwt', { session: false }), delUser)
+// @route       DELETE api/admin/del/:id
+// @desc        Delete user, post by id
+// @access      Private
+router.delete('/del/:id', passportAdmin.authenticate('jwt', { session: false }), delUser)
 
 module.exports = router
