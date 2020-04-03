@@ -72,8 +72,8 @@ class App extends Component {
               <PrivateRoute exact path="/mypost" component={MyPost} />
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
+              <Route exact path="/admin" component={Admin} />
             </div>
-            <Route exact path="/admin" component={Admin} />
           </Switch>
         </Router>
       </Provider>
