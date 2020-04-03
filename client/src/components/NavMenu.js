@@ -17,7 +17,7 @@ class NavMenu extends Component {
     render() {
         const { isAuthenticated } = this.props.auth;
         const guestLinks = (
-            <Nav className="nav-mobile ml-auto nowrap">
+            <Nav className="nav-mobile ml-auto nowrap text-left">
                 <Nav.Link className="nav-color mr-3" href="/owner">ให้เช่าที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/rent">จองที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/support">ช่วยเหลือ</Nav.Link>
@@ -26,7 +26,7 @@ class NavMenu extends Component {
             </Nav>
         );
         const authLinks = (
-            <Nav className="ml-auto nowrap">
+            <Nav className="ml-auto nowrap text-left">
                 <Nav.Link className="nav-color mr-3" href="/post">เพิ่มที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/rent">จองที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/mypost">รายการของฉัน</Nav.Link>
