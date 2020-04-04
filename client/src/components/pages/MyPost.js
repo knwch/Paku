@@ -16,20 +16,20 @@ import {
   Input,
   Transition,
   Label,
-  Icon
+  Icon,
 } from "semantic-ui-react";
 import {
   getPosts,
   deletePost,
   availablePost,
-  addComment
+  addComment,
 } from "../../redux/actions/postActions";
 import { getProfiles } from "../../redux/actions/profileActions";
 import {
   getBookUser,
   cancelBook,
   checkBook,
-  getBookPost
+  getBookPost,
 } from "../../redux/actions/bookActions";
 import NavMenu from "../NavMenu";
 import Footer from "../Footer";
@@ -58,11 +58,11 @@ class MyPost extends Component {
       temp_postdata: null,
       temp_checkoutdata: null,
       rating: "",
-      comment: ""
+      comment: "",
     };
 
     this.validator = new SimpleReactValidator({
-      element: message => (
+      element: (message) => (
         <div className="mb-2">
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -73,8 +73,8 @@ class MyPost extends Component {
         </div>
       ),
       messages: {
-        required: "โปรดระบุ:attribute"
-      }
+        required: "โปรดระบุ:attribute",
+      },
     });
   }
 
@@ -90,7 +90,7 @@ class MyPost extends Component {
     }
 
     this.setState({
-      userid: user.id
+      userid: user.id,
     });
   }
 
@@ -105,7 +105,7 @@ class MyPost extends Component {
     const bookuser = nextProps.book.bookUser;
     const bookpost = nextProps.book.bookPost;
 
-    const postsFind = posts.filter(val => val.user === user.id);
+    const postsFind = posts.filter((val) => val.user === user.id);
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -113,13 +113,13 @@ class MyPost extends Component {
 
     if (postsFind.length !== 0) {
       this.setState({
-        posts: postsFind
+        posts: postsFind,
       });
     }
 
     if (profiles !== null) {
       this.setState({
-        users: profiles
+        users: profiles,
       });
     }
 
@@ -127,8 +127,8 @@ class MyPost extends Component {
 
     if (bookuser.length !== 0) {
       if (bookuser.Book !== "No have booking") {
-        bookuser.forEach(book => {
-          posts.forEach(post => {
+        bookuser.forEach((book) => {
+          posts.forEach((post) => {
             if (book.idUser === this.state.userid) {
               if (book.idPost === post._id) {
                 book.title = post.title;
@@ -140,7 +140,7 @@ class MyPost extends Component {
           });
         });
 
-        bookuser.forEach(book => {
+        bookuser.forEach((book) => {
           this.state.bookuser_temp.push(book);
         });
 
@@ -168,15 +168,15 @@ class MyPost extends Component {
 
     if (bookpost.length !== 0) {
       if (bookpost.Book !== "No have booking") {
-        bookpost.forEach(book => {
-          this.state.posts.forEach(post => {
+        bookpost.forEach((book) => {
+          this.state.posts.forEach((post) => {
             if (post._id === book.idPost) {
               book.title = post.title;
               book.address = post.location.address;
               return book;
             }
           });
-          this.state.users.forEach(profile => {
+          this.state.users.forEach((profile) => {
             if (profile._id === book.idUser) {
               book.name = profile.name;
               book.photo = profile.photo_user;
@@ -199,7 +199,7 @@ class MyPost extends Component {
         // //   }
         // // }
 
-        bookpost.map(book => {
+        bookpost.map((book) => {
           this.state.bookpost.push(book);
         });
       }
@@ -207,32 +207,32 @@ class MyPost extends Component {
 
     var uniqueBookPost = [...new Set(this.state.bookpost)];
     this.setState({
-      bookpost: uniqueBookPost
+      bookpost: uniqueBookPost,
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.posts.length !== this.state.posts.length) {
-      this.state.posts.forEach(post => {
+      this.state.posts.forEach((post) => {
         this.props.getBookPost(post._id);
       });
     }
 
     if (prevState.users.length !== this.state.users.length) {
-      this.state.users.forEach(user => {
+      this.state.users.forEach((user) => {
         this.props.getBookUser(user._id);
       });
     }
   }
 
-  handleDeletePost = id => {
+  handleDeletePost = (id) => {
     this.props.deletePost(id);
     window.location.reload(false);
   };
 
   handlePausePost = (bool, id) => {
     const newAvailable = {
-      available: bool
+      available: bool,
     };
     this.props.availablePost(newAvailable, id);
     window.location.reload(false);
@@ -333,7 +333,7 @@ class MyPost extends Component {
                       onClick={() => {
                         this.setState({
                           temp_postdata: post,
-                          modalPostOpen: true
+                          modalPostOpen: true,
                         });
                       }}
                     >
@@ -363,15 +363,15 @@ class MyPost extends Component {
 
   handleCheckInOut = (bookid, bool) => {
     const checkData = {
-      check: bool
+      check: bool,
     };
     this.props.checkBook(bookid, checkData);
     window.location.reload(false);
   };
 
-  handleCommentChange = e => {
+  handleCommentChange = (e) => {
     this.setState({
-      comment: e.target.value
+      comment: e.target.value,
     });
   };
 
@@ -380,7 +380,7 @@ class MyPost extends Component {
       e.preventDefault();
       const newComment = {
         comment: this.state.comment,
-        rate: this.state.rating
+        rate: this.state.rating,
       };
       this.props.addComment(postid, newComment);
       this.handleCheckInOut(checkid, false);
@@ -441,19 +441,6 @@ class MyPost extends Component {
                         }
                       })()}
 
-                      <Button
-                        compact
-                        className="btn-paku-light"
-                        onClick={() => {
-                          this.setState({
-                            temp_checkoutdata: book,
-                            modalCheckOutOpen: true
-                          });
-                        }}
-                      >
-                        <Button.Content visible>test</Button.Content>
-                      </Button>
-
                       {(() => {
                         if (
                           book.check.checkInUser === true &&
@@ -467,7 +454,7 @@ class MyPost extends Component {
                               onClick={() => {
                                 this.setState({
                                   temp_checkoutdata: book,
-                                  modalCheckOutOpen: true
+                                  modalCheckOutOpen: true,
                                 });
                               }}
                             >
@@ -508,7 +495,7 @@ class MyPost extends Component {
                               onClick={() => {
                                 this.setState({
                                   temp_bookdata: book,
-                                  modalBookOpen: true
+                                  modalBookOpen: true,
                                 });
                               }}
                             >
@@ -530,8 +517,8 @@ class MyPost extends Component {
   showWaitList = () => {
     const { bookpost, bookuser_temp } = this.state;
 
-    bookpost.forEach(book => {
-      bookuser_temp.forEach(user => {
+    bookpost.forEach((book) => {
+      bookuser_temp.forEach((user) => {
         if (book.id === user.id) {
           book.check = user.check;
         }
@@ -541,7 +528,7 @@ class MyPost extends Component {
     return bookpost.map((book, index) => {
       if (book.check === null) {
         this.setState({
-          activeItem: "postmenu"
+          activeItem: "postmenu",
         });
       } else if (book.statusBook === 1 && book.check.checkOutStatus === false) {
         return (
@@ -815,7 +802,7 @@ class MyPost extends Component {
                   temp_checkoutdata: null,
                   modalCheckOutOpen: false,
                   rating: "",
-                  comment: ""
+                  comment: "",
                 });
               }}
             >
@@ -823,10 +810,10 @@ class MyPost extends Component {
             </Button>
             <Button
               className="btn-paku"
-              onClick={e => {
+              onClick={(e) => {
                 this.onSubmitCheckOut(e, {
                   postid: this.state.temp_checkoutdata.idPost,
-                  checkid: this.state.temp_checkoutdata.check.id
+                  checkid: this.state.temp_checkoutdata.check.id,
                 });
               }}
             >
@@ -897,12 +884,12 @@ class MyPost extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   errors: state.errors,
   post: state.post,
   auth: state.auth,
   profile: state.profile,
-  book: state.book
+  book: state.book,
 });
 
 export default connect(mapStateToProps, {
@@ -914,5 +901,5 @@ export default connect(mapStateToProps, {
   availablePost,
   checkBook,
   getBookPost,
-  addComment
+  addComment,
 })(withRouter(MyPost));
