@@ -114,7 +114,7 @@ router.post('/login', (req, res) => {
                 if (isMath) {
                     // User Matched
                     // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
-                    const payload = { id:user.id, name: user.name, email: user.email, idCard: user.Card };
+                    const payload = { id:user.id, name: user.name, email: user.email, status: user.status };
                     // console.log('succeess');
                     // Sign Token
                     jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
