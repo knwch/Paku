@@ -5,92 +5,17 @@ const key = require('../config/db.mongodb')
 // import input validation
 const validateLoginInput = require('../validator/login')
 
-const Admin = require('../models/admin')
+// const Admin = require('../models/admin')
 const User = require('../models/user')
 const Post = require('../models/post')
 
-exports.register = (req, res) => {
-    const errors = {}
-
-    if (!req.body) {
-        errors.username = `username/password is required`
-        return res.status(400).json(errors)
-    }
-
-    Admin.findOne({username: req.body.username})
-        .then((admin) => {
-            if (admin) {
-                errors.username = `Username alrady exists`;
-                return res.status(400).json(errors)
-            }
-
-            const newAdmin = new Admin({
-                username: req.body.username,
-                password: req.body.password,
-                name: req.body.name
-            })
-
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(newAdmin.password, salt, (err, hash) => {
-                    if (err) throw err
-                    newAdmin.password = hash
-                    newAdmin.save()
-                        .then((admin) => {
-                            res.json(admin)
-                            // console.log(user);
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                })
-            })
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-}
-
-exports.login = (req, res) => {
-    const { errors, isValid } = validateLoginInput(req.body)
-
-    // Check Validation 
-    if (!isValid) {
-        return res.status(400).json(errors)
-    }
-
-    const username = req.body.username
-    const password = req.body.password
-
-    Admin.findOne({ username }).then((admin) => {
-        // Check for admin
-        if (!admin) {
-            errors.username = `Username not found`
-            return res.status(404).json(errors)
-        }
-
-        // Check Password
-        bcrypt.compare(password, admin.password).then(isMatch => {
-            // Admin Matched
-            if (isMatch) {
-                const payload = { id: admin.id, name: admin.name } // Create JWT Payload
-
-                // Sign Token
-                jwt.sign(payload, key.secretOrKey, { expiresIn: 3600 }, (err, token) => {
-                    res.json({
-                        success: true,
-                        token: 'Bearer ' + token
-                    });
-                });
-            } else {
-                errors.password = `Password Incorret`
-                return res.status(404).json(errors)
-            }
-        })
-    })
-}   
-
 exports.userall = (req, res) => {
     const errors = {}
+
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
 
     User.find()
         .then((user) => {
@@ -109,6 +34,11 @@ exports.userall = (req, res) => {
 exports.userConfirm = (req, res) => {
     const errors = {}
 
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
+
     User.find({Card:{confirm: false}})
         .then((user) => {
             if (user.length === 0) {
@@ -126,6 +56,11 @@ exports.userConfirm = (req, res) => {
 exports.userById = (req, res) => {
     const errors = {}
 
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
+
     User.findById(req.params.id)
         .then((user) => {
             res.json(user)
@@ -138,6 +73,11 @@ exports.userById = (req, res) => {
 
 exports.confirmUser = (req, res) => {
     const errors = {}
+
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
 
     User.findById(req.params.id)
         .then((user) => {
@@ -164,6 +104,11 @@ exports.confirmUser = (req, res) => {
 exports.unConfirmUser = (req, res) => {
     const errors = {}
 
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
+
     User.findById(req.params.id)
         .then((user) => {
             if (user.Card.idCard === 0 || user.Card.laser === "") {
@@ -178,7 +123,7 @@ exports.unConfirmUser = (req, res) => {
                 laser: "",
                 confirm: false
             }
-            user.save().then((user) => res.json({ success: true }))
+            user.save().then((user) => res.json(user))
         })
         .catch((err) => {
             errors.user = `No User found with that ID`
@@ -188,6 +133,11 @@ exports.unConfirmUser = (req, res) => {
 
 exports.delUser = (req, res) => {
     const errors = {}
+
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
 
     User.findByIdAndDelete({ _id: req.params.id }).then((user) => {
         if (!user) {
@@ -211,4 +161,16 @@ exports.delUser = (req, res) => {
         errors.user = `No User found with that ID`
         res.json(errors)
     })
+}
+
+const authAadmin = (status) => {
+    let errors = {}
+    if (status === 0) {
+        errors.admin = `User not authorized`
+        return errors
+    } else {
+        errors = null
+        return errors
+    }
+
 }
