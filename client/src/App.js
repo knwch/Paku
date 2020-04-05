@@ -15,6 +15,7 @@ import { clearCurrentProfile } from "./redux/actions/profileActions";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PrivateRoute from "./components/common/PrivateRoute";
+import AdminRoute from "./components/common/AdminRoute";
 
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
@@ -72,7 +73,7 @@ class App extends Component {
               <PrivateRoute exact path="/mypost" component={MyPost} />
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
-              <Route exact path="/admin" component={Admin} />
+              <AdminRoute exact path="/admin" component={Admin} />
               <Route path="*">
                 <Redirect path="/" />
               </Route>
