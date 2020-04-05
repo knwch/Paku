@@ -8,8 +8,9 @@ const validateLoginInput = require('../validator/login')
 // const Admin = require('../models/admin')
 const User = require('../models/user')
 const Post = require('../models/post')
+const Book = require('../models/book')
 
-exports.userall = (req, res) => {
+exports.userall = async (req, res) => {
     const errors = {}
 
     let auth = authAadmin(req.user.status)
@@ -17,21 +18,15 @@ exports.userall = (req, res) => {
         return res.status(401).json(auth)
     }
 
-    User.find()
-        .then((user) => {
-            if (user.length === 0) {
-                errors.user = `No have user`
-                return res.status(200).json(errors);
-            }
-            res.json(user)
-        })
-        .catch((err) => {
-            errors.user = `Server errors`
-            res.json(errors)
-        })
+    const user = await User.find()
+    if (user.length === 0) {
+        errors.user = `No have user`
+        return res.status(200).json(errors);
+    }
+    res.status(200).json(user)
 }
 
-exports.userConfirm = (req, res) => {
+exports.userConfirm = async (req, res) => {
     const errors = {}
 
     let auth = authAadmin(req.user.status)
@@ -39,128 +34,125 @@ exports.userConfirm = (req, res) => {
         return res.status(401).json(auth)
     }
 
-    User.find({Card:{confirm: false}})
-        .then((user) => {
-            if (user.length === 0) {
-                errors.user = `No have user`
-                return res.status(200).json(errors);
-            }
-            res.json(user)
-        })
-        .catch((err) => {
-            errors.user = `No have user`
-            res.json(errors)
-        })
+    const user = await User.find({Card:{confirm: false}})
+    if (user.length === 0) {
+        errors.user = `No have user`
+        return res.status(200).json(errors);
+    }
+    res.status(200).json(user)
 }
 
-exports.userById = (req, res) => {
+exports.userById = async (req, res) => {
     const errors = {}
-
+    const id = req.params.id
     let auth = authAadmin(req.user.status)
     if (auth) {
         return res.status(401).json(auth)
     }
-
-    User.findById(req.params.id)
-        .then((user) => {
-            res.json(user)
-        })
-        .catch((err) => {
+    try {
+        const user = await User.findById(id)
+        res.status(200).json(user)
+    } catch(err) {
+        if(err.message.includes('Cast to ObjectId failed')) {
             errors.user = `No User found with that ID`
-            res.json(errors)
-        })
+            return res.status(404).json(errors)
+        }  
+        return res.sendStatus(500)      
+    }
 }
 
-exports.confirmUser = (req, res) => {
+exports.confirmUser = async (req, res) => {
     const errors = {}
+    const id = req.params.id
 
     let auth = authAadmin(req.user.status)
     if (auth) {
         return res.status(401).json(auth)
     }
 
-    User.findById(req.params.id)
-        .then((user) => {
-            if (user.Card.idCard === 0 || user.Card.laser === "") {
-                errors.user = `Idcard is not empty`
-                return res.status(400).json(errors)
-            }
-            if (user.Card.confirm === true) {
-                return res.json({ user: `User confirm success`})
-            }
-            user.Card = {
-                idCard: user.Card.idCard,
-                laser: user.Card.laser,
-                confirm: true
-            }
-            user.save().then((user) => res.json(user))
-        })
-        .catch((err) => {
-            errors.user = `No User found with that ID`
-            res.json(errors)
-        })
-}
-
-exports.unConfirmUser = (req, res) => {
-    const errors = {}
-
-    let auth = authAadmin(req.user.status)
-    if (auth) {
-        return res.status(401).json(auth)
-    }
-
-    User.findById(req.params.id)
-        .then((user) => {
-            if (user.Card.idCard === 0 || user.Card.laser === "") {
-                errors.user = `Idcard is not empty`
-                return res.status(400).json(errors)
-            }
-            if (user.Card.confirm === true) {
-                return res.status(400).json({ user: `User confirm success`})
-            }
-            user.Card = {
-                idCard: 0,
-                laser: "",
-                confirm: false
-            }
-            user.save().then((user) => res.json(user))
-        })
-        .catch((err) => {
-            errors.user = `No User found with that ID`
-            res.json(errors)
-        })
-}
-
-exports.delUser = (req, res) => {
-    const errors = {}
-
-    let auth = authAadmin(req.user.status)
-    if (auth) {
-        return res.status(401).json(auth)
-    }
-
-    User.findByIdAndDelete({ _id: req.params.id }).then((user) => {
-        if (!user) {
-            errors.user = `No User found with that ID`
-            res.status(404).json(errors)
+    try {
+        const user = await User.findById(id)
+        if (user.Card.idCard === 0 || user.Card.laser === "") {
+            errors.user = `Idcard is not empty`
+            return res.status(400).json(errors)
         }
-        Post.deleteMany({ user: req.params.id })
-            .then((del) => {
-                if (del.ok !== 1) {
-                    errors.user = `Delete fail`
-                    return res.status(400).json(errors)
-                }
-                res.json({ success: true})
-            })
-            .catch((err) => {
-                errors.user = err.message
-                res.json(errors)
-            })
-    })
-    .catch((err) => {
-        errors.user = `No User found with that ID`
-        res.json(errors)
-    })
+        if (user.Card.confirm === true) {
+            return res.status(200).json({ user: `User confirm success`})
+        }
+        user.Card = {
+            idCard: user.Card.idCard,
+            laser: user.Card.laser,
+            confirm: true
+        }
+        const result = await User.findByIdAndUpdate({ _id: id }, user, {
+            new: true, // returning the document after update applied
+            runValidators: true // run validator
+        })
+        res.status(200).json(result)
+    } catch(err) {
+        if (err.message.includes('Cast to ObjectId failed')) {
+            errors.user = `No User found with that ID`
+            return res.status(404).json(errors)
+        } 
+        return res.sendStatus(500)      
+    }
+}
+
+exports.unConfirmUser = async (req, res) => {
+    const errors = {}
+    const id = req.params.id
+
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
+    try {
+        const user = await User.findById(id)
+        if (user.Card.idCard === 0 || user.Card.laser === "") {
+            errors.user = `Idcard is not empty`
+            return res.status(400).json(errors)
+        }
+        if (user.Card.confirm === true) {
+            return res.status(200).json({ user: `User confirm success`})
+        }
+        user.Card = {
+            idCard: 0,
+            laser: "",
+            confirm: false
+        }
+        const result = await User.findByIdAndUpdate({ _id: id }, user, {
+            new: true, // returning the document after update applied
+            runValidators: true // run validator
+        })
+        res.status(200).json(result)
+    } catch(err) {
+        if (err.message.includes('Cast to ObjectId failed')) {
+            errors.user = `No User found with that ID`
+            return res.status(404).json(errors)
+        } 
+        return res.sendStatus(500) 
+    }
+}
+
+exports.delUser = async (req, res) => {
+    const errors = {}
+    const id = req.params.id
+
+    let auth = authAadmin(req.user.status)
+    if (auth) {
+        return res.status(401).json(auth)
+    }
+    try {
+        const user = await User.findById(id)
+        await user.remove()
+        res.status(200).json({ success: true })
+    } catch(err) {
+        if (err.message.includes('Cast to ObjectId failed')) {
+            errors.user = `No User found with that ID`
+            return res.status(404).json(errors)
+        } 
+        return res.sendStatus(500) 
+    }
 }
 
 const authAadmin = (status) => {
@@ -172,5 +164,4 @@ const authAadmin = (status) => {
         errors = null
         return errors
     }
-
 }
