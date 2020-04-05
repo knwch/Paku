@@ -123,7 +123,7 @@ class MyPost extends Component {
       });
     }
 
-    // console.log(bookuser, bookpost)
+    console.log(bookuser, bookpost);
 
     if (bookuser.length !== 0) {
       if (bookuser.Book !== "No have booking") {
@@ -375,15 +375,22 @@ class MyPost extends Component {
     });
   };
 
-  onSubmitCheckOut = async (e, { postid, checkid }) => {
+  onSubmitCheckOut = (e, { postid, checkid }) => {
     if (this.validator.allValid()) {
       e.preventDefault();
+      this.setState({
+        modalCheckOutOpen: false,
+      });
+      const checkData = {
+        check: false,
+      };
       const newComment = {
         comment: this.state.comment,
         rate: this.state.rating,
       };
+      this.props.checkBook(checkid, checkData);
       this.props.addComment(postid, newComment);
-      this.handleCheckInOut(checkid, false);
+      window.location.reload(false);
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time
