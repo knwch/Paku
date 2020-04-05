@@ -8,7 +8,7 @@ import {
   Item,
   Icon,
   Header,
-  Comment
+  Comment,
 } from "semantic-ui-react";
 import { getPost } from "../../redux/actions/postActions";
 import { connect } from "react-redux";
@@ -49,20 +49,20 @@ class PostDetail extends Component {
           key: "3",
           text: "หลังคากันแดด / กันฝน",
           value: "หลังคากันแดด / กันฝน",
-          checked: false
-        }
+          checked: false,
+        },
       ],
       open: "",
       close: "",
       address: "",
       location: {
         lat: null,
-        lng: null
+        lng: null,
       },
       zoom: 15,
       show: true,
       statustemp: false,
-      errors: {}
+      errors: {},
     };
   }
 
@@ -73,7 +73,7 @@ class PostDetail extends Component {
     this.props.getPost(postid);
 
     this.setState({
-      postid: postid
+      postid: postid,
     });
   };
 
@@ -104,8 +104,8 @@ class PostDetail extends Component {
         address: post.location.address,
         location: {
           lat: parseFloat(post.location.latitude),
-          lng: parseFloat(post.location.longitude)
-        }
+          lng: parseFloat(post.location.longitude),
+        },
       });
     }
   }
@@ -296,7 +296,9 @@ class PostDetail extends Component {
                           <Comment key={index}>
                             <Comment.Avatar as="a" src={comment.photoUser} />
                             <Comment.Content>
-                              <Comment.Author as="a">คุณลูกค้า</Comment.Author>
+                              <Comment.Author as="a">
+                                {comment.name.firstname}
+                              </Comment.Author>
                               <Comment.Metadata>
                                 <span>
                                   {moment(new Date(comment.created)).fromNow()}
@@ -319,10 +321,10 @@ class PostDetail extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   errors: state.errors,
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getPost })(withRouter(PostDetail));
