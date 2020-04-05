@@ -12,7 +12,7 @@ import {
   Modal,
   Header,
   Loader,
-  Transition
+  Transition,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import NavMenu from "../NavMenu";
@@ -25,7 +25,7 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      errors: {}
+      errors: {},
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.validator = new SimpleReactValidator({
@@ -33,10 +33,10 @@ class Login extends Component {
         error: {
           // name the rule
           message: "ชื่อผู้ใช้หรือรหัสผ่านผิด",
-          rule: val => val == null
-        }
+          rule: (val) => val == null,
+        },
       },
-      element: message => (
+      element: (message) => (
         <div>
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -47,8 +47,8 @@ class Login extends Component {
         </div>
       ),
       messages: {
-        required: "โปรดระบุ:attribute"
-      }
+        required: "โปรดระบุ:attribute",
+      },
     });
   }
 
@@ -66,7 +66,11 @@ class Login extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/");
+      if (nextProps.auth.user.status === 0) {
+        this.props.history.push("/");
+      } else if (nextProps.auth.user.status === 1) {
+        this.props.history.push("/admin");
+      }
       document.body.classList.remove("Background-Brown");
     }
     if (nextProps.errors) {
@@ -74,7 +78,7 @@ class Login extends Component {
     }
   }
 
-  handleChange = input => e => {
+  handleChange = (input) => (e) => {
     this.setState({ [input]: e.target.value });
   };
 
@@ -87,7 +91,7 @@ class Login extends Component {
       // this.handleLoaderModal();
       const userData = {
         username: this.state.username,
-        password: this.state.password
+        password: this.state.password,
       };
       this.props.loginUser(userData);
       this.validator.showMessages();
@@ -101,13 +105,13 @@ class Login extends Component {
 
   state = {
     modalRegist: false,
-    modalLoader: false
+    modalLoader: false,
   };
 
   handleRegistModal = () => {
     this.setState({ modalRegist: true });
     setTimeout(
-      function() {
+      function () {
         this.setState({ modalRegist: false });
       }.bind(this),
       2250
@@ -245,9 +249,9 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   errors: state.errors,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { loginUser })(withRouter(Login));
