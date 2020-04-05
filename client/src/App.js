@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -57,8 +57,8 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <Switch>
-            <div className="App">
+          <div className="App">
+            <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
@@ -73,8 +73,11 @@ class App extends Component {
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
               <Route exact path="/admin" component={Admin} />
-            </div>
-          </Switch>
+              <Route path="*">
+                <Redirect path="/" />
+              </Route>
+            </Switch>
+          </div>
         </Router>
       </Provider>
     );
