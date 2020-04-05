@@ -87,5 +87,10 @@ let userSchema = new mongoose.Schema({
     },
 });
 
+userSchema.pre('remove', async function(next) {
+    await this.model('post').deleteMany({ user: this._id })
+    next()
+})
+
 // create the model for users and expose it to our app
 module.exports = User = mongoose.model('users', userSchema);
