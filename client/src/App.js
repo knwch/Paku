@@ -31,6 +31,7 @@ import MyPost from "./components/pages/MyPost";
 import PostDetail from "./components/pages/PostDetail";
 import EditPost from "./components/pages/EditPost";
 import Admin from "./components/admin/Admin";
+import VerifyUser from "./components/admin/VerifyUser";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -74,6 +75,7 @@ class App extends Component {
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
               <AdminRoute exact path="/admin" component={Admin} />
+              <AdminRoute exact path="/verifyuser" component={VerifyUser} />
               <Route path="*">
                 <Redirect path="/" />
               </Route>
