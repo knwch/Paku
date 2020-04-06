@@ -17,8 +17,7 @@ exports.userall = async (req, res) => {
     if (auth) {
         return res.status(401).json(auth)
     }
-
-    const user = await User.find()
+    const user = await User.find().where('status', 0).sort({ created: -1 })
     if (user.length === 0) {
         errors.user = `No have user`
         return res.status(200).json(errors);
@@ -33,7 +32,6 @@ exports.userConfirm = async (req, res) => {
     if (auth) {
         return res.status(401).json(auth)
     }
-
     const user = await User.find({Card:{confirm: false}})
     if (user.length === 0) {
         errors.user = `No have user`
@@ -45,10 +43,14 @@ exports.userConfirm = async (req, res) => {
 exports.userById = async (req, res) => {
     const errors = {}
     const id = req.params.id
+
     let auth = authAadmin(req.user.status)
+
     if (auth) {
         return res.status(401).json(auth)
     }
+    console.log('userById')
+
     try {
         const user = await User.findById(id)
         res.status(200).json(user)
@@ -66,6 +68,7 @@ exports.confirmUser = async (req, res) => {
     const id = req.params.id
 
     let auth = authAadmin(req.user.status)
+
     if (auth) {
         return res.status(401).json(auth)
     }
@@ -84,9 +87,9 @@ exports.confirmUser = async (req, res) => {
             laser: user.Card.laser,
             confirm: true
         }
-        const result = await User.findByIdAndUpdate({ _id: id }, user, {
-            new: true, // returning the document after update applied
-            runValidators: true // run validator
+        const result = await User.findOneAndUpdate({ _id: id }, user, {
+            new: true, 
+            runValidators: true 
         })
         res.status(200).json(result)
     } catch(err) {
@@ -103,9 +106,11 @@ exports.unConfirmUser = async (req, res) => {
     const id = req.params.id
 
     let auth = authAadmin(req.user.status)
+
     if (auth) {
         return res.status(401).json(auth)
     }
+
     try {
         const user = await User.findById(id)
         if (user.Card.idCard === 0 || user.Card.laser === "") {
@@ -120,9 +125,9 @@ exports.unConfirmUser = async (req, res) => {
             laser: "",
             confirm: false
         }
-        const result = await User.findByIdAndUpdate({ _id: id }, user, {
-            new: true, // returning the document after update applied
-            runValidators: true // run validator
+        const result = await User.findByIdAndUpdate(id, user, {
+            new: true,
+            runValidators: true
         })
         res.status(200).json(result)
     } catch(err) {
@@ -142,6 +147,8 @@ exports.delUser = async (req, res) => {
     if (auth) {
         return res.status(401).json(auth)
     }
+    console.log('delUser')
+
     try {
         const user = await User.findById(id)
         await user.remove()
