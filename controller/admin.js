@@ -141,7 +141,7 @@ exports.delUser = async (req, res) => {
     }
 
     try {
-        const user = await User.findById(id)
+        await User.findOneAndDelete({ _id: id })
         // await user.remove()
         res.status(200).json({ success: true })
     } catch(err) {
