@@ -50,7 +50,7 @@ export const getUserConfirm = () => dispatch => {
 // Get user by id 
 export const getUserId = (id) => dispatch => {
     dispatch(setUserLoading())
-    axios.get(`/api/user/${id}`)
+    axios.get(`/api/admin/user/${id}`)
         .then((res) => {
             dispatch({
                 type: GET_USER,
@@ -68,7 +68,7 @@ export const getUserId = (id) => dispatch => {
 // Confirm
 export const confirmUser = (id) => dispatch => {
     dispatch(setUserLoading())
-    axios.get(`/api/confirmUser/${id}`)
+    axios.get(`/api/admin/confirmUser/${id}`)
         .then((res) => {
             dispatch({
                 type: CONFIRM_USER,
@@ -86,7 +86,7 @@ export const confirmUser = (id) => dispatch => {
 // Unconfirm
 export const UnConfirmUser = (id) => dispatch => {
     dispatch(setUserLoading())
-    axios.get(`/api/unconfirmUser/${id}`)
+    axios.get(`/api/admin/unConfirm/${id}`)
         .then((res) => {
             dispatch({
                 type: UNCONFIRM_USER,
@@ -104,7 +104,7 @@ export const UnConfirmUser = (id) => dispatch => {
 // delete user 
 export const delUser = (id) => dispatch => {
     dispatch(setUserLoading())
-    axios.delete(`/api/del/${id}`)
+    axios.delete(`/api/admin/del/${id}`)
         .then((res) => {
             dispatch({
                 type: DELETE_USER,
