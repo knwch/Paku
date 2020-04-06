@@ -64,7 +64,6 @@ class Admin extends Component {
   deleteUser = (userid) => {
     this.setState({ modalDeleteOpen: false });
     this.props.delUser(userid);
-    window.location.reload(false);
   };
 
   showUserTable = () => {
