@@ -1,11 +1,3 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const key = require('../config/db.mongodb')
-
-// import input validation
-const validateLoginInput = require('../validator/login')
-
-// const Admin = require('../models/admin')
 const User = require('../models/user')
 const Post = require('../models/post')
 const Book = require('../models/book')
@@ -147,11 +139,10 @@ exports.delUser = async (req, res) => {
     if (auth) {
         return res.status(401).json(auth)
     }
-    console.log('delUser')
 
     try {
         const user = await User.findById(id)
-        await user.remove()
+        // await user.remove()
         res.status(200).json({ success: true })
     } catch(err) {
         if (err.message.includes('Cast to ObjectId failed')) {
