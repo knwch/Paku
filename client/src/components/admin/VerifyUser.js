@@ -9,6 +9,7 @@ import {
   Grid,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
+import { confirmUser, UnConfirmUser } from "../../redux/actions/adminActions";
 import { logoutUser } from "../../redux/actions/authActions";
 import { clearCurrentProfile } from "../../redux/actions/profileActions";
 import moment from "moment";
@@ -60,6 +61,16 @@ class VerifyUser extends Component {
 
   handleItemClick = () => (window.location.href = "/admin");
 
+  approveUser = (userid) => {
+    this.props.confirmUser(userid);
+    window.location.href = "/admin";
+  };
+
+  declineUser = (userid) => {
+    this.props.UnConfirmUser(userid);
+    window.location.href = "/admin";
+  };
+
   render() {
     return (
       <Responsive
@@ -76,6 +87,7 @@ class VerifyUser extends Component {
           <Menu.Item name="backmenu" onClick={this.handleItemClick}>
             กลับ
           </Menu.Item>
+          <Menu.Item>{this.state.user.username}</Menu.Item>
 
           <Menu.Menu position="right">
             <Menu.Item name="logout" onClick={this.onLogout.bind(this)}>
@@ -109,19 +121,55 @@ class VerifyUser extends Component {
           <Grid.Column textAlign="left">
             <Card fluid>
               <Card.Content>
-                <Card.Header>Matthew</Card.Header>
-                <Card.Meta>
-                  <span className="date">Joined in 2015</span>
-                </Card.Meta>
-                <Card.Description>
-                  Matthew is a musician living in Nashville.
-                </Card.Description>
+                <Card.Header>Information</Card.Header>
+                <Card.Meta>Username {this.state.user.username}</Card.Meta>
+              </Card.Content>
+              <Card.Content>
+                <Card.Meta className="mb-2">Name</Card.Meta>
+                <Card.Header>
+                  {this.state.user.name.firstname}{" "}
+                  {this.state.user.name.lastname}
+                </Card.Header>
+              </Card.Content>
+              <Card.Content>
+                <Card.Meta className="mb-2">Identification number</Card.Meta>
+                <Card.Header>{this.state.user.Card.idCard}</Card.Header>
+              </Card.Content>
+              <Card.Content>
+                <Card.Meta className="mb-2">Laser number</Card.Meta>
+                <Card.Header>{this.state.user.Card.laser}</Card.Header>
+              </Card.Content>
+              <Card.Content>
+                <Card.Meta>Email address</Card.Meta>
+                <Card.Description>{this.state.user.email}</Card.Description>
+              </Card.Content>
+              <Card.Content>
+                <Card.Meta>Phone number</Card.Meta>
+                <Card.Description>{this.state.user.phone}</Card.Description>
               </Card.Content>
               <Card.Content extra>
-                <a>
-                  <Icon name="user" />
-                  22 Friends
-                </a>
+                Registered on{" "}
+                {moment(new Date(this.state.user.created))
+                  .locale("en")
+                  .format("ll")}
+              </Card.Content>
+              <Card.Content extra>
+                <div className="ui two buttons">
+                  <Button
+                    onClick={this.declineUser.bind(this, this.state.user._id)}
+                    basic
+                    color="red"
+                  >
+                    Decline
+                  </Button>
+                  <Button
+                    onClick={this.approveUser.bind(this, this.state.user._id)}
+                    basic
+                    color="green"
+                  >
+                    Approve
+                  </Button>
+                </div>
               </Card.Content>
             </Card>
           </Grid.Column>
@@ -140,4 +188,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   logoutUser,
   clearCurrentProfile,
+  confirmUser,
+  UnConfirmUser,
 })(VerifyUser);
