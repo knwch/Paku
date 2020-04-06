@@ -123,8 +123,6 @@ class MyPost extends Component {
       });
     }
 
-    console.log(bookuser, bookpost);
-
     if (bookuser.length !== 0) {
       if (bookuser.Book !== "No have booking") {
         bookuser.forEach((book) => {
@@ -226,6 +224,7 @@ class MyPost extends Component {
   }
 
   handleDeletePost = (id) => {
+    this.setState({ temp_postdata: null, modalPostOpen: false });
     this.props.deletePost(id);
     window.location.reload(false);
   };
@@ -235,7 +234,7 @@ class MyPost extends Component {
       available: bool,
     };
     this.props.availablePost(newAvailable, id);
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   handleOpenModal = () => {
@@ -249,108 +248,115 @@ class MyPost extends Component {
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   showPostList = () => {
-    return this.state.posts.map((post, index) => {
+    if (this.state.posts.length === 0) {
       return (
-        <Card key={index} className="mb-4" fluid>
-          <Card.Content>
-            <Item.Group>
-              <Item>
-                <div className="mr-4 img-center-square">
-                  <Image src={post.photos[0]} wrapped ui={false} />
-                </div>
+        <div className="text-center">คุณยังไม่มีที่จอดรถให้เช่าในขณะนี้</div>
+      );
+    } else if (this.state.posts.length > 0) {
+      return this.state.posts.map((post, index) => {
+        return (
+          <Card key={index} className="mb-4" fluid>
+            <Card.Content>
+              <Item.Group>
+                <Item>
+                  <div className="mr-4 img-center-square">
+                    <Image src={post.photos[0]} wrapped ui={false} />
+                  </div>
 
-                <Item.Content>
-                  <Item.Header href={`/post/${post._id}`}>
-                    {post.title}
-                  </Item.Header>
+                  <Item.Content>
+                    <Item.Header href={`/post/${post._id}`}>
+                      {post.title}
+                    </Item.Header>
 
-                  {(() => {
-                    if (post.rate.rating !== 0) {
-                      if (post.rate.rating <= 2.5) {
+                    {(() => {
+                      if (post.rate.rating !== 0) {
+                        if (post.rate.rating <= 2.5) {
+                          return (
+                            <Item.Description>
+                              <Icon fitted name="yellow star half" />{" "}
+                              {post.rate.rating.toFixed(1)}
+                            </Item.Description>
+                          );
+                        } else if (post.rate.rating > 2.5) {
+                          return (
+                            <Item.Description>
+                              <Icon fitted name="yellow star" />{" "}
+                              {post.rate.rating.toFixed(1)}
+                            </Item.Description>
+                          );
+                        }
+                      } else {
                         return (
                           <Item.Description>
-                            <Icon fitted name="yellow star half" />{" "}
-                            {post.rate.rating.toFixed(1)}
-                          </Item.Description>
-                        );
-                      } else if (post.rate.rating > 2.5) {
-                        return (
-                          <Item.Description>
-                            <Icon fitted name="yellow star" />{" "}
-                            {post.rate.rating.toFixed(1)}
+                            <Icon fitted name="yellow star outline" />{" "}
+                            ไม่มีคะแนน
                           </Item.Description>
                         );
                       }
-                    } else {
-                      return (
-                        <Item.Description>
-                          <Icon fitted name="yellow star outline" /> ไม่มีคะแนน
-                        </Item.Description>
-                      );
-                    }
-                  })()}
+                    })()}
 
-                  <Item.Description>{post.location.address}</Item.Description>
+                    <Item.Description>{post.location.address}</Item.Description>
 
-                  <Item.Description>
-                    <p>
-                      เปิดตั้งแต่เวลา {post.date.open} จนถึง {post.date.close}
-                    </p>
-                  </Item.Description>
+                    <Item.Description>
+                      <p>
+                        เปิดตั้งแต่เวลา {post.date.open} จนถึง {post.date.close}
+                      </p>
+                    </Item.Description>
 
-                  <Divider />
+                    <Divider />
 
-                  <Item.Extra>
-                    <Button
-                      compact
-                      className="btn-paku-light"
-                      hidden={post.available}
-                      onClick={this.handlePausePost.bind(
-                        this,
-                        post.available,
-                        post._id
-                      )}
-                    >
-                      <Button.Content visible>เปิดให้เช่า</Button.Content>
-                    </Button>
+                    <Item.Extra>
+                      <Button
+                        compact
+                        className="btn-paku-light"
+                        hidden={post.available}
+                        onClick={this.handlePausePost.bind(
+                          this,
+                          post.available,
+                          post._id
+                        )}
+                      >
+                        <Button.Content visible>เปิดให้เช่า</Button.Content>
+                      </Button>
 
-                    <Button
-                      compact
-                      basic
-                      hidden={!post.available}
-                      onClick={this.handlePausePost.bind(
-                        this,
-                        post.available,
-                        post._id
-                      )}
-                    >
-                      <Button.Content visible>พักชั่วคราว</Button.Content>
-                    </Button>
+                      <Button
+                        compact
+                        basic
+                        hidden={!post.available}
+                        onClick={this.handlePausePost.bind(
+                          this,
+                          post.available,
+                          post._id
+                        )}
+                      >
+                        <Button.Content visible>พักชั่วคราว</Button.Content>
+                      </Button>
 
-                    <Button
-                      compact
-                      basic
-                      onClick={() => {
-                        this.setState({
-                          temp_postdata: post,
-                          modalPostOpen: true,
-                        });
-                      }}
-                    >
-                      <Button.Content visible>ลบ</Button.Content>
-                    </Button>
+                      <Button
+                        compact
+                        basic
+                        onClick={() => {
+                          this.setState({
+                            temp_postdata: post,
+                            modalPostOpen: true,
+                          });
+                        }}
+                      >
+                        <Button.Content visible>ลบ</Button.Content>
+                      </Button>
 
-                    <Button compact href={`/editpost/${post._id}`} basic>
-                      <Button.Content visible>แก้ไข</Button.Content>
-                    </Button>
-                  </Item.Extra>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-          </Card.Content>
-        </Card>
-      );
-    }, this);
+                      <Button compact href={`/editpost/${post._id}`} basic>
+                        <Button.Content visible>แก้ไข</Button.Content>
+                      </Button>
+                    </Item.Extra>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </Card.Content>
+          </Card>
+        );
+      }, this);
+    }
   };
 
   cancelBooking = (postid, bookid) => {
@@ -400,125 +406,135 @@ class MyPost extends Component {
   };
 
   showBookList = () => {
-    return this.state.bookuser.map((book, index) => {
-      if (book.statusBook === 1 && book.check.checkOutStatus === false)
-        return (
-          <Card key={index} className="mb-4" fluid>
-            <Card.Content>
-              <Item.Group>
-                <Item>
-                  <div className="mr-4 img-center-square">
-                    <Image src={book.photos[0]} wrapped ui={false} />
-                  </div>
+    if (this.state.bookuser.length === 0) {
+      return (
+        <div className="text-center">คุณยังไม่มีการจองที่จอดรถในขณะนี้</div>
+      );
+    } else if (this.state.bookuser.length > 0) {
+      return this.state.bookuser.map((book, index) => {
+        if (book.statusBook === 1 && book.check.checkOutStatus === false)
+          return (
+            <Card key={index} className="mb-4" fluid>
+              <Card.Content>
+                <Item.Group>
+                  <Item>
+                    <div className="mr-4 img-center-square">
+                      <Image src={book.photos[0]} wrapped ui={false} />
+                    </div>
 
-                  <Item.Content>
-                    <Item.Header href={`/post/${book.idPost}`}>
-                      {book.title}
-                    </Item.Header>
-                    <Item.Description>{book.address}</Item.Description>
+                    <Item.Content>
+                      <Item.Header href={`/post/${book.idPost}`}>
+                        {book.title}
+                      </Item.Header>
+                      <Item.Description>{book.address}</Item.Description>
 
-                    <Divider />
+                      <Divider />
 
-                    <Item.Description>
-                      <p>
-                        วันที่จอง{" "}
-                        {moment(new Date(book.bookDate)).format("D MMMM YYYY")}
-                      </p>
-                      <p>
-                        ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
-                      </p>
-                    </Item.Description>
+                      <Item.Description>
+                        <p>
+                          วันที่จอง{" "}
+                          {moment(new Date(book.bookDate)).format(
+                            "D MMMM YYYY"
+                          )}
+                        </p>
+                        <p>
+                          ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                        </p>
+                      </Item.Description>
 
-                    <Item.Extra>
-                      {(() => {
-                        if (book.check.checkInUser === false) {
-                          return (
-                            <Button
-                              compact
-                              className="btn-paku"
-                              onClick={this.handleCheckInOut.bind(
-                                this,
-                                book.check.id,
-                                true
-                              )}
-                            >
-                              <Button.Content visible>เช็คอิน</Button.Content>
-                            </Button>
-                          );
-                        }
-                      })()}
+                      <Item.Extra>
+                        {(() => {
+                          if (book.check.checkInUser === false) {
+                            return (
+                              <Button
+                                compact
+                                className="btn-paku"
+                                onClick={this.handleCheckInOut.bind(
+                                  this,
+                                  book.check.id,
+                                  true
+                                )}
+                              >
+                                <Button.Content visible>เช็คอิน</Button.Content>
+                              </Button>
+                            );
+                          }
+                        })()}
 
-                      {(() => {
-                        if (
-                          book.check.checkInUser === true &&
-                          book.check.checkInRenter === true &&
-                          book.check.checkOutUser === false
-                        ) {
-                          return (
-                            <Button
-                              compact
-                              className="btn-paku-light"
-                              onClick={() => {
-                                this.setState({
-                                  temp_checkoutdata: book,
-                                  modalCheckOutOpen: true,
-                                });
-                              }}
-                            >
-                              <Button.Content visible>เช็คเอาท์</Button.Content>
-                            </Button>
-                          );
-                        } else if (
-                          book.check.checkInUser === true &&
-                          book.check.checkInRenter === false
-                        ) {
-                          return (
-                            <Button compact disabled>
-                              <Button.Content visible>
-                                รอการยืนยัน
-                              </Button.Content>
-                            </Button>
-                          );
-                        } else if (
-                          book.check.checkOutUser === true &&
-                          book.check.checkOutRenter === false
-                        ) {
-                          return (
-                            <Button basic compact disabled>
-                              <Button.Content visible>
-                                เช็คเอาท์สำเร็จ
-                              </Button.Content>
-                            </Button>
-                          );
-                        }
-                      })()}
+                        {(() => {
+                          if (
+                            book.check.checkInUser === true &&
+                            book.check.checkInRenter === true &&
+                            book.check.checkOutUser === false
+                          ) {
+                            return (
+                              <Button
+                                compact
+                                className="btn-paku-light"
+                                onClick={() => {
+                                  this.setState({
+                                    temp_checkoutdata: book,
+                                    modalCheckOutOpen: true,
+                                  });
+                                }}
+                              >
+                                <Button.Content visible>
+                                  เช็คเอาท์
+                                </Button.Content>
+                              </Button>
+                            );
+                          } else if (
+                            book.check.checkInUser === true &&
+                            book.check.checkInRenter === false
+                          ) {
+                            return (
+                              <Button compact disabled>
+                                <Button.Content visible>
+                                  รอการยืนยัน
+                                </Button.Content>
+                              </Button>
+                            );
+                          } else if (
+                            book.check.checkOutUser === true &&
+                            book.check.checkOutRenter === false
+                          ) {
+                            return (
+                              <Button basic compact disabled>
+                                <Button.Content visible>
+                                  เช็คเอาท์สำเร็จ
+                                </Button.Content>
+                              </Button>
+                            );
+                          }
+                        })()}
 
-                      {(() => {
-                        if (book.check.checkInUser === false) {
-                          return (
-                            <Button
-                              compact
-                              basic
-                              onClick={() => {
-                                this.setState({
-                                  temp_bookdata: book,
-                                  modalBookOpen: true,
-                                });
-                              }}
-                            >
-                              <Button.Content visible>ยกเลิก</Button.Content>
-                            </Button>
-                          );
-                        }
-                      })()}
-                    </Item.Extra>
-                  </Item.Content>
-                </Item>
-              </Item.Group>
-            </Card.Content>
-          </Card>
-        );
-    }, this);
+                        {(() => {
+                          if (book.check.checkInUser === false) {
+                            return (
+                              <Button
+                                compact
+                                basic
+                                onClick={() => {
+                                  this.setState({
+                                    temp_bookdata: book,
+                                    modalBookOpen: true,
+                                  });
+                                }}
+                              >
+                                <Button.Content visible>ยกเลิก</Button.Content>
+                              </Button>
+                            );
+                          }
+                        })()}
+                      </Item.Extra>
+                    </Item.Content>
+                  </Item>
+                </Item.Group>
+              </Card.Content>
+            </Card>
+          );
+      }, this);
+    }
   };
 
   showWaitList = () => {
@@ -867,7 +883,6 @@ class MyPost extends Component {
                     active={this.state.activeItem === "waitmenu"}
                     onClick={this.handleItemClick}
                   />
-                  <Menu.Item name="รอรีวิว" />
                   <Menu.Item
                     content="เสร็จสิ้น"
                     name="completemenu"
