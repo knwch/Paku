@@ -1,8 +1,16 @@
 import React, { Component } from "react";
-import { Responsive, Menu, Table, Button, Image } from "semantic-ui-react";
+import {
+  Responsive,
+  Menu,
+  Table,
+  Button,
+  Image,
+  Modal,
+  Header,
+} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { logoutUser } from "../../redux/actions/authActions";
-import { getUsers } from "../../redux/actions/adminActions";
+import { getUsers, delUser } from "../../redux/actions/adminActions";
 import { clearCurrentProfile } from "../../redux/actions/profileActions";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -14,6 +22,8 @@ class Admin extends Component {
     this.state = {
       users: [],
       activeItem: "usermenu",
+      modalDeleteOpen: false,
+      temp_userdata: null,
       errors: {},
     };
   }
@@ -50,6 +60,12 @@ class Admin extends Component {
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  deleteUser = (userid) => {
+    this.setState({ modalDeleteOpen: false });
+    this.props.delUser(userid);
+    window.location.reload(false);
+  };
 
   showUserTable = () => {
     return (
@@ -92,7 +108,18 @@ class Admin extends Component {
                   {moment(new Date(user.created)).locale("en").format("ll")}
                 </Table.Cell>
                 <Table.Cell collapsing>
-                  <Button compact inverted color="red" size="mini">
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        temp_userdata: user,
+                        modalDeleteOpen: true,
+                      });
+                    }}
+                    compact
+                    inverted
+                    color="red"
+                    size="mini"
+                  >
                     Delete
                   </Button>
                 </Table.Cell>
@@ -157,12 +184,46 @@ class Admin extends Component {
 
   render() {
     var rendererList;
+    var modalPopup;
 
     if (this.state.activeItem === "usermenu") {
       rendererList = this.showUserTable();
     }
     if (this.state.activeItem === "verifymenu") {
       rendererList = this.showVerifyTable();
+    }
+
+    if (this.state.temp_userdata !== null) {
+      modalPopup = (
+        <Modal
+          open={this.state.modalDeleteOpen}
+          className="modal-paku"
+          size="tiny"
+        >
+          <Modal.Content>
+            <Header
+              icon="delete"
+              content={`คุณต้องการลบ ${this.state.temp_userdata.username} ใช่หรือไม่`}
+            />
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              basic
+              onClick={() => {
+                this.setState({ temp_userdata: null, modalDeleteOpen: false });
+              }}
+            >
+              <text>กลับ</text>
+            </Button>
+            <Button
+              className="btn-paku"
+              onClick={this.deleteUser.bind(this, this.state.temp_userdata._id)}
+            >
+              <text>ลบ</text>
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      );
     }
 
     return (
@@ -202,6 +263,8 @@ class Admin extends Component {
 
         {rendererList}
 
+        {modalPopup}
+
         {console.log(this.state.users)}
       </Responsive>
     );
@@ -218,4 +281,5 @@ export default connect(mapStateToProps, {
   logoutUser,
   clearCurrentProfile,
   getUsers,
+  delUser,
 })(Admin);
