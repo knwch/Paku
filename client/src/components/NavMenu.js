@@ -31,7 +31,7 @@ class NavMenu extends Component {
                 <Nav.Link className="nav-color mr-3" href="/rent">จองที่จอดรถ</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/mypost">รายการของฉัน</Nav.Link>
                 <Nav.Link className="nav-color mr-3" href="/support">ช่วยเหลือ</Nav.Link>
-                <Nav.Link><Icon name="bell" color='black'/></Nav.Link>
+                {/* <Nav.Link><Icon name="bell" color='black'/></Nav.Link> */}
                 <NavDropdown alignRight title={<Icon name="user" color='black'/>} id="basic-nav-dropdown">
                     <NavDropdown.Item href="/profile">โปรไฟล์</NavDropdown.Item>
                     <NavDropdown.Item onClick={this.onLogout.bind(this)}>ออกจากระบบ</NavDropdown.Item>
