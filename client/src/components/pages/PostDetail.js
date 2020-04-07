@@ -66,7 +66,7 @@ class PostDetail extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     document.title = "Paku - Post";
 
     const postid = this.props.match.params.id;
@@ -79,6 +79,10 @@ class PostDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     const post = nextProps.post.post;
+
+    if(post === null) {
+      window.location.href = "/mypost";
+    }
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
