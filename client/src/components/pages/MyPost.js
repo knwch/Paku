@@ -104,7 +104,9 @@ class MyPost extends Component {
     const bookuser = nextProps.book.bookUser;
     const bookpost = nextProps.book.bookPost;
 
-    const postsFind = posts.filter((val) => val.user === user.id);
+    if (posts !== null) {
+      var postsFind = posts.filter((val) => val.user === user.id);
+    }
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
