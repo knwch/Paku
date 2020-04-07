@@ -83,7 +83,7 @@ class PostDetail extends Component {
     const post = nextProps.post.post;
 
     if (post === null) {
-      window.location.href = "/mypost";
+      window.history.back();
     }
 
     if (nextProps.errors) {

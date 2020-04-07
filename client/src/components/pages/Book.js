@@ -172,6 +172,10 @@ class Book extends Component {
     const user = nextProps.auth.user;
     const book = nextProps.book.bookPost;
 
+    if (post === null) {
+      window.history.back();
+    }
+
     if (book.Book !== "No have booking") {
       const bookFilter = book.filter((val) => val.idPost === post._id);
       this.setState({
