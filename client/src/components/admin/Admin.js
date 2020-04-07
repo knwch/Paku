@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   Header,
+  Loader,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { logoutUser } from "../../redux/actions/authActions";
@@ -225,48 +226,59 @@ class Admin extends Component {
       );
     }
 
-    return (
-      <Responsive
-        style={{
-          "margin-left": "-1.5rem",
-          "margin-right": "-1.5rem",
-        }}
-      >
-        <Menu
+    const { admin, loading } = this.props.admin;
+    if (admin === null || loading) {
+      return (
+        <Modal open={true} className="modal-paku" size="mini" basic>
+          <Loader size="large" active inline="centered">
+            <p>โปรดรอสักครู่</p>
+          </Loader>
+        </Modal>
+      );
+    } else {
+      return (
+        <Responsive
           style={{
-            "margin-top": "1.5rem",
+            "margin-left": "-1.5rem",
+            "margin-right": "-1.5rem",
           }}
         >
-          <Menu.Item
-            name="usermenu"
-            active={this.state.activeItem === "usermenu"}
-            onClick={this.handleItemClick}
+          <Menu
+            style={{
+              "margin-top": "1.5rem",
+            }}
           >
-            จัดการผู้ใช้งาน
-          </Menu.Item>
-
-          <Menu.Item
-            name="verifymenu"
-            active={this.state.activeItem === "verifymenu"}
-            onClick={this.handleItemClick}
-          >
-            การยืนยันตัวตน
-          </Menu.Item>
-
-          <Menu.Menu position="right">
-            <Menu.Item name="logout" onClick={this.onLogout.bind(this)}>
-              ออกจากระบบ
+            <Menu.Item
+              name="usermenu"
+              active={this.state.activeItem === "usermenu"}
+              onClick={this.handleItemClick}
+            >
+              จัดการผู้ใช้งาน
             </Menu.Item>
-          </Menu.Menu>
-        </Menu>
 
-        {rendererList}
+            <Menu.Item
+              name="verifymenu"
+              active={this.state.activeItem === "verifymenu"}
+              onClick={this.handleItemClick}
+            >
+              การยืนยันตัวตน
+            </Menu.Item>
 
-        {modalPopup}
+            <Menu.Menu position="right">
+              <Menu.Item name="logout" onClick={this.onLogout.bind(this)}>
+                ออกจากระบบ
+              </Menu.Item>
+            </Menu.Menu>
+          </Menu>
 
-        {console.log(this.state.users)}
-      </Responsive>
-    );
+          {rendererList}
+
+          {modalPopup}
+
+          {console.log(this.state.users)}
+        </Responsive>
+      );
+    }
   }
 }
 
