@@ -83,7 +83,6 @@ class MyPost extends Component {
 
     this.props.getPosts();
     this.props.getProfiles();
-    // this.props.getBookUser(user.id);
 
     if (this.props.auth.isAuthenticated === false) {
       this.props.history.push("/login");
@@ -549,7 +548,7 @@ class MyPost extends Component {
     });
 
     return bookpost.map((book, index) => {
-      if (book.check === null) {
+      if (book.check == null) {
         this.setState({
           activeItem: "postmenu",
         });
