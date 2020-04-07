@@ -9,6 +9,8 @@ import {
   Icon,
   Header,
   Comment,
+  Modal,
+  Loader,
 } from "semantic-ui-react";
 import { getPost } from "../../redux/actions/postActions";
 import { connect } from "react-redux";
@@ -80,7 +82,7 @@ class PostDetail extends Component {
   componentWillReceiveProps(nextProps) {
     const post = nextProps.post.post;
 
-    if(post === null) {
+    if (post === null) {
       window.location.href = "/mypost";
     }
 
@@ -115,213 +117,228 @@ class PostDetail extends Component {
   }
 
   render() {
-    return (
-      <Responsive>
-        <NavMenu />
-        <Container fluid>
-          <Grid centered className="mb-4">
-            <Grid.Row>
-              {this.state.photos.map((photo, index) => {
-                return (
-                  <div key={index} className="mb-3 mr-4 img-center-240">
-                    <Image src={photo} wrapped ui={false} />
-                  </div>
-                );
-              })}
-            </Grid.Row>
-            <Grid.Column mobile={16} tablet={7} computer={7}>
-              <Item.Group>
-                <Item>
-                  <Item.Content>
-                    <Header size="huge">
-                      <div>{this.state.title}</div>
-                    </Header>
-                    <Item.Description>
-                      <Icon name="map pin" /> {this.state.address}
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+    const { post, loading } = this.props.post;
+    if (post === null || loading) {
+      return (
+        <Modal open={true} className="modal-paku" size="mini" basic>
+          <Loader size="large" active inline="centered">
+            <p>โปรดรอสักครู่</p>
+          </Loader>
+        </Modal>
+      );
+    } else {
+      return (
+        <Responsive>
+          <NavMenu />
+          <Container fluid>
+            <Grid centered className="mb-4">
+              <Grid.Row>
+                {this.state.photos.map((photo, index) => {
+                  return (
+                    <div key={index} className="mb-3 mr-4 img-center-240">
+                      <Image src={photo} wrapped ui={false} />
+                    </div>
+                  );
+                })}
+              </Grid.Row>
+              <Grid.Column mobile={16} tablet={7} computer={7}>
+                <Item.Group>
+                  <Item>
+                    <Item.Content>
+                      <Header size="huge">
+                        <div>{this.state.title}</div>
+                      </Header>
+                      <Item.Description>
+                        <Icon name="map pin" /> {this.state.address}
+                      </Item.Description>
+                    </Item.Content>
+                  </Item>
 
-                <Divider />
+                  <Divider />
 
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>ประเภทที่สามารถจอดได้</div>
-                    </Item.Header>
-                    <Item.Description>
-                      <Icon name="home" /> {this.state.typeofpark}
-                    </Item.Description>
-                    <Item.Description>
-                      <Icon name="warehouse" /> จำนวนที่จอดรถ{" "}
-                      {this.state.numberofcar} คัน
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>ประเภทที่สามารถจอดได้</div>
+                      </Item.Header>
+                      <Item.Description>
+                        <Icon name="home" /> {this.state.typeofpark}
+                      </Item.Description>
+                      <Item.Description>
+                        <Icon name="warehouse" /> จำนวนที่จอดรถ{" "}
+                        {this.state.numberofcar} คัน
+                      </Item.Description>
+                    </Item.Content>
+                  </Item>
 
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>ประเภทที่จอดรถ</div>
-                    </Item.Header>
-                    <Item.Description>
-                      <Icon name="car" /> {this.state.typeofcar}
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>ประเภทที่จอดรถ</div>
+                      </Item.Header>
+                      <Item.Description>
+                        <Icon name="car" /> {this.state.typeofcar}
+                      </Item.Description>
+                    </Item.Content>
+                  </Item>
 
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>ช่วงเวลาที่เปิดให้บริการ</div>
-                    </Item.Header>
-                    <Item.Description>
-                      <Icon name="clock" /> ตั้งแต่ {this.state.open} จนถึง{" "}
-                      {this.state.close}
-                    </Item.Description>
-                  </Item.Content>
-                </Item>
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>ช่วงเวลาที่เปิดให้บริการ</div>
+                      </Item.Header>
+                      <Item.Description>
+                        <Icon name="clock" /> ตั้งแต่ {this.state.open} จนถึง{" "}
+                        {this.state.close}
+                      </Item.Description>
+                    </Item.Content>
+                  </Item>
 
-                <Divider />
+                  <Divider />
 
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>คำอธิบายที่จอดรถ</div>
-                    </Item.Header>
-                    <Item.Description>{this.state.explain}</Item.Description>
-                  </Item.Content>
-                </Item>
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>คำอธิบายที่จอดรถ</div>
+                      </Item.Header>
+                      <Item.Description>{this.state.explain}</Item.Description>
+                    </Item.Content>
+                  </Item>
 
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>กฎที่จอดรถ</div>
-                    </Item.Header>
-                    {(() => {
-                      if (this.state.rule.length === 0) {
-                        return <Item.Description>ไม่ระบุ</Item.Description>;
-                      }
-                    })()}
-                    {this.state.rule.map((rule, index) => {
-                      return (
-                        <Item.Description key={index}>{rule}</Item.Description>
-                      );
-                    })}
-                  </Item.Content>
-                </Item>
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>สถานที่ใกล้เคียง</div>
-                    </Item.Header>
-                    {(() => {
-                      if (this.state.nearby.length === 0) {
-                        return <Item.Description>ไม่ระบุ</Item.Description>;
-                      }
-                    })()}
-                    {this.state.nearby.map((nearby, index) => {
-                      return (
-                        <Item.Description key={index}>
-                          {nearby}
-                        </Item.Description>
-                      );
-                    })}
-                  </Item.Content>
-                </Item>
-
-                <Item>
-                  <Item.Content>
-                    <Item.Header>
-                      <div>สิ่งอำนวยความสะดวก</div>
-                    </Item.Header>
-                    {(() => {
-                      if (this.state.facility.length === 0) {
-                        return <Item.Description>ไม่ระบุ</Item.Description>;
-                      }
-                    })()}
-                    {this.state.facility.map((facility, index) => {
-                      return (
-                        <Item.Description key={index}>
-                          {facility}
-                        </Item.Description>
-                      );
-                    })}
-                  </Item.Content>
-                </Item>
-
-                <Divider />
-              </Item.Group>
-            </Grid.Column>
-            <Grid.Column mobile={16} tablet={5} computer={5}>
-              <Item.Group>
-                <Header>
-                  <div>
-                    <Icon name="map" />
-                    แผนที่
-                  </div>
-                </Header>
-
-                <Item>
-                  <Item.Content>
-                    <MapContainer
-                      center={this.state.location}
-                      lat={this.state.location.lat}
-                      lng={this.state.location.lng}
-                      zoom={this.state.zoom}
-                      show={this.state.show}
-                      height={"40vh"}
-                    />
-                  </Item.Content>
-                </Item>
-
-                <Divider />
-              </Item.Group>
-            </Grid.Column>
-
-            <Grid.Column
-              className="pt-0"
-              textAlign="left"
-              mobile={16}
-              tablet={12}
-              computer={12}
-            >
-              <Comment.Group minimal>
-                <Header as="h3">
-                  <div>ความคิดเห็น</div>
-                </Header>
-                {(() => {
-                  if (this.state.comments.length === 0) {
-                    return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
-                  } else if (this.state.comments.length > 0) {
-                    return this.state.comments.map((comment, index) => {
-                      if (comment.comment !== "")
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>กฎที่จอดรถ</div>
+                      </Item.Header>
+                      {(() => {
+                        if (this.state.rule.length === 0) {
+                          return <Item.Description>ไม่ระบุ</Item.Description>;
+                        }
+                      })()}
+                      {this.state.rule.map((rule, index) => {
                         return (
-                          <Comment key={index}>
-                            <Comment.Avatar as="a" src={comment.photoUser} />
-                            <Comment.Content>
-                              <Comment.Author as="a">
-                                {comment.name.firstname}
-                              </Comment.Author>
-                              <Comment.Metadata>
-                                <span>
-                                  {moment(new Date(comment.created)).fromNow()}
-                                </span>
-                              </Comment.Metadata>
-                              <Comment.Text>{comment.comment}</Comment.Text>
-                            </Comment.Content>
-                          </Comment>
+                          <Item.Description key={index}>
+                            {rule}
+                          </Item.Description>
                         );
-                    });
-                  }
-                })()}
-              </Comment.Group>
-            </Grid.Column>
-          </Grid>
-        </Container>
-        <Footer />
-      </Responsive>
-    );
+                      })}
+                    </Item.Content>
+                  </Item>
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>สถานที่ใกล้เคียง</div>
+                      </Item.Header>
+                      {(() => {
+                        if (this.state.nearby.length === 0) {
+                          return <Item.Description>ไม่ระบุ</Item.Description>;
+                        }
+                      })()}
+                      {this.state.nearby.map((nearby, index) => {
+                        return (
+                          <Item.Description key={index}>
+                            {nearby}
+                          </Item.Description>
+                        );
+                      })}
+                    </Item.Content>
+                  </Item>
+
+                  <Item>
+                    <Item.Content>
+                      <Item.Header>
+                        <div>สิ่งอำนวยความสะดวก</div>
+                      </Item.Header>
+                      {(() => {
+                        if (this.state.facility.length === 0) {
+                          return <Item.Description>ไม่ระบุ</Item.Description>;
+                        }
+                      })()}
+                      {this.state.facility.map((facility, index) => {
+                        return (
+                          <Item.Description key={index}>
+                            {facility}
+                          </Item.Description>
+                        );
+                      })}
+                    </Item.Content>
+                  </Item>
+
+                  <Divider />
+                </Item.Group>
+              </Grid.Column>
+              <Grid.Column mobile={16} tablet={5} computer={5}>
+                <Item.Group>
+                  <Header>
+                    <div>
+                      <Icon name="map" />
+                      แผนที่
+                    </div>
+                  </Header>
+
+                  <Item>
+                    <Item.Content>
+                      <MapContainer
+                        center={this.state.location}
+                        lat={this.state.location.lat}
+                        lng={this.state.location.lng}
+                        zoom={this.state.zoom}
+                        show={this.state.show}
+                        height={"40vh"}
+                      />
+                    </Item.Content>
+                  </Item>
+
+                  <Divider />
+                </Item.Group>
+              </Grid.Column>
+
+              <Grid.Column
+                className="pt-0"
+                textAlign="left"
+                mobile={16}
+                tablet={12}
+                computer={12}
+              >
+                <Comment.Group minimal>
+                  <Header as="h3">
+                    <div>ความคิดเห็น</div>
+                  </Header>
+                  {(() => {
+                    if (this.state.comments.length === 0) {
+                      return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
+                    } else if (this.state.comments.length > 0) {
+                      return this.state.comments.map((comment, index) => {
+                        if (comment.comment !== "")
+                          return (
+                            <Comment key={index}>
+                              <Comment.Avatar as="a" src={comment.photoUser} />
+                              <Comment.Content>
+                                <Comment.Author as="a">
+                                  {comment.name.firstname}
+                                </Comment.Author>
+                                <Comment.Metadata>
+                                  <span>
+                                    {moment(
+                                      new Date(comment.created)
+                                    ).fromNow()}
+                                  </span>
+                                </Comment.Metadata>
+                                <Comment.Text>{comment.comment}</Comment.Text>
+                              </Comment.Content>
+                            </Comment>
+                          );
+                      });
+                    }
+                  })()}
+                </Comment.Group>
+              </Grid.Column>
+            </Grid>
+          </Container>
+          <Footer />
+        </Responsive>
+      );
+    }
   }
 }
 
