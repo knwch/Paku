@@ -49,7 +49,7 @@ class MyPost extends Component {
       bookuser: [],
       bookuser_temp: [],
       bookpost: [],
-      activeItem: "postmenu",
+      activeItem: "bookmenu",
       errors: {},
       modalBookOpen: false,
       modalPostOpen: false,
@@ -112,7 +112,7 @@ class MyPost extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (postsFind.length !== 0) {
+    if (postsFind !== null) {
       this.setState({
         posts: postsFind,
       });
@@ -124,7 +124,7 @@ class MyPost extends Component {
       });
     }
 
-    if (bookuser.length !== 0) {
+    if (bookuser != null) {
       if (bookuser.Book !== "No have booking") {
         bookuser.forEach((book) => {
           posts.forEach((post) => {
@@ -138,6 +138,7 @@ class MyPost extends Component {
             }
           });
         });
+
 
         bookuser.forEach((book) => {
           this.state.bookuser_temp.push(book);
@@ -165,7 +166,7 @@ class MyPost extends Component {
       }
     }
 
-    if (bookpost.length !== 0) {
+    if (bookpost != null) {
       if (bookpost.Book !== "No have booking") {
         bookpost.forEach((book) => {
           this.state.posts.forEach((post) => {
@@ -227,7 +228,6 @@ class MyPost extends Component {
   handleDeletePost = (id) => {
     this.setState({ temp_postdata: null, modalPostOpen: false });
     this.props.deletePost(id);
-    window.location.reload(false);
   };
 
   handlePausePost = (bool, id) => {
@@ -235,7 +235,6 @@ class MyPost extends Component {
       available: bool,
     };
     this.props.availablePost(newAvailable, id);
-    // window.location.reload(false);
   };
 
   handleOpenModal = () => {
@@ -565,7 +564,7 @@ class MyPost extends Component {
                   </div>
 
                   <Item.Content>
-                    <Item.Header href={`/post/${book.idUser}`}>
+                    <Item.Header>
                       {book.name.firstname} {book.name.lastname}
                     </Item.Header>
                     <Item.Description>{book.title}</Item.Description>
@@ -849,7 +848,6 @@ class MyPost extends Component {
     }
 
     const { book, loading } = this.props.book;
-    let errors = this.state.errors;
     if (book === null || loading) {
       return (
         <Modal open={true} className="modal-paku" size="mini" basic>
