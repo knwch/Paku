@@ -9,6 +9,8 @@ const Post = require('../../models/post');
 // import input validation
 const validatePostInput = require('../../validator/post');
 
+const { search } = require('../../controller/post')
+
 // @route   GET api/post
 // @desc    Default Route
 // @access  Public
@@ -23,7 +25,7 @@ router.get('/allPost', (req, res) => {
             if (post.length === 0) {
                 return res.status(200).json({ post: 'No have post' });
             }
-            res.json(post);
+            res.status(200).json(post);
         })
         .catch((err) => {
             res.status(404).json(err);
@@ -36,7 +38,7 @@ router.get('/allPost', (req, res) => {
 router.get('/handle/:id', (req, res) => {
     Post.findById(req.params.id)
         .then((post) => {
-            res.json(post);
+            res.status(200).json(post);
         })
         .catch((err) => {
             res.status(404).json({ post: 'No Post found with that ID'});
@@ -89,7 +91,7 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
             // res.json(newPost)
             newPost.save()
                 .then((post) => {
-                    res.json(post);
+                    res.status(201).json(post);
                 })
         })
         .catch((err) => {
@@ -108,7 +110,7 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
             }
 
             post.remove().then((post) => {
-                res.json({ success: true});
+                res.status(200).json({ success: true});
             })
         })
         .catch((err) => {
@@ -155,7 +157,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
             post.price = req.body.price;
 
             post.save().then((post) => {
-                res.json(post);
+                res.status(200).json(post);
             })
         })
         .catch((err) => {
@@ -194,7 +196,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             // res.json(post)
             post.save().then((post) => {
-                res.json(post);
+                res.status(200).json(post);
             })
         })
         .catch((err) => {
@@ -260,7 +262,7 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
 
             if (req.body.available === post.available) {
                 post.available = !post.available
-                post.save().then((post) => res.json(post))
+                post.save().then((post) => res.status(200).json(post))
             } else {
                 return res.status(400).json({ post: 'Input isn t reqiured  '})
             }
@@ -269,5 +271,7 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
             res.status(404).json({ post: 'No Post found with that ID'})
         })
 })
+
+router.get('/search?', search)
 
 module.exports = router
