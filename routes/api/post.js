@@ -9,7 +9,10 @@ const Post = require('../../models/post');
 // import input validation
 const validatePostInput = require('../../validator/post');
 
-const { search } = require('../../controller/post')
+const { 
+    search,
+    recommend
+} = require('../../controller/post')
 
 // @route   GET api/post
 // @desc    Default Route
@@ -272,6 +275,13 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
         })
 })
 
+// @route   GET api/post/search?search=?
+// @desc    Get post by search 
+// @access  Pubilc
 router.get('/search?', search)
 
+// @route   GET api/post/recommend
+// @desc    Get post recommend 
+// @access  Pubilc
+router.get('/recommend', recommend)
 module.exports = router
