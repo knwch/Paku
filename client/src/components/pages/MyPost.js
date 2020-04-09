@@ -139,7 +139,6 @@ class MyPost extends Component {
           });
         });
 
-
         bookuser.forEach((book) => {
           this.state.bookuser_temp.push(book);
         });
@@ -367,11 +366,11 @@ class MyPost extends Component {
   handleRate = (e, { rating, maxRating }) =>
     this.setState({ rating, maxRating });
 
-  handleCheckInOut = (bookid, bool) => {
+  handleCheckInOut = async (bookid, bool) => {
     const checkData = {
       check: bool,
     };
-    this.props.checkBook(bookid, checkData);
+    await this.props.checkBook(bookid, checkData);
     window.location.reload(false);
   };
 
@@ -406,11 +405,15 @@ class MyPost extends Component {
   };
 
   showBookList = () => {
-    if (this.state.bookuser.length === 0) {
+    if (
+      this.state.bookuser.filter(
+        (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+      ).length === 0
+    ) {
       return (
         <div className="text-center">คุณยังไม่มีการจองที่จอดรถในขณะนี้</div>
       );
-    } else if (this.state.bookuser.length > 0) {
+    } else {
       return this.state.bookuser.map((book, index) => {
         if (book.statusBook === 1 && book.check.checkOutStatus === false)
           return (
@@ -548,145 +551,176 @@ class MyPost extends Component {
       });
     });
 
-    return bookpost.map((book, index) => {
-      if (book.check == null) {
-        this.setState({
-          activeItem: "postmenu",
-        });
-      } else if (book.statusBook === 1 && book.check.checkOutStatus === false) {
-        return (
-          <Card key={index} className="mb-4" fluid>
-            <Card.Content>
-              <Item.Group>
-                <Item>
-                  <div className="mr-4 img-center-square">
-                    <Image src={book.photo} wrapped ui={false} />
-                  </div>
+    if (
+      bookpost.filter(
+        (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+      ).length === 0
+    ) {
+      return (
+        <div className="text-center">
+          คุณยังไม่มีการจองที่รอการยืนยันจากคุณในขณะนี้
+        </div>
+      );
+    } else {
+      return bookpost
+        .filter(
+          (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+        )
+        .map((book, index) => {
+          if (book.check == null) {
+            this.setState({
+              activeItem: "postmenu",
+            });
+          } else {
+            return (
+              <Card key={index} className="mb-4" fluid>
+                <Card.Content>
+                  <Item.Group>
+                    <Item>
+                      <div className="mr-4 img-center-square">
+                        <Image src={book.photo} wrapped ui={false} />
+                      </div>
 
-                  <Item.Content>
-                    <Item.Header>
-                      {book.name.firstname} {book.name.lastname}
-                    </Item.Header>
-                    <Item.Description>{book.title}</Item.Description>
-                    <Item.Extra>{book.address}</Item.Extra>
+                      <Item.Content>
+                        <Item.Header>
+                          {book.name.firstname} {book.name.lastname}
+                        </Item.Header>
+                        <Item.Description>{book.title}</Item.Description>
+                        <Item.Extra>{book.address}</Item.Extra>
 
-                    <Divider />
+                        <Divider />
 
-                    <Item.Description>
-                      <p>
-                        วันที่จอง{" "}
-                        {moment(new Date(book.bookDate)).format("D MMMM YYYY")}
-                      </p>
-                      <p>
-                        ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
-                      </p>
-                    </Item.Description>
+                        <Item.Description>
+                          <p>
+                            วันที่จอง{" "}
+                            {moment(new Date(book.bookDate)).format(
+                              "D MMMM YYYY"
+                            )}
+                          </p>
+                          <p>
+                            ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                          </p>
+                        </Item.Description>
 
-                    <Item.Extra>
-                      {(() => {
-                        if (book.check.checkInRenter === false) {
-                          return (
-                            <Button
-                              compact
-                              className="btn-paku"
-                              onClick={this.handleCheckInOut.bind(
-                                this,
-                                book.check.id,
-                                true
-                              )}
-                            >
-                              <Button.Content visible>
-                                ยืนยันการเช็คอิน
-                              </Button.Content>
-                            </Button>
-                          );
-                        } else if (
-                          book.check.checkInRenter === true &&
-                          book.check.checkOutUser === false
-                        ) {
-                          return (
-                            <Button compact basic disabled>
-                              <Button.Content visible>
-                                ยืนยันแล้ว
-                              </Button.Content>
-                            </Button>
-                          );
-                        } else if (
-                          book.check.checkOutUser === true &&
-                          book.check.checkOutRenter === false
-                        ) {
-                          return (
-                            <Button
-                              compact
-                              className="btn-paku-light"
-                              onClick={this.handleCheckInOut.bind(
-                                this,
-                                book.check.id,
-                                false
-                              )}
-                            >
-                              <Button.Content visible>
-                                ยืนยันการเช็คเอาท์
-                              </Button.Content>
-                            </Button>
-                          );
-                        }
-                      })()}
-                    </Item.Extra>
-                  </Item.Content>
-                </Item>
-              </Item.Group>
-            </Card.Content>
-          </Card>
-        );
-      }
-    }, this);
+                        <Item.Extra>
+                          {(() => {
+                            if (
+                              book.check.checkInUser === true &&
+                              book.check.checkInRenter === false
+                            ) {
+                              return (
+                                <Button
+                                  compact
+                                  className="btn-paku"
+                                  onClick={this.handleCheckInOut.bind(
+                                    this,
+                                    book.check.id,
+                                    true
+                                  )}
+                                >
+                                  <Button.Content visible>
+                                    ยืนยันการเช็คอิน
+                                  </Button.Content>
+                                </Button>
+                              );
+                            } else if (
+                              book.check.checkInRenter === true &&
+                              book.check.checkOutUser === false
+                            ) {
+                              return (
+                                <Button compact basic disabled>
+                                  <Button.Content visible>
+                                    ยืนยันแล้ว
+                                  </Button.Content>
+                                </Button>
+                              );
+                            } else if (
+                              book.check.checkOutUser === true &&
+                              book.check.checkOutRenter === false
+                            ) {
+                              return (
+                                <Button
+                                  compact
+                                  className="btn-paku-light"
+                                  onClick={this.handleCheckInOut.bind(
+                                    this,
+                                    book.check.id,
+                                    false
+                                  )}
+                                >
+                                  <Button.Content visible>
+                                    ยืนยันการเช็คเอาท์
+                                  </Button.Content>
+                                </Button>
+                              );
+                            }
+                          })()}
+                        </Item.Extra>
+                      </Item.Content>
+                    </Item>
+                  </Item.Group>
+                </Card.Content>
+              </Card>
+            );
+          }
+        }, this);
+    }
   };
 
   showCompleteList = () => {
-    return this.state.bookuser.map((book, index) => {
-      if (book.statusBook === 0 || book.check.checkOutStatus === true)
-        return (
-          <Card key={index} className="mb-4" fluid>
-            <Card.Content>
-              <Item.Group>
-                <Item>
-                  <div className="mr-4 img-center-square">
-                    <Image src={book.photos[0]} wrapped ui={false} />
-                  </div>
+    if (
+      this.state.bookuser.filter(
+        (val) => val.statusBook === 0 || val.check.checkOutStatus === true
+      ).length === 0
+    ) {
+      return <div className="text-center">คุณยังไม่มีการจองที่เสร็จสิ้น</div>;
+    } else {
+      return this.state.bookuser.map((book, index) => {
+        if (book.statusBook === 0 || book.check.checkOutStatus === true)
+          return (
+            <Card key={index} className="mb-4" fluid>
+              <Card.Content>
+                <Item.Group>
+                  <Item>
+                    <div className="mr-4 img-center-square">
+                      <Image src={book.photos[0]} wrapped ui={false} />
+                    </div>
 
-                  <Item.Content>
-                    <Item.Header href={`/post/${book.idPost}`}>
-                      {book.title}
-                    </Item.Header>
-                    <Item.Description>{book.address}</Item.Description>
+                    <Item.Content>
+                      <Item.Header href={`/post/${book.idPost}`}>
+                        {book.title}
+                      </Item.Header>
+                      <Item.Description>{book.address}</Item.Description>
 
-                    <Divider />
+                      <Divider />
 
-                    <Item.Description>
-                      <p>
-                        วันที่จองเมื่อ{" "}
-                        {moment(new Date(book.bookDate)).format("D MMMM YYYY")}
-                      </p>
-                      <p>
-                        ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
-                      </p>
-                    </Item.Description>
+                      <Item.Description>
+                        <p>
+                          วันที่จองเมื่อ{" "}
+                          {moment(new Date(book.bookDate)).format(
+                            "D MMMM YYYY"
+                          )}
+                        </p>
+                        <p>
+                          ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                        </p>
+                      </Item.Description>
 
-                    {(() => {
-                      if (book.statusBook === 0) {
-                        return <Item.Meta>ยกเลิกแล้ว</Item.Meta>;
-                      } else if (book.check.checkOutStatus === true) {
-                        return <Item.Meta>ทำรายการสำเร็จ</Item.Meta>;
-                      }
-                    })()}
-                  </Item.Content>
-                </Item>
-              </Item.Group>
-            </Card.Content>
-          </Card>
-        );
-    });
+                      {(() => {
+                        if (book.statusBook === 0) {
+                          return <Item.Meta>ยกเลิกแล้ว</Item.Meta>;
+                        } else if (book.check.checkOutStatus === true) {
+                          return <Item.Meta>ทำรายการสำเร็จ</Item.Meta>;
+                        }
+                      })()}
+                    </Item.Content>
+                  </Item>
+                </Item.Group>
+              </Card.Content>
+            </Card>
+          );
+      });
+    }
   };
 
   render() {
