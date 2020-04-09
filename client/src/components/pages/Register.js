@@ -83,7 +83,11 @@ class Register extends Component {
     document.title = "🐤 register";
     document.body.classList.add("Background-Brown");
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
+      if (this.props.auth.user.status === 0) {
+        this.props.history.push("/");
+      } else if (this.props.auth.user.status === 1) {
+        this.props.history.push("/admin");
+      }
     }
   }
 
@@ -91,6 +95,10 @@ class Register extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Brown");
   }
 
   onSubmit = e => {

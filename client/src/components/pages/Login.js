@@ -71,11 +71,14 @@ class Login extends Component {
       } else if (nextProps.auth.user.status === 1) {
         this.props.history.push("/admin");
       }
-      document.body.classList.remove("Background-Brown");
     }
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Brown");
   }
 
   handleChange = (input) => (e) => {
