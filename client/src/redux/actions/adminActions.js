@@ -23,7 +23,7 @@ export const getUsers = () => dispatch => {
         })
         .catch((err) => {
             dispatch({
-                tpye: GET_USERS,
+                type: GET_USERS,
                 payload: null
             })
         })
