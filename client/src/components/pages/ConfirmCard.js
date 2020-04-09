@@ -36,6 +36,15 @@ class ConfirmCard extends Component {
     };
 
     this.validator = new SimpleReactValidator({
+      validators: {
+        imgerror: {
+          // name the rule
+          message: ":values",
+          rule: (val, params, validator) => params === null,
+          messageReplace: (message, params) =>
+            message.replace(":values", params) // optional
+        }
+      },
       element: (message) => (
         <div className="mb-2">
           <Transition animation="shake" duration={250} transitionOnMount={true}>
@@ -97,7 +106,7 @@ class ConfirmCard extends Component {
           ...this.state,
           errors: err,
         });
-        // this.validator.showMessages();
+        this.validator.showMessages();
       } else {
         if (file.size <= size) {
           this.setState({
@@ -113,7 +122,7 @@ class ConfirmCard extends Component {
             ...this.state,
             errors: err,
           });
-          // this.validator.showMessages();
+          this.validator.showMessages();
         }
       }
     }
@@ -159,7 +168,7 @@ class ConfirmCard extends Component {
   };
 
   onSubmit = (e) => {
-    if (this.validator.allValid()) {
+    if (this.validator.fieldValid("เลขบัตรประชาชน") && this.validator.fieldValid("เลขหลังบัตรประชาชน")) {
       e.preventDefault();
       const cardUser = {
         idCard: this.state.idCard,
@@ -179,12 +188,13 @@ class ConfirmCard extends Component {
   handleOpenModal = () => this.setState({ modalOpen: true });
 
   render() {
+    let errors = this.state.errors;
     let cardfield;
     let userfield;
 
     if (this.state.cardfiletemp.name != null) {
       cardfield = (
-        <Form.Field className="text-left">
+        <Form.Field className="text-left mt-3 mb-0">
           <Input iconPosition="left" disabled fluid>
             <Icon name="id card" />
             <input type="text" value={this.state.cardfiletemp.name} />
@@ -195,7 +205,7 @@ class ConfirmCard extends Component {
 
     if (this.state.userfiletemp.name != null) {
       userfield = (
-        <Form.Field className="text-left">
+        <Form.Field className="text-left mt-3 mb-0">
           <Input iconPosition="left" disabled fluid>
             <Icon name="photo" />
             <input type="text" value={this.state.userfiletemp.name} />
@@ -270,7 +280,7 @@ class ConfirmCard extends Component {
                   <Form.Field className="text-center mt-3 mb-0">
                     <Button
                       fluid
-                      className="btn-paku-light mb-3"
+                      className="btn-paku-light"
                       content=""
                       onClick={() => this.fileInputRef1.current.click()}
                     >
@@ -288,7 +298,7 @@ class ConfirmCard extends Component {
                   <Form.Field className="text-center mt-3 mb-0">
                     <Button
                       fluid
-                      className="btn-paku-light mb-3"
+                      className="btn-paku-light"
                       content=""
                       onClick={() => this.fileInputRef2.current.click()}
                     >
@@ -305,7 +315,13 @@ class ConfirmCard extends Component {
                   </Form.Field>
                 </Form.Group>
 
-                <div className="d-flex justify-content-end">
+                {this.validator.message(
+                  "err",
+                  errors.image,
+                  `imgerror:${errors.image}`
+                )}
+
+                <div className="mt-3 d-flex justify-content-end">
                   <Button
                     onClick={this.onSubmit}
                     disabled={this.state.statusTemp}
