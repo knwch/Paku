@@ -11,6 +11,10 @@ class Home extends Component {
     document.body.classList.add("Background-Yellow");
   }
 
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Yellow");
+  }
+
   // state = {
   //   modalLogout: false
   // }
