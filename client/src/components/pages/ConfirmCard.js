@@ -8,12 +8,15 @@ import {
   Icon,
   Header,
   Modal,
-  Input
+  Input,
+  Transition,
+  Label,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { storage } from "../../config/firebase-config";
 import { addIDcard, getIDcard } from "../../redux/actions/profileActions";
+import SimpleReactValidator from "simple-react-validator";
 import NavMenu from "../NavMenu";
 import Footer from "../Footer";
 
@@ -29,8 +32,36 @@ class ConfirmCard extends Component {
       userfiletemp: "",
       modalOpen: false,
       statusTemp: true,
-      errors: {}
+      errors: {},
     };
+
+    this.validator = new SimpleReactValidator({
+      validators: {
+        imgerror: {
+          // name the rule
+          message: ":values",
+          rule: (val, params, validator) => params === null,
+          messageReplace: (message, params) =>
+            message.replace(":values", params) // optional
+        }
+      },
+      element: (message) => (
+        <div className="mb-2">
+          <Transition animation="shake" duration={250} transitionOnMount={true}>
+            <Label basic color="red" pointing>
+              {message}
+            </Label>
+          </Transition>
+          <br />
+        </div>
+      ),
+      messages: {
+        required: "โปรดระบุ:attribute",
+        min: ":attributeต้องมีความยาว :min ตัวอักษร",
+        alpha_num: "โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น",
+        integer: "โปรดระบุเฉพาะตัวเลขเท่านั้น",
+      },
+    });
   }
 
   fileInputRef1 = React.createRef();
@@ -41,26 +72,27 @@ class ConfirmCard extends Component {
     this.props.getIDcard();
   };
 
-  componentWillReceiveProps = nextProps => {
+  componentWillReceiveProps = (nextProps) => {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (nextProps.profile.idcard.Card.confirm === true) {
-      this.props.history.push("/");
-    } else if (
-      nextProps.profile.idcard.Card.idCard !== 0 &&
-      nextProps.profile.idcard.Card.confirm === false
-    ) {
-      this.handleOpenModal();
-    }
+    if (nextProps.profile.idcard != null)
+      if (nextProps.profile.idcard.Card.confirm === true) {
+        this.props.history.push("/");
+      } else if (
+        nextProps.profile.idcard.Card.idCard !== 0 &&
+        nextProps.profile.idcard.Card.confirm === false
+      ) {
+        this.handleOpenModal();
+      }
   };
 
-  handleChange = input => e => {
+  handleChange = (input) => (e) => {
     this.setState({ [input]: e.target.value });
   };
 
-  fileChange = input => e => {
+  fileChange = (input) => (e) => {
     // console.log(e.target.files[0])
     if (typeof e.target.files[0] !== "undefined") {
       let file = e.target.files[0];
@@ -68,18 +100,18 @@ class ConfirmCard extends Component {
       const types = ["image/png", "image/jpeg", "image/jpg"];
       const size = 1024000;
       // console.log(file.size);
-      if (types.every(type => file.type !== type)) {
+      if (types.every((type) => file.type !== type)) {
         err = { image: "ไฟล์ไม่รองรับ" };
         this.setState({
           ...this.state,
-          errors: err
+          errors: err,
         });
-        // this.validator.showMessages();
+        this.validator.showMessages();
       } else {
         if (file.size <= size) {
           this.setState({
             [input]: file,
-            statusTemp: true
+            statusTemp: true,
           });
           this.handleUploadCard(e, input, file);
           // this.handleOpenModal();
@@ -88,9 +120,9 @@ class ConfirmCard extends Component {
           // console.log(err);
           this.setState({
             ...this.state,
-            errors: err
+            errors: err,
           });
-          // this.validator.showMessages();
+          this.validator.showMessages();
         }
       }
     }
@@ -105,8 +137,8 @@ class ConfirmCard extends Component {
 
     uploadImage.on(
       "state_changed",
-      snapshot => {},
-      error => {
+      (snapshot) => {},
+      (error) => {
         alert(error);
       },
       () => {
@@ -114,20 +146,20 @@ class ConfirmCard extends Component {
           .ref("idcard")
           .child(currentImageName)
           .getDownloadURL()
-          .then(url => {
+          .then((url) => {
             if (input === "cardfiletemp") {
               this.setState({
-                cardphoto: url
+                cardphoto: url,
               });
             }
             if (input === "userfiletemp") {
               this.setState({
-                userphoto: url
+                userphoto: url,
               });
             }
             if (this.state.cardphoto !== null && this.state.userphoto) {
               this.setState({
-                statusTemp: false
+                statusTemp: false,
               });
             }
           });
@@ -135,28 +167,34 @@ class ConfirmCard extends Component {
     );
   };
 
-  onSubmit = e => {
-    e.preventDefault();
-
-    const cardUser = {
-      idCard: this.state.idCard,
-      idCardURL: this.state.cardphoto,
-      idCardPerson: this.state.userphoto,
-      laser: this.state.laserno
-    };
-
-    this.props.addIDcard(cardUser);
+  onSubmit = (e) => {
+    if (this.validator.fieldValid("เลขบัตรประชาชน") && this.validator.fieldValid("เลขหลังบัตรประชาชน")) {
+      e.preventDefault();
+      const cardUser = {
+        idCard: this.state.idCard,
+        idCardURL: this.state.cardphoto,
+        idCardPerson: this.state.userphoto,
+        laser: this.state.laserno,
+      };
+      this.props.addIDcard(cardUser);
+    } else {
+      this.validator.showMessages();
+      // rerender to show messages for the first time
+      // you can use the autoForceUpdate option to do this automatically`
+      this.forceUpdate();
+    }
   };
 
   handleOpenModal = () => this.setState({ modalOpen: true });
 
   render() {
+    let errors = this.state.errors;
     let cardfield;
     let userfield;
 
     if (this.state.cardfiletemp.name != null) {
       cardfield = (
-        <Form.Field className="text-left">
+        <Form.Field className="text-left mt-3 mb-0">
           <Input iconPosition="left" disabled fluid>
             <Icon name="id card" />
             <input type="text" value={this.state.cardfiletemp.name} />
@@ -167,7 +205,7 @@ class ConfirmCard extends Component {
 
     if (this.state.userfiletemp.name != null) {
       userfield = (
-        <Form.Field className="text-left">
+        <Form.Field className="text-left mt-3 mb-0">
           <Input iconPosition="left" disabled fluid>
             <Icon name="photo" />
             <input type="text" value={this.state.userfiletemp.name} />
@@ -194,7 +232,7 @@ class ConfirmCard extends Component {
                   คุณสามารถดูตัวอย่างการอัปโหลดได้ที่นี่
                 </div>
 
-                <Form.Field className="text-left">
+                <Form.Field className="text-left mt-3 mb-0">
                   <Input
                     fluid
                     placeholder="เลขบัตรประชาชน (ไม่ต้องเติมขีดหรือเว้นว่าง)"
@@ -208,8 +246,13 @@ class ConfirmCard extends Component {
                     />
                   </Input>
                 </Form.Field>
+                {this.validator.message(
+                  "เลขบัตรประชาชน",
+                  this.state.idCard,
+                  "required|integer|min:13,string"
+                )}
 
-                <Form.Field className="text-left">
+                <Form.Field className="text-left mt-3 mb-0">
                   <Input
                     fluid
                     placeholder="เลขหลังบัตรประชาชน (ไม่ต้องเติมขีดหรือเว้นว่าง)"
@@ -223,16 +266,21 @@ class ConfirmCard extends Component {
                     />
                   </Input>
                 </Form.Field>
+                {this.validator.message(
+                  "เลขหลังบัตรประชาชน",
+                  this.state.laserno,
+                  "required|alpha_num|min:12"
+                )}
 
                 {cardfield}
 
                 {userfield}
 
                 <Form.Group widths="equal">
-                  <Form.Field className="text-center">
+                  <Form.Field className="text-center mt-3 mb-0">
                     <Button
                       fluid
-                      className="btn-paku-light mb-3"
+                      className="btn-paku-light"
                       content=""
                       onClick={() => this.fileInputRef1.current.click()}
                     >
@@ -247,10 +295,10 @@ class ConfirmCard extends Component {
                       onChange={this.fileChange("cardfiletemp")}
                     />
                   </Form.Field>
-                  <Form.Field className="text-center">
+                  <Form.Field className="text-center mt-3 mb-0">
                     <Button
                       fluid
-                      className="btn-paku-light mb-3"
+                      className="btn-paku-light"
                       content=""
                       onClick={() => this.fileInputRef2.current.click()}
                     >
@@ -267,7 +315,13 @@ class ConfirmCard extends Component {
                   </Form.Field>
                 </Form.Group>
 
-                <div className="d-flex justify-content-end">
+                {this.validator.message(
+                  "err",
+                  errors.image,
+                  `imgerror:${errors.image}`
+                )}
+
+                <div className="mt-3 d-flex justify-content-end">
                   <Button
                     onClick={this.onSubmit}
                     disabled={this.state.statusTemp}
@@ -312,10 +366,10 @@ class ConfirmCard extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
   profile: state.profile,
-  errors: state.errors
+  errors: state.errors,
 });
 
 export default connect(mapStateToProps, { addIDcard, getIDcard })(

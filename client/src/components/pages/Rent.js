@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { getPosts } from "../../redux/actions/postActions";
 import { Grid, Responsive, Container, Icon, Popup, Modal, Loader } from "semantic-ui-react";
+import SearchBox from "../SearchBox";
 
 // // Return map bounds based on list of places
 // const getMapBounds = (map, maps, places) => {
@@ -103,7 +104,8 @@ class Rent extends Component {
       return (
         <Responsive>
           <NavMenu />
-          <Container fluid>
+          <SearchBox />
+          <Container className="mt-4" fluid>
             <Grid>
               <Grid.Column mobile={16} tablet={10} computer={11}>
                 <div style={{ height: "100vh", width: "100%" }}>

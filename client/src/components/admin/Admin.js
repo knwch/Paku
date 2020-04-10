@@ -10,6 +10,7 @@ import {
   Loader,
 } from "semantic-ui-react";
 import { connect } from "react-redux";
+import _ from "lodash";
 import { logoutUser } from "../../redux/actions/authActions";
 import { getUsers, delUser } from "../../redux/actions/adminActions";
 import { clearCurrentProfile } from "../../redux/actions/profileActions";
@@ -23,8 +24,11 @@ class Admin extends Component {
     this.state = {
       users: [],
       activeItem: "usermenu",
+      activeSubItem: "all",
       modalDeleteOpen: false,
       temp_userdata: null,
+      column: null,
+      direction: null,
       errors: {},
     };
   }
@@ -46,7 +50,7 @@ class Admin extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (users !== null) {
+    if (users.length !== 0) {
       this.setState({
         users: users,
       });
@@ -60,21 +64,102 @@ class Admin extends Component {
     window.location.href = "/";
   }
 
+  handleSort = (clickedColumn) => () => {
+    const { column, users, direction } = this.state;
+
+    if (column !== clickedColumn) {
+      this.setState({
+        column: clickedColumn,
+        users: _.sortBy(users, [clickedColumn]),
+        direction: "ascending",
+      });
+
+      return;
+    }
+
+    this.setState({
+      users: users.reverse(),
+      direction: direction === "ascending" ? "descending" : "ascending",
+    });
+  };
+
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  handleSubItemClick = (e, { name }) => this.setState({ activeSubItem: name });
 
   deleteUser = (userid) => {
     this.setState({ modalDeleteOpen: false });
     this.props.delUser(userid);
   };
 
-  showUserTable = () => {
+  showRow = (user, index) => {
     return (
-      <Table color="red" celled selectable>
+      <Table.Row key={index}>
+        <Table.Cell>
+          <Image src={user.photo_user} avatar /> {user.username}
+        </Table.Cell>
+        <Table.Cell>
+          {user.name.firstname} {user.name.lastname}
+        </Table.Cell>
+        <Table.Cell>{user.email}</Table.Cell>
+        <Table.Cell>{user.phone}</Table.Cell>
+        {(() => {
+          if (user.Card.idCard !== 0 && user.Card.confirm === false) {
+            return <Table.Cell>Waiting</Table.Cell>;
+          } else if (user.Card.confirm === true) {
+            return <Table.Cell>Yes</Table.Cell>;
+          } else if (user.Card.idCard === 0 && user.Card.confirm === false) {
+            return <Table.Cell>No</Table.Cell>;
+          }
+        })()}
+        <Table.Cell>
+          {" "}
+          {moment(new Date(user.created)).locale("en").format("ll")}
+        </Table.Cell>
+        <Table.Cell collapsing>
+          <Button
+            onClick={() => {
+              this.setState({
+                temp_userdata: user,
+                modalDeleteOpen: true,
+              });
+            }}
+            compact
+            inverted
+            color="red"
+            size="mini"
+          >
+            Delete
+          </Button>
+        </Table.Cell>
+      </Table.Row>
+    );
+  };
+
+  showUserTable = () => {
+    const { column, direction } = this.state;
+    return (
+      <Table color="red" sortable celled selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Username</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Email</Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === "username" ? direction : null}
+              onClick={this.handleSort("username")}
+            >
+              Username
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === "name" ? direction : null}
+              onClick={this.handleSort("name")}
+            >
+              Name
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === "email" ? direction : null}
+              onClick={this.handleSort("email")}
+            >
+              Email
+            </Table.HeaderCell>
             <Table.HeaderCell>Phone</Table.HeaderCell>
             <Table.HeaderCell>Verified</Table.HeaderCell>
             <Table.HeaderCell>Registered</Table.HeaderCell>
@@ -82,62 +167,78 @@ class Admin extends Component {
           </Table.Row>
         </Table.Header>
 
-        <Table.Body>
-          {this.state.users.map((user, index) => {
+        {(() => {
+          if (this.state.activeSubItem === "all") {
             return (
-              <Table.Row key={index}>
-                <Table.Cell>
-                  <Image src={user.photo_user} avatar /> {user.username}
-                </Table.Cell>
-                <Table.Cell>
-                  {user.name.firstname} {user.name.lastname}
-                </Table.Cell>
-                <Table.Cell>{user.email}</Table.Cell>
-                <Table.Cell>{user.phone}</Table.Cell>
-                {(() => {
-                  if (user.Card.idCard !== 0 && user.Card.confirm === false) {
-                    return <Table.Cell>Waiting</Table.Cell>;
-                  } else if (user.Card.confirm === true) {
-                    return <Table.Cell>Yes</Table.Cell>;
-                  } else if (user.Card.confirm === false) {
-                    return <Table.Cell>No</Table.Cell>;
-                  }
-                })()}
-                <Table.Cell>
-                  {" "}
-                  {moment(new Date(user.created)).locale("en").format("ll")}
-                </Table.Cell>
-                <Table.Cell collapsing>
-                  <Button
-                    onClick={() => {
-                      this.setState({
-                        temp_userdata: user,
-                        modalDeleteOpen: true,
-                      });
-                    }}
-                    compact
-                    inverted
-                    color="red"
-                    size="mini"
-                  >
-                    Delete
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
+              <Table.Body>
+                {this.state.users.map((user, index) => {
+                  return this.showRow(user, index);
+                })}
+              </Table.Body>
             );
-          })}
-        </Table.Body>
+          } else if (this.state.activeSubItem === "verified") {
+            return (
+              <Table.Body>
+                {this.state.users.map((user, index) => {
+                  if (user.Card.confirm === true)
+                    return this.showRow(user, index);
+                })}
+              </Table.Body>
+            );
+          } else if (this.state.activeSubItem === "waitverify") {
+            return (
+              <Table.Body>
+                {this.state.users.map((user, index) => {
+                  if (user.Card.idCard !== 0 && user.Card.confirm === false)
+                    return this.showRow(user, index);
+                })}
+              </Table.Body>
+            );
+          } else if (this.state.activeSubItem === "notverify") {
+            return (
+              <Table.Body>
+                {this.state.users.map((user, index) => {
+                  if (user.Card.idCard === 0 && user.Card.confirm === false)
+                    return this.showRow(user, index);
+                })}
+              </Table.Body>
+            );
+          }
+        })()}
+
+        {/* <Table.Footer>
+          <Table.Row>
+            <Table.HeaderCell>Total {this.state.users.length} users</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Footer> */}
       </Table>
     );
   };
 
   showVerifyTable = () => {
+    const { column, direction } = this.state;
     return (
-      <Table color="violet" celled selectable>
+      <Table color="violet" sortable celled selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Username</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === "username" ? direction : null}
+              onClick={this.handleSort("username")}
+            >
+              Username
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === "name" ? direction : null}
+              onClick={this.handleSort("name")}
+            >
+              Name
+            </Table.HeaderCell>
             <Table.HeaderCell>Identification</Table.HeaderCell>
             <Table.HeaderCell>Registered</Table.HeaderCell>
             <Table.HeaderCell>Verified</Table.HeaderCell>
@@ -261,7 +362,7 @@ class Admin extends Component {
               active={this.state.activeItem === "verifymenu"}
               onClick={this.handleItemClick}
             >
-              การยืนยันตัวตน
+              รอการยืนยันตัวตน
             </Menu.Item>
 
             <Menu.Menu position="right">
@@ -271,11 +372,44 @@ class Admin extends Component {
             </Menu.Menu>
           </Menu>
 
+          {(() => {
+            if (this.state.activeItem === "usermenu") {
+              return (
+                <Menu className="pt-2" pointing secondary>
+                  <Menu.Item
+                    content="ทั้งหมด"
+                    name="all"
+                    active={this.state.activeSubItem === "all"}
+                    onClick={this.handleSubItemClick}
+                  />
+                  <Menu.Item
+                    content="ยืนยันแล้ว"
+                    name="verified"
+                    active={this.state.activeSubItem === "verified"}
+                    onClick={this.handleSubItemClick}
+                  />
+                  <Menu.Item
+                    content="รอการยืนยัน"
+                    name="waitverify"
+                    active={this.state.activeSubItem === "waitverify"}
+                    onClick={this.handleSubItemClick}
+                  />
+                  <Menu.Item
+                    content="ไม่ยืนยัน"
+                    name="notverify"
+                    active={this.state.activeSubItem === "notverify"}
+                    onClick={this.handleSubItemClick}
+                  />
+                </Menu>
+              );
+            }
+          })()}
+
+          {console.log(this.state)}
+
           {rendererList}
 
           {modalPopup}
-
-          {console.log(this.state.users)}
         </Responsive>
       );
     }
