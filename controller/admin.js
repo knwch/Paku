@@ -41,7 +41,6 @@ exports.userById = async (req, res) => {
     if (auth) {
         return res.status(401).json(auth)
     }
-    console.log('userById')
 
     try {
         const user = await User.findById(id)
