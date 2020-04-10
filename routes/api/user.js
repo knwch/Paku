@@ -30,7 +30,7 @@ router.post('/register', (req, res) => {
 
     // Check Validation
     if (!isValid) {
-        // console.log(errors);
+        // console.log(ลชบ);
         return res.status(400).json(errors);
     }
 
@@ -73,13 +73,13 @@ router.post('/register', (req, res) => {
                             // console.log(user);
                         })
                         .catch((err) => {
-                            console.log(err);
+                            res.sendStatus(500)
                         });
                 })
             })
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         })
 });
 
@@ -131,7 +131,7 @@ router.post('/login', (req, res) => {
             });
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         });
 });
 
@@ -157,7 +157,7 @@ router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, 
             })
         })
         .catch((err) => {
-            res.status(400).json({ idCard: 'User not found'})
+            res.status(404).json({ idCard: 'User not found'})
         });
 });
 
@@ -170,7 +170,7 @@ router.get('/infoCard', passport.authenticate('jwt', { session: false }), (req, 
             res.json({ Card: user.Card });
         })
         .catch((err) => {
-            res.json({ idCard: 'User not found'})
+            res.status(404).json({ idCard: 'User not found'})
         })
 });
 

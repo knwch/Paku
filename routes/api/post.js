@@ -31,7 +31,7 @@ router.get('/allPost', (req, res) => {
             res.status(200).json(post);
         })
         .catch((err) => {
-            res.status(404).json(err);
+            res.sendStatus(500)
         })
 });
 
@@ -260,7 +260,7 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
     Post.findById(req.params.id)
         .then((post) => {
             if (req.user.id != post.user) {
-                return res.status(400).json({ post: 'User not authorized'})
+                return res.status(401).json({ post: 'User not authorized'})
             }
 
             if (req.body.available === post.available) {

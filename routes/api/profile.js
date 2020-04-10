@@ -41,7 +41,7 @@ router.get('/alluser', (req, res) => {
             res.json(profile);
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         })
 });
 
@@ -81,7 +81,7 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
             res.json({ success: true })
         )
         .catch((err) => {
-            console.log(err)
+            res.status(404).json({ profile: 'No User found with that ID'})
         })
     )
 });
@@ -101,7 +101,6 @@ router.get('/handle/:id', (req, res) => {
             res.json(profile)
         })
         .catch((err) => {
-            console.log(err);
             res.state(404).json({ profile: 'No User found with that ID'});
         });
 });
@@ -125,7 +124,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
                     res.json(user)
                 })
                 .catch((err) => {
-                    res.json({ image : "Upload fail" })
+                    res.status(400).json({ image : "Upload fail" })
                 })
         })
         .catch((err) => {

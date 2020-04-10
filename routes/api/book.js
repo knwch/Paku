@@ -28,7 +28,7 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
     }
 
     if (req.body.renter === req.user.id) {
-        return res.status(400).json({ Book: 'User Only'})
+        return res.status(401).json({ Book: 'User Only'})
     }
     
     Book.findOne({ where: { bookDate: req.body.bookDate, idPost: req.params.id, statusBook: 1,
@@ -66,7 +66,7 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
     }})
         .then((book) => {
             if (book) {
-                return res.status(401).json({ book: 'Booking Errors'})
+                return res.status(400).json({ book: 'Booking Errors'})
             }
             Book.create(body)
                 .then((book) => {
@@ -77,16 +77,16 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
                     }
                     Check.create(check)
                         .then((check) => {
-                            res.json(book)
+                            res.status(200).json(book)
                         })
                 })
                 .catch((err) => {
                     console.log(err)
-                    res.json({ book: 'Booking Errors'})
+                    res.status(400).json({ book: 'Booking Errors'})
                 })
         })
         .catch((err) => {
-            res.json({ book: 'Booking Errors'})
+            res.sendStatus(500)
         })
 });
 
@@ -98,13 +98,12 @@ router.post('/cancel/:postId/:bookId', passport.authenticate('jwt', { session: f
     Book.update(status, { where: {idPost: req.params.postId, id: req.params.bookId, idUser: req.user.id, statusBook: 1} }) // returning: true it' not working mysql
         .then((book) => {
             if (book[0] === 0) {
-                return res.status(401).json({ Book: 'Cancel Booking fail or Booking Cancel'})
+                return res.status(400).json({ Book: 'Cancel Booking fail or Booking Cancel'})
             }
-            res.json(book)
+            res.status(200).json(book)
         })
         .catch((err) => {
-            console.log(err)
-            res.json({ Server: 'Server errors'})
+            res.sendStatus(500)
         })
 }); 
 
@@ -115,12 +114,12 @@ router.get('/post/:id', (req, res) => {
     Book.findAll({ where: { idPost: req.params.id }})
         .then((book) => {
             if (book.length === 0) {
-                return res.json({ Book: 'No have booking'})
+                return res.status(200).json({ Book: 'No have booking'})
             }
-            res.json(book)
+            res.status(200).json(book)
         })
         .catch((err) => {
-            res.json({ Server: 'Server errors'})
+            res.sendStatus(500)
         })
 });
 
@@ -131,12 +130,12 @@ router.get('/user/:id', passport.authenticate('jwt', { session: false }), (req, 
     Book.findAll({ where: { idUser: req.params.id }, include: [{ model: Check }] })
         .then((book) => {
             if (book.length === 0) {
-                return res.json({ Book: 'No have booking'})
+                return res.status(200).json({ Book: 'No have booking'})
             }
-            res.json(book)
+            res.status(200).json(book)
         })
         .catch((err) => {
-            res.json({ Server: 'Server errors'})
+            res.sendStatus(500)
         })
 });
 
@@ -147,12 +146,12 @@ router.get('/:id',(req, res) => {
     Book.findOne({ where: { id: req.params.id }, include: [{ model: Check }]})
         .then((book) => {
             if (!book) {
-                return res.json({ Book: 'Book not found'})
+                return res.status(404).json({ Book: 'Book not found'})
             }
-            res.json(book)
+            res.status(200).json(book)
         })
         .catch((err) => {
-            res.json({ Server: 'Server errors'})
+            res.sendStatus(500)
         })
 });
 
@@ -184,12 +183,12 @@ router.post('/check/:id', passport.authenticate('jwt', { session: false }), (req
                         Check.update(temp ,{ where: { id: req.params.id }})
                             .then((check) => {
                                 if (check[0] === 0) {
-                                    return res.status(401).json({ Check: 'Error'})
+                                    return res.status(400).json({ Check: 'Error'})
                                 }
-                                res.json(check)
+                                res.status(200).json(check)
                             })
                     } else {
-                        res.json({ Check: true })
+                        res.status(200).json({ Check: true })
                     }
                 } else {
                     if (temp.checkOutStatus === false) {
@@ -200,12 +199,12 @@ router.post('/check/:id', passport.authenticate('jwt', { session: false }), (req
                         Check.update(temp ,{ where: { id: req.params.id }})
                             .then((check) => {
                                 if (check[0] === 0) {
-                                    return res.status(401).json({ Check: 'Error'})
+                                    return res.status(400).json({ Check: 'Error'})
                                 }
-                                res.json(check)
+                                res.status(200).json(check)
                             })
                     } else {
-                        res.json({ Check: true })
+                        res.status(200).json({ Check: true })
                     }
                 }
             } else {
@@ -218,12 +217,12 @@ router.post('/check/:id', passport.authenticate('jwt', { session: false }), (req
                         Check.update(temp ,{ where: { id: req.params.id }})
                             .then((check) => {
                                 if (check[0] === 0) {
-                                    return res.status(401).json({ Check: 'Error'})
+                                    return res.status(400).json({ Check: 'Error'})
                                 }
-                                res.json(check)
+                                res.status(200).json(check)
                             })
                     } else {
-                        res.json({ Check: true })
+                        res.status(200).json({ Check: true })
                     }
                 } else {
                     if (temp.checkOutStatus === false) {
@@ -234,18 +233,18 @@ router.post('/check/:id', passport.authenticate('jwt', { session: false }), (req
                         Check.update(temp ,{ where: { id: req.params.id }})
                             .then((check) => {
                                 if (check[0] === 0) {
-                                    return res.status(401).json({ Check: 'Error'})
+                                    return res.status(400).json({ Check: 'Error'})
                                 }
-                                res.json(check)
+                                res.status(200).json(check)
                             })
                     } else {
-                        res.json({ Check: true })
+                        res.status(200).json({ Check: true })
                     }
                 }
             }
         })
         .catch((err) => {
-            res.json({ Check: 'No Check found with that ID'})
+            res.status(404).json({ Check: 'No Check found with that ID'})
         })
 })
 
