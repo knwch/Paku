@@ -10,7 +10,8 @@ import {
   DELETE_POST,
   AVAILABLE_POST,
   SET_POST_LOADING,
-  SET_POST_SUCCESS
+  SET_POST_SUCCESS,
+  SEARCH_POST
 } from './types';
 
 // Add Post
@@ -191,6 +192,24 @@ export const availablePost = (availableData, idPost) => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
+      })
+    })
+}
+
+// Search post 
+export const searchPost = (search) => dispatch => {
+  dispatch(setPostLoading())
+  axios.get(`/api/posts/search?q=${search}`)  
+    .then((res) => {
+      dispatch({
+        type: GET_POSTS,
+        payload: res.data
+      })
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_POSTS,
+        payload: null
       })
     })
 }
