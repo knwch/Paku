@@ -1,7 +1,7 @@
 const Post = require('../models/post')
 
 exports.search = async (req, res) => {
-    const query = req.query.search
+    const query = req.query.q
     if (query) {
         console.log(query)
         const post = await Post.find({
@@ -11,9 +11,14 @@ exports.search = async (req, res) => {
                 },
                 {
                     'detail.nearby': { $regex: '.*' + query + '.*', $options: 'i' }        
+                },
+                {
+                    'location.address': { $regex: '.*' + query + '.*', $options: 'i' }
                 }
             ]
-        }).select({ comments: 0, available: 0, detail: 0, created: 0, __v: 0})
+        })
+        .select({ comments: 0, available: 0, detail: 0, created: 0, __v: 0})
+        .sort({ 'rate.rating': -1 })
         if (post.length === 0) {
             return res.status(200).json({ post: 'No have post' })
         }
