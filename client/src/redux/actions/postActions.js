@@ -198,7 +198,7 @@ export const availablePost = (availableData, idPost) => dispatch => {
 
 // Search post 
 export const searchPost = (search) => dispatch => {
-  dispatch(setPostLoading())
+  // dispatch(setPostLoading())
   axios.get(`/api/posts/search?q=${search}`)  
     .then((res) => {
       dispatch({
