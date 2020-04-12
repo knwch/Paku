@@ -797,7 +797,7 @@ class Book extends Component {
                               <Comment.Avatar as="a" src={comment.photoUser} />
                               <Comment.Content>
                                 <Comment.Author as="a">
-                                  คุณลูกค้า
+                                  {comment.name.firstname}
                                 </Comment.Author>
                                 <Comment.Metadata>
                                   <span>
