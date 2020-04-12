@@ -23,7 +23,7 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests post system' }));
 // @desc    Get All posts 
 // @access  Public
 router.get('/allPost', (req, res) => {
-    Post.find()
+    Post.find({ available: true })
         .then((post) => {
             if (post.length === 0) {
                 return res.status(200).json({ post: 'No have post' });
@@ -284,4 +284,5 @@ router.get('/search?', search)
 // @desc    Get post recommend 
 // @access  Pubilc
 router.get('/recommend', recommend)
+
 module.exports = router
