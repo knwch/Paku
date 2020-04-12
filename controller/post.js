@@ -5,15 +5,22 @@ exports.search = async (req, res) => {
     if (query) {
         console.log(query)
         const post = await Post.find({
-            $or: [
+            $and: [
                 {
-                    title: { $regex: '.*' + query + '.*', $options: 'i' }
+                    $or: [
+                        {
+                            title: { $regex: '.*' + query + '.*', $options: 'i' }
+                        },
+                        {
+                            'detail.nearby': { $regex: '.*' + query + '.*', $options: 'i' }        
+                        },
+                        {
+                            'location.address': { $regex: '.*' + query + '.*', $options: 'i' }
+                        }
+                    ]
                 },
                 {
-                    'detail.nearby': { $regex: '.*' + query + '.*', $options: 'i' }        
-                },
-                {
-                    'location.address': { $regex: '.*' + query + '.*', $options: 'i' }
+                    available: true
                 }
             ]
         })
@@ -34,7 +41,14 @@ exports.search = async (req, res) => {
 
 exports.recommend = async (req, res) => {
     const posts = await Post.find({
-        'rate.rating': { $gte: 4 }
+        $and: [
+            {
+                'rate.rating': { $gte: 4 }
+            },
+            {
+                available: true
+            }
+        ]
     }).select({ comments: 0, available: 0, detail: 0, created: 0, __v: 0})
     if (posts.length === 0) {
         return res.status(200).json({ post: 'No have post' })
