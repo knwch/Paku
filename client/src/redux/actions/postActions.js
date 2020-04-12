@@ -202,13 +202,13 @@ export const searchPost = (search) => dispatch => {
   axios.get(`/api/posts/search?q=${search}`)  
     .then((res) => {
       dispatch({
-        type: GET_POSTS,
+        type: SEARCH_POST,
         payload: res.data
       })
     })
     .catch((err) => {
       dispatch({
-        type: GET_POSTS,
+        type: SEARCH_POST,
         payload: null
       })
     })
