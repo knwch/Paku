@@ -6,8 +6,16 @@ import NavMenu from "../NavMenu";
 import Footer from "../Footer";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { getPosts } from "../../redux/actions/postActions";
-import { Grid, Responsive, Container, Icon, Popup, Modal, Loader } from "semantic-ui-react";
+import { getPosts} from "../../redux/actions/postActions";
+import {
+  Grid,
+  Responsive,
+  Container,
+  Icon,
+  Popup,
+  Modal,
+  Loader,
+} from "semantic-ui-react";
 import SearchBox from "../SearchBox";
 
 // // Return map bounds based on list of places
@@ -57,7 +65,7 @@ class Rent extends Component {
     };
   }
 
-  componentWillMount() {
+  currentLocationRequest = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.setState((prevState) => ({
@@ -71,21 +79,26 @@ class Rent extends Component {
         }));
       });
     }
+  };
+
+  componentWillMount() {
+    this.props.getPosts();
+    this.currentLocationRequest();
   }
 
   componentDidMount() {
     document.title = "Paku - Rent";
-
-    this.props.getPosts();
   }
 
   componentWillReceiveProps(nextProps) {
     const posts = nextProps.post.posts;
 
-    if (posts.length !== 0) {
-      this.setState({
-        places: posts,
-      });
+    if (posts != null) {
+      if (posts.length !== 0) {
+        this.setState({
+          places: posts,
+        });
+      }
     }
   }
 
@@ -184,4 +197,6 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getPosts })(withRouter(Rent));
+export default connect(mapStateToProps, { getPosts })(
+  withRouter(Rent)
+);
