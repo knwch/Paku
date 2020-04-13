@@ -32,3 +32,4 @@ export const CONFIRM_USER = 'CONFIRM_USER';
 export const UNCONFIRM_USER = 'UNCONFIRM_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const ADMIN_LOADING = 'ADMIN_LOADING';
+export const GET_RECOMMEND = 'GET_RECOMMEND'
