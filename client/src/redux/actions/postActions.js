@@ -11,7 +11,8 @@ import {
   AVAILABLE_POST,
   SET_POST_LOADING,
   SET_POST_SUCCESS,
-  SEARCH_POST
+  SEARCH_POST,
+  GET_RECOMMEND
 } from './types';
 
 // Add Post
@@ -210,6 +211,24 @@ export const searchPost = (search) => dispatch => {
       dispatch({
         type: SEARCH_POST,
         payload: null
+      })
+    })
+}
+
+// Get recommend
+export const recommendPost = () => dispatch => {
+  dispatch(setPostLoading())
+  axios.get('/api/posts/recommend')
+    .then((res) => {
+      dispatch({
+        tpye: GET_RECOMMEND,
+        payload: res.data
+      })
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     })
 }
