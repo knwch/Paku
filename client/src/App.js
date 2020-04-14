@@ -77,7 +77,7 @@ class App extends Component {
               <AdminRoute exact path="/admin" component={Admin} />
               <AdminRoute exact path="/verifyuser" component={VerifyUser} />
               <Route path="*">
-                <Redirect path="/" />
+                <Redirect to="/" />
               </Route>
             </Switch>
           </div>
