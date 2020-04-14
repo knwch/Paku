@@ -221,7 +221,7 @@ export const recommendPost = () => dispatch => {
   axios.get('/api/posts/recommend')
     .then((res) => {
       dispatch({
-        tpye: GET_RECOMMEND,
+        type: GET_RECOMMEND,
         payload: res.data
       })
     })
