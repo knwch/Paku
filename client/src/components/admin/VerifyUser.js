@@ -95,8 +95,8 @@ class VerifyUser extends Component {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
-        <Grid columns={2}>
-          <Grid.Column>
+        <Grid columns={2} centered>
+          <Grid.Column textAlign="center" mobile={16} tablet={5} computer={5}>
             <Card fluid>
               <Card.Content>
                 <Card.Header>Identification card</Card.Header>
@@ -115,10 +115,10 @@ class VerifyUser extends Component {
                 src={this.state.user.photo_card.photoPerson}
                 wrapped
                 ui={false}
-              />
+              /> 
             </Card>
           </Grid.Column>
-          <Grid.Column textAlign="left">
+          <Grid.Column textAlign="left" mobile={16} tablet={6} computer={6}>
             <Card fluid>
               <Card.Content>
                 <Card.Header>Information</Card.Header>
