@@ -762,7 +762,7 @@ class Support extends Component {
       <List as="ol">
         <List.Item>
           <List.Content>
-            <List.Header className="mb-2">
+            <List.Header as="h4" className="mb-2">
               <div>การยืนยันตัวตน</div>
             </List.Header>
             <List.Header>
@@ -854,7 +854,7 @@ class Support extends Component {
 
         <List.Item className="mt-3">
           <List.Content>
-            <List.Header className="mb-2">
+            <List.Header as="h4" className="mb-2">
               <div>รู้ถึงสิ่งที่คาดหวัง</div>
             </List.Header>
             <List.Header>
@@ -1000,7 +1000,7 @@ class Support extends Component {
 
         <List.Item className="mt-3">
           <List.Content>
-            <List.Header className="mb-2">
+            <List.Header as="h4" className="mb-2">
               <div>ความเป็นธรรม</div>
             </List.Header>
             <List.Header>
