@@ -58,6 +58,10 @@
   color: white !important;
 }
 
+.Background-Brown .nav-color:hover {
+  font-weight: bold;
+}
+
 .map-responsive {
   overflow: hidden;
   padding-bottom: 100%;
