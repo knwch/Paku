@@ -23,7 +23,7 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests post system' }));
 // @desc    Get All posts 
 // @access  Public
 router.get('/allPost', (req, res) => {
-    Post.find({ available: true })
+    Post.find({ available: true }).sort({ created: -1 })
         .then((post) => {
             if (post.length === 0) {
                 return res.status(200).json({ post: 'No have post' });
