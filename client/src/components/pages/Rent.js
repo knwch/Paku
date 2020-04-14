@@ -6,7 +6,7 @@ import NavMenu from "../NavMenu";
 import Footer from "../Footer";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { getPosts} from "../../redux/actions/postActions";
+import { getPosts, recommendPost } from "../../redux/actions/postActions";
 import {
   Grid,
   Responsive,
@@ -15,6 +15,7 @@ import {
   Popup,
   Modal,
   Loader,
+  Header,
 } from "semantic-ui-react";
 import SearchBox from "../SearchBox";
 
@@ -55,6 +56,7 @@ class Rent extends Component {
     super(props);
     this.state = {
       places: [],
+      recommendset: [],
       location: {
         lat: 13.7563,
         lng: 100.5018,
@@ -83,6 +85,7 @@ class Rent extends Component {
 
   componentWillMount() {
     this.props.getPosts();
+    this.props.recommendPost();
     this.currentLocationRequest();
   }
 
@@ -92,11 +95,20 @@ class Rent extends Component {
 
   componentWillReceiveProps(nextProps) {
     const posts = nextProps.post.posts;
+    const recommendposts = nextProps.post.post_recommend;
 
     if (posts != null) {
       if (posts.length !== 0) {
         this.setState({
           places: posts,
+        });
+      }
+    }
+
+    if (recommendposts != null) {
+      if (recommendposts.length !== 0) {
+        this.setState({
+          recommendset: recommendposts,
         });
       }
     }
@@ -119,8 +131,8 @@ class Rent extends Component {
           <NavMenu />
           <SearchBox />
           <Container className="mt-4" fluid>
-            <Grid>
-              <Grid.Column mobile={16} tablet={10} computer={11}>
+            <Grid centered>
+              <Grid.Column mobile={16} tablet={10} computer={10}>
                 <div style={{ height: "100vh", width: "100%" }}>
                   <GoogleMapReact
                     bootstrapURLKeys={{
@@ -144,6 +156,7 @@ class Rent extends Component {
                           trigger={
                             <Link to={`/book/${place._id}`}>
                               <Icon
+                                className="text-decoration-none"
                                 circular
                                 inverted
                                 link
@@ -172,16 +185,23 @@ class Rent extends Component {
                 </div>
               </Grid.Column>
 
-              <Grid.Column mobile={16} tablet={6} computer={5}>
-                <Grid.Row>
-                  <NearbyCard />
-                </Grid.Row>
-                <Grid.Row>
-                  <NearbyCard />
-                </Grid.Row>
-                <Grid.Row>
-                  <NearbyCard />
-                </Grid.Row>
+              <Grid.Column mobile={16} tablet={5} computer={5}>
+                <Header textAlign="left">
+                  <div>ที่จอดรถแนะนำ</div>
+                </Header>
+                {this.state.recommendset.map((post, index) => {
+                  return (
+                    <Grid.Row key={index}>
+                      <NearbyCard
+                        photo={post.photos}
+                        title={post.title}
+                        rate={post.rate.rating}
+                        price={post.price}
+                        url={`/post/${post._id}`}
+                      />
+                    </Grid.Row>
+                  );
+                })}
               </Grid.Column>
             </Grid>
           </Container>
@@ -197,6 +217,6 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getPosts })(
+export default connect(mapStateToProps, { getPosts, recommendPost })(
   withRouter(Rent)
 );

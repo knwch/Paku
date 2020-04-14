@@ -1,23 +1,28 @@
 import React, { Component } from "react";
 import RecommendCard from "../cards/RecommendCard";
 import { Grid } from "semantic-ui-react";
+import { recommendPost } from "../../redux/actions/postActions";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import NavMenu from "../NavMenu";
 import Footer from "../Footer";
 import SearchBox from "../SearchBox";
 
 class Home extends Component {
-  componentDidMount() {
+  constructor() {
+    super();
+    this.state = { recommendset: [] };
+  }
+
+  componentWillMount() {
     document.title = "Paku - Home";
     document.body.classList.add("Background-Yellow");
+    this.props.recommendPost();
   }
 
   componentWillUnmount() {
     document.body.classList.remove("Background-Yellow");
   }
-
-  // state = {
-  //   modalLogout: false
-  // }
 
   // handleLogoutModal = () => {
   //   this.setState({ modalLogout: true })
@@ -52,6 +57,18 @@ class Home extends Component {
   //   );
   // }
 
+  componentWillReceiveProps(nextProps) {
+    const posts = nextProps.post.post_recommend;
+
+    if (posts != null) {
+      if (posts.length !== 0) {
+        this.setState({
+          recommendset: posts,
+        });
+      }
+    }
+  }
+
   render() {
     return (
       <div>
@@ -65,18 +82,19 @@ class Home extends Component {
           </div>
           <Grid textAlign="center" columns={4}>
             <Grid.Row>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
+              {this.state.recommendset.map((post, index) => {
+                return (
+                  <Grid.Column key={index} mobile={16} tablet={4} computer={4}>
+                    <RecommendCard
+                      photo={post.photos}
+                      title={post.title}
+                      rate={post.rate.rating}
+                      price={post.price}
+                      url={`/post/${post._id}`}
+                    />
+                  </Grid.Column>
+                );
+              })}
             </Grid.Row>
           </Grid>
         </div>
@@ -86,4 +104,11 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  post: state.post,
+});
+
+export default connect(mapStateToProps, {
+  recommendPost,
+})(withRouter(Home));
