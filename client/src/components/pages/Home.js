@@ -90,7 +90,7 @@ class Home extends Component {
                       title={post.title}
                       rate={post.rate.rating}
                       price={post.price}
-                      url={`/post/${post._id}`}
+                      url={`/book/${post._id}`}
                     />
                   </Grid.Column>
                 );
