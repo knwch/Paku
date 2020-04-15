@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RecommendCard from "../cards/RecommendCard";
-import { Grid } from "semantic-ui-react";
+import { Grid, Responsive, Header } from "semantic-ui-react";
 import { recommendPost } from "../../redux/actions/postActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -71,35 +71,37 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
+      <Responsive>
         <NavMenu />
         <SearchBox />
-        <div className="container-fluid mt-5">
-          <div className="text-left mb-4">
-            <h4>
-              <div>ที่จอดรถแนะนำ</div>
-            </h4>
-          </div>
-          <Grid textAlign="center" columns={4}>
-            <Grid.Row>
-              {this.state.recommendset.map((post, index) => {
-                return (
-                  <Grid.Column key={index} mobile={16} tablet={4} computer={4}>
-                    <RecommendCard
-                      photo={post.photos}
-                      title={post.title}
-                      rate={post.rate.rating}
-                      price={post.price}
-                      url={`/book/${post._id}`}
-                    />
-                  </Grid.Column>
-                );
-              })}
-            </Grid.Row>
-          </Grid>
-        </div>
+        <Grid
+          style={{
+            "margin-left": "2rem",
+            "margin-right": "2rem",
+          }}
+          className="mt-5 mb-5"
+        >
+          <Header textAlign="left" as="h2" className="mb-3">
+            <div>ที่จอดรถแนะนำ</div>
+          </Header>
+          <Grid.Row columns={4} centered>
+            {this.state.recommendset.map((post, index) => {
+              return (
+                <Grid.Column key={index} mobile={16} tablet={4} computer={4}>
+                  <RecommendCard
+                    photo={post.photos}
+                    title={post.title}
+                    rate={post.rate.rating}
+                    price={post.price}
+                    url={`/book/${post._id}`}
+                  />
+                </Grid.Column>
+              );
+            })}
+          </Grid.Row>
+        </Grid>
         <Footer />
-      </div>
+      </Responsive>
     );
   }
 }
