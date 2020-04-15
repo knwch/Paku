@@ -773,9 +773,44 @@ class Book extends Component {
                     </Item.Content>
                   </Item>
                 </Item.Group>
+
+                <Divider />
+
+                <Comment.Group minimal>
+                  <Header as="h3">
+                    <div>ความคิดเห็น</div>
+                  </Header>
+                  {(() => {
+                    if (this.state.comments.length === 0) {
+                      return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
+                    } else if (this.state.comments.length > 0) {
+                      return this.state.comments.map((comment, index) => {
+                        if (comment.comment !== "")
+                          return (
+                            <Comment key={index}>
+                              <Comment.Avatar as="a" src={comment.photoUser} />
+                              <Comment.Content>
+                                <Comment.Author as="a">
+                                  {comment.name.firstname}
+                                </Comment.Author>
+                                <Comment.Metadata>
+                                  <span>
+                                    {moment(
+                                      new Date(comment.created)
+                                    ).fromNow()}
+                                  </span>
+                                </Comment.Metadata>
+                                <Comment.Text>{comment.comment}</Comment.Text>
+                              </Comment.Content>
+                            </Comment>
+                          );
+                      });
+                    }
+                  })()}
+                </Comment.Group>
               </Grid.Column>
 
-              <Grid.Column
+              {/* <Grid.Column
                 className="pt-0"
                 textAlign="left"
                 mobile={16}
@@ -814,7 +849,7 @@ class Book extends Component {
                     }
                   })()}
                 </Comment.Group>
-              </Grid.Column>
+              </Grid.Column> */}
             </Grid>
           </Container>
           <Footer />
