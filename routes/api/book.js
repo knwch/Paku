@@ -81,7 +81,6 @@ router.post('/addBook/:id', passport.authenticate('jwt', { session: false }), (r
                         })
                 })
                 .catch((err) => {
-                    console.log(err)
                     res.status(400).json({ book: 'Booking Errors'})
                 })
         })
