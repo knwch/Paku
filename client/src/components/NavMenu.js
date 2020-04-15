@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { logoutUser } from '../redux/actions/authActions';
 import { clearCurrentProfile } from '../redux/actions/profileActions';
@@ -56,7 +56,7 @@ class NavMenu extends Component {
                 </Navbar> */}
                 <Navbar expand="sm">
                     <Navbar.Brand href="/">
-                        <img className="logo-paku" src={require("./imgs/Logo.png")} />
+                        <Image className="logo-paku" src={require("./imgs/Logo.png")} />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">

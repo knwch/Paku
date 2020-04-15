@@ -180,8 +180,9 @@ class Admin extends Component {
             return (
               <Table.Body>
                 {this.state.users.map((user, index) => {
-                  if (user.Card.confirm === true)
+                  if (user.Card.confirm === true) {
                     return this.showRow(user, index);
+                  } else return null;
                 })}
               </Table.Body>
             );
@@ -189,8 +190,9 @@ class Admin extends Component {
             return (
               <Table.Body>
                 {this.state.users.map((user, index) => {
-                  if (user.Card.idCard !== 0 && user.Card.confirm === false)
+                  if (user.Card.idCard !== 0 && user.Card.confirm === false) {
                     return this.showRow(user, index);
+                  } else return null;
                 })}
               </Table.Body>
             );
@@ -198,8 +200,9 @@ class Admin extends Component {
             return (
               <Table.Body>
                 {this.state.users.map((user, index) => {
-                  if (user.Card.idCard === 0 && user.Card.confirm === false)
+                  if (user.Card.idCard === 0 && user.Card.confirm === false) {
                     return this.showRow(user, index);
+                  } else return null;
                 })}
               </Table.Body>
             );
@@ -248,7 +251,7 @@ class Admin extends Component {
 
         <Table.Body>
           {this.state.users.map((user, index) => {
-            if (user.Card.idCard !== 0 && user.Card.confirm === false)
+            if (user.Card.idCard !== 0 && user.Card.confirm === false) {
               return (
                 <Table.Row key={index}>
                   <Table.Cell>
@@ -277,6 +280,7 @@ class Admin extends Component {
                   </Table.Cell>
                 </Table.Row>
               );
+            } else return null;
           })}
         </Table.Body>
       </Table>

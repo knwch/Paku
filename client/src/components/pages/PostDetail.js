@@ -303,7 +303,7 @@ class PostDetail extends Component {
                       return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
                     } else if (this.state.comments.length > 0) {
                       return this.state.comments.map((comment, index) => {
-                        if (comment.comment !== "")
+                        if (comment.comment !== "") {
                           return (
                             <Comment key={index}>
                               <Comment.Avatar as="a" src={comment.photoUser} />
@@ -322,6 +322,9 @@ class PostDetail extends Component {
                               </Comment.Content>
                             </Comment>
                           );
+                        } else {
+                          return null;
+                        }
                       });
                     }
                   })()}

@@ -3,7 +3,6 @@ import {
   Responsive,
   Menu,
   Card,
-  Icon,
   Button,
   Image,
   Grid,

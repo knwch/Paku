@@ -229,7 +229,7 @@ class ConfirmCard extends Component {
                 </Header>
                 <div className="mb-2">
                   เพื่อทำการยืนยันตัวตนของคุณ
-                  คุณสามารถดูตัวอย่างการอัปโหลดได้<a href="#">ที่นี่</a>
+                  คุณสามารถดูตัวอย่างการอัปโหลดได้<text className="ButtonLink">ที่นี่</text>
                 </div>
 
                 <Form.Field className="text-left mt-3 mb-0">

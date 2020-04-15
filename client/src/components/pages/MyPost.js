@@ -199,7 +199,7 @@ class MyPost extends Component {
         // // }
 
         bookpost.map((book) => {
-          this.state.bookpost.push(book);
+          return this.state.bookpost.push(book);
         });
       }
     }
@@ -366,11 +366,11 @@ class MyPost extends Component {
   handleRate = (e, { rating, maxRating }) =>
     this.setState({ rating, maxRating });
 
-  handleCheckInOut = async (bookid, bool) => {
+  handleCheckInOut = (bookid, bool) => {
     const checkData = {
       check: bool,
     };
-    await this.props.checkBook(bookid, checkData);
+    this.props.checkBook(bookid, checkData);
     window.location.reload(false);
   };
 
@@ -415,7 +415,7 @@ class MyPost extends Component {
       );
     } else {
       return this.state.bookuser.map((book, index) => {
-        if (book.statusBook === 1 && book.check.checkOutStatus === false)
+        if (book.statusBook === 1 && book.check.checkOutStatus === false) {
           return (
             <Card key={index} className="mb-4" fluid>
               <Card.Content>
@@ -536,6 +536,9 @@ class MyPost extends Component {
               </Card.Content>
             </Card>
           );
+        } else {
+          return null;
+        }
       }, this);
     }
   };
@@ -571,6 +574,7 @@ class MyPost extends Component {
             this.setState({
               activeItem: "postmenu",
             });
+            return 0;
           } else {
             return (
               <Card key={index} className="mb-4" fluid>
@@ -676,7 +680,7 @@ class MyPost extends Component {
       return <div className="text-center">คุณยังไม่มีการจองที่เสร็จสิ้น</div>;
     } else {
       return this.state.bookuser.map((book, index) => {
-        if (book.statusBook === 0 || book.check.checkOutStatus === true)
+        if (book.statusBook === 0 || book.check.checkOutStatus === true) {
           return (
             <Card key={index} className="mb-4" fluid>
               <Card.Content>
@@ -719,6 +723,9 @@ class MyPost extends Component {
               </Card.Content>
             </Card>
           );
+        } else {
+          return null;
+        }
       });
     }
   };

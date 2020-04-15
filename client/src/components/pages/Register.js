@@ -333,12 +333,12 @@ class Register extends Component {
                         defaultValue={this.state.terms}
                       />
                     </Checkbox>
-                    <a className="align-middle">
+                    <span className="align-middle">
                       &nbsp;ฉันยอมรับ
-                      <a href="#" onClick={this.handleOpenModal}>
+                      <text className="ButtonLink" onClick={this.handleOpenModal}>
                         ข้อกำหนดและเงื่อนไขในการใช้งาน
-                      </a>
-                    </a>
+                      </text>
+                    </span>
                     {this.validator.message(
                       "terms",
                       this.state.terms,

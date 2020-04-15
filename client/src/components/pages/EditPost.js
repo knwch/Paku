@@ -257,7 +257,7 @@ class EditPost extends Component {
     }
 
     checkFacility = (input) => {
-        for (var i = 0; i < input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             const facilityFilter = this.state.addfacility.filter(val => val.value === input[i]);
             const facilityObject = facilityFilter[0]
             facilityObject.checked = true

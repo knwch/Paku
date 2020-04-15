@@ -292,8 +292,11 @@ class Book extends Component {
   handleStartBookingDate = async () => {
     var Array = [];
     const date = this.state.bookeds.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1)
+      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
         return date;
+      } else {
+        return null;
+      }
     });
     for (var i = 0; i < date.length; i++) {
       var start = parseFloat(date[i].timeIn);
@@ -325,8 +328,11 @@ class Book extends Component {
   handleEndBookingDate = async () => {
     var Array = [];
     const date = this.state.bookeds.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1)
+      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
         return date;
+      } else {
+        return null;
+      }
     });
     for (var i = 0; i < date.length; i++) {
       var start = parseFloat(this.state.book_start);
@@ -785,7 +791,7 @@ class Book extends Component {
                       return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
                     } else if (this.state.comments.length > 0) {
                       return this.state.comments.map((comment, index) => {
-                        if (comment.comment !== "")
+                        if (comment.comment !== "") {
                           return (
                             <Comment key={index}>
                               <Comment.Avatar as="a" src={comment.photoUser} />
@@ -804,8 +810,11 @@ class Book extends Component {
                               </Comment.Content>
                             </Comment>
                           );
+                        } else {
+                          return null;
+                        }
                       });
-                    }
+                    } 
                   })()}
                 </Comment.Group>
               </Grid.Column>
