@@ -259,7 +259,7 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
 
     Post.findById(req.params.id)
         .then((post) => {
-            if (req.user.id != post.user) {
+            if (req.user.id !== post.user.toString()) {
                 return res.status(401).json({ post: 'User not authorized'})
             }
 
