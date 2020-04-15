@@ -166,6 +166,16 @@
   width: 2rem;
 }
 
+.ButtonLink {
+  color: #3366BB !important;
+  cursor: pointer;
+}
+
+.ButtonLink:hover, .ButtonLink:focus {
+  color: #0645AD !important;
+  text-decoration: underline !important;
+}
+
 .App {
   text-align: center;
   padding-left: 3rem;
