@@ -20,7 +20,11 @@ import {
   Loader,
 } from "semantic-ui-react";
 import { getPost } from "../../redux/actions/postActions";
-import { getBookPost, addBook } from "../../redux/actions/bookActions";
+import {
+  getBookPost,
+  getBookUser,
+  addBook,
+} from "../../redux/actions/bookActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import NavMenu from "../NavMenu";
@@ -47,7 +51,8 @@ class Book extends Component {
       book_price: 0,
       book_start_disabled: [],
       book_end_disabled: [],
-      bookeds: [],
+      bookpost: [],
+      bookuser: [],
       title: "",
       photos: [],
       price: "",
@@ -155,12 +160,13 @@ class Book extends Component {
     });
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     document.title = "Paku - Booking";
 
     const postid = this.props.match.params.id;
     this.props.getPost(postid);
     this.props.getBookPost(postid);
+    this.props.getBookUser(this.props.auth.user.id);
 
     this.setState({
       postid: postid,
@@ -170,17 +176,24 @@ class Book extends Component {
   componentWillReceiveProps(nextProps) {
     const post = nextProps.post.post;
     const user = nextProps.auth.user;
-    const book = nextProps.book.bookPost;
+    const bookpost = nextProps.book.bookPost;
+    const bookuser = nextProps.book.bookUser;
 
     if (post === null) {
       window.history.back();
     }
 
-    if (book.Book !== "No have booking") {
-      const bookFilter = book.filter((val) => val.idPost === post._id);
+    if (bookpost.Book !== "No have booking") {
+      let bookArray = bookpost.filter((val) => val.idPost === post._id);
+
+      if (bookuser.Book !== "No have booking") {
+        bookArray = bookArray.concat(bookuser)
+      }
+
       this.setState({
-        bookeds: bookFilter,
+        bookpost: bookArray,
       });
+      
     }
 
     if (!_.isEmpty(user)) {
@@ -223,6 +236,7 @@ class Book extends Component {
         },
       });
     }
+
   }
 
   handleChange = (input) => (e, { value }) => {
@@ -291,7 +305,7 @@ class Book extends Component {
 
   handleStartBookingDate = async () => {
     var Array = [];
-    const date = this.state.bookeds.filter((date) => {
+    const date = this.state.bookpost.filter((date) => {
       if (date.bookDate === this.state.book_date && date.statusBook === 1) {
         return date;
       } else {
@@ -327,7 +341,7 @@ class Book extends Component {
 
   handleEndBookingDate = async () => {
     var Array = [];
-    const date = this.state.bookeds.filter((date) => {
+    const date = this.state.bookpost.filter((date) => {
       if (date.bookDate === this.state.book_date && date.statusBook === 1) {
         return date;
       } else {
@@ -339,12 +353,6 @@ class Book extends Component {
       var end = parseFloat(date[i].timeIn);
 
       if (start < end) {
-        // if (start % 1 !== 0) {
-        //     start = start - 0.3
-        // } else if (start % 1 === 0) {
-        //     start = start - 0.7
-        // }
-
         while (start !== end) {
           Array.push(start);
           if (start % 1 !== 0) {
@@ -607,6 +615,8 @@ class Book extends Component {
                 </Card>
               </Grid.Column>
 
+              {console.log(this.state.bookpost)}
+
               <Modal
                 open={this.state.modalOpen}
                 className="modal-paku"
@@ -814,51 +824,10 @@ class Book extends Component {
                           return null;
                         }
                       });
-                    } 
-                  })()}
-                </Comment.Group>
-              </Grid.Column>
-
-              {/* <Grid.Column
-                className="pt-0"
-                textAlign="left"
-                mobile={16}
-                tablet={12}
-                computer={12}
-              >
-                <Comment.Group minimal>
-                  <Header as="h3">
-                    <div>ความคิดเห็น</div>
-                  </Header>
-                  {(() => {
-                    if (this.state.comments.length === 0) {
-                      return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
-                    } else if (this.state.comments.length > 0) {
-                      return this.state.comments.map((comment, index) => {
-                        if (comment.comment !== "")
-                          return (
-                            <Comment key={index}>
-                              <Comment.Avatar as="a" src={comment.photoUser} />
-                              <Comment.Content>
-                                <Comment.Author as="a">
-                                  {comment.name.firstname}
-                                </Comment.Author>
-                                <Comment.Metadata>
-                                  <span>
-                                    {moment(
-                                      new Date(comment.created)
-                                    ).fromNow()}
-                                  </span>
-                                </Comment.Metadata>
-                                <Comment.Text>{comment.comment}</Comment.Text>
-                              </Comment.Content>
-                            </Comment>
-                          );
-                      });
                     }
                   })()}
                 </Comment.Group>
-              </Grid.Column> */}
+              </Grid.Column>
             </Grid>
           </Container>
           <Footer />
@@ -875,6 +844,9 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getPost, getBookPost, addBook })(
-  withRouter(Book)
-);
+export default connect(mapStateToProps, {
+  getPost,
+  getBookPost,
+  getBookUser,
+  addBook,
+})(withRouter(Book));
