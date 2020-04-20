@@ -615,8 +615,6 @@ class Book extends Component {
                 </Card>
               </Grid.Column>
 
-              {console.log(this.state.bookpost)}
-
               <Modal
                 open={this.state.modalOpen}
                 className="modal-paku"
