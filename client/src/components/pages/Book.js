@@ -184,16 +184,15 @@ class Book extends Component {
     }
 
     if (bookpost.Book !== "No have booking") {
-      let bookArray = bookpost.filter((val) => val.idPost === post._id);
+      let bookArray = bookpost.filter((val) => val.post === post._id);
 
       if (bookuser.Book !== "No have booking") {
-        bookArray = bookArray.concat(bookuser)
+        bookArray = bookArray.concat(bookuser);
       }
 
       this.setState({
         bookpost: bookArray,
       });
-      
     }
 
     if (!_.isEmpty(user)) {
@@ -236,7 +235,6 @@ class Book extends Component {
         },
       });
     }
-
   }
 
   handleChange = (input) => (e, { value }) => {
@@ -306,15 +304,15 @@ class Book extends Component {
   handleStartBookingDate = async () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
+      if (date.Date === this.state.book_date && date.status === 1) {
         return date;
       } else {
         return null;
       }
     });
     for (var i = 0; i < date.length; i++) {
-      var start = parseFloat(date[i].timeIn);
-      var end = parseFloat(date[i].timeOut);
+      var start = parseFloat(date[i].timein);
+      var end = parseFloat(date[i].timeout);
       if (end % 1 !== 0) {
         end = end + 0.7;
       } else if (end % 1 === 0) {
@@ -342,7 +340,7 @@ class Book extends Component {
   handleEndBookingDate = async () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
+      if (date.Date === this.state.book_date && date.status === 1) {
         return date;
       } else {
         return null;
@@ -350,7 +348,7 @@ class Book extends Component {
     });
     for (var i = 0; i < date.length; i++) {
       var start = parseFloat(this.state.book_start);
-      var end = parseFloat(date[i].timeIn);
+      var end = parseFloat(date[i].timein);
 
       if (start < end) {
         while (start !== end) {
@@ -391,18 +389,20 @@ class Book extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const newBook = {
-      bookDate: this.state.book_date,
-      timeIn: this.state.book_start,
-      timeOut: this.state.book_end,
-      phone: this.state.book_phone,
-      idCar: this.state.book_plate,
-      note: this.state.book_description,
-      payment: this.state.book_payment,
-      idPost: this.state.postid,
-      idUser: this.state.userid,
-      renter: this.state.renterid,
-      hours: this.state.book_hours.toString(),
-      price: this.state.book_price.toString(),
+      Date: this.state.book_date,
+      detail: {
+        timein: this.state.book_start,
+        timeout: this.state.book_end,
+        phone: this.state.book_phone,
+        idCar: this.state.book_plate,
+        note: this.state.book_description,
+        payment: this.state.book_payment,
+        post: this.state.postid,
+        user: this.state.userid,
+        renter: this.state.renterid,
+        hours: this.state.book_hours.toString(),
+        price: this.state.book_price.toString(),
+      },
     };
     await this.props.addBook(newBook, this.state.postid);
     this.props.history.push("/mypost");
