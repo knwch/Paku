@@ -1,69 +1,94 @@
-module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('book', {
-        id: {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            defaultValue: DataTypes.UUIDV4,
-            allowNull: false
-        },
-        bookDate: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            required: true
-        },
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
+
+const bookSchema = new mongoose.Schema({
+    Date: {
+        type: String,
+        required: true
+    },
+    detail: {
         phone: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: String,
             required: true
         },
         idCar: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: String,
             required: true
         },
         note: {
-            type: DataTypes.TEXT,
+            type: String
         },
         payment: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: String,
             required: true
         },
-        idPost: {
-            type: DataTypes.STRING,
-            allowNull: false,
+        post: {
+            type: ObjectId,
+            ref: 'post'
+        },
+        user: {
+            type: ObjectId,
+            ref: 'users'
+        },
+        renter: {
+            type: ObjectId,
+            ref: 'users'
+        },
+        timein: {
+            type: Number,
             required: true
         },
-        idUser: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            required: true
-        },
-        timeIn: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            required: true
-        },
-        timeOut: {
-            type: DataTypes.STRING,
-            allowNull: false,
+        timeout: {
+            type: Number,
             required: true
         },
         hours: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: Number,
             required: true
         },
         price: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
+            type: Number,
             required: true
         },
-        statusBook: {
-            type: DataTypes.INTEGER,
-            defaultValue: 1,
-            allowNull: false,
-            required: true
+        status: {
+            type: Number,
+            default: 1
         }
-    })
-}
+    }, 
+    check: {
+        checkin: {
+            status: {
+                type: Boolean,
+                default: false
+            },
+            user: {
+                type: Boolean,
+                default: false
+            },
+            renter: {
+                type: Boolean,
+                default: false
+            }
+        },
+        checkout: {
+            status: {
+                type: Boolean,
+                default: false
+            },
+            user: {
+                type: Boolean,
+                default: false
+            },
+            renter: {
+                type: Boolean,
+                default: false
+            }
+        }
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    }
+})
+
+module.exports = mongoose.model('book', bookSchema)
