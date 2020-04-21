@@ -321,7 +321,7 @@ class Admin extends Component {
               <text>กลับ</text>
             </Button>
             <Button
-              className="btn-paku"
+              className="btn-paku-delete"
               onClick={this.deleteUser.bind(this, this.state.temp_userdata._id)}
             >
               <text>ลบ</text>

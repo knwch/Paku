@@ -20,7 +20,11 @@ import {
   Loader,
 } from "semantic-ui-react";
 import { getPost } from "../../redux/actions/postActions";
-import { getBookPost, addBook } from "../../redux/actions/bookActions";
+import {
+  getBookPost,
+  getBookUser,
+  addBook,
+} from "../../redux/actions/bookActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import NavMenu from "../NavMenu";
@@ -47,7 +51,8 @@ class Book extends Component {
       book_price: 0,
       book_start_disabled: [],
       book_end_disabled: [],
-      bookeds: [],
+      bookpost: [],
+      bookuser: [],
       title: "",
       photos: [],
       price: "",
@@ -155,12 +160,13 @@ class Book extends Component {
     });
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     document.title = "Paku - Booking";
 
     const postid = this.props.match.params.id;
     this.props.getPost(postid);
     this.props.getBookPost(postid);
+    this.props.getBookUser(this.props.auth.user.id);
 
     this.setState({
       postid: postid,
@@ -170,16 +176,22 @@ class Book extends Component {
   componentWillReceiveProps(nextProps) {
     const post = nextProps.post.post;
     const user = nextProps.auth.user;
-    const book = nextProps.book.bookPost;
+    const bookpost = nextProps.book.bookPost;
+    const bookuser = nextProps.book.bookUser;
 
     if (post === null) {
       window.history.back();
     }
 
-    if (book.Book !== "No have booking") {
-      const bookFilter = book.filter((val) => val.idPost === post._id);
+    if (bookpost.Book !== "No have booking") {
+      let bookArray = bookpost.filter((val) => val.detail.post === post._id);
+
+      if (bookuser.Book !== "No have booking") {
+        bookArray = bookArray.concat(bookuser);
+      }
+
       this.setState({
-        bookeds: bookFilter,
+        bookpost: bookArray,
       });
     }
 
@@ -291,16 +303,16 @@ class Book extends Component {
 
   handleStartBookingDate = async () => {
     var Array = [];
-    const date = this.state.bookeds.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
+    const date = this.state.bookpost.filter((date) => {
+      if (date.Date === this.state.book_date && date.status === 1) {
         return date;
       } else {
         return null;
       }
     });
     for (var i = 0; i < date.length; i++) {
-      var start = parseFloat(date[i].timeIn);
-      var end = parseFloat(date[i].timeOut);
+      var start = parseFloat(date[i].detail.timein);
+      var end = parseFloat(date[i].detail.timeout);
       if (end % 1 !== 0) {
         end = end + 0.7;
       } else if (end % 1 === 0) {
@@ -327,8 +339,8 @@ class Book extends Component {
 
   handleEndBookingDate = async () => {
     var Array = [];
-    const date = this.state.bookeds.filter((date) => {
-      if (date.bookDate === this.state.book_date && date.statusBook === 1) {
+    const date = this.state.bookpost.filter((date) => {
+      if (date.Date === this.state.book_date && date.status === 1) {
         return date;
       } else {
         return null;
@@ -336,15 +348,9 @@ class Book extends Component {
     });
     for (var i = 0; i < date.length; i++) {
       var start = parseFloat(this.state.book_start);
-      var end = parseFloat(date[i].timeIn);
+      var end = parseFloat(date[i].detail.timein);
 
       if (start < end) {
-        // if (start % 1 !== 0) {
-        //     start = start - 0.3
-        // } else if (start % 1 === 0) {
-        //     start = start - 0.7
-        // }
-
         while (start !== end) {
           Array.push(start);
           if (start % 1 !== 0) {
@@ -383,18 +389,20 @@ class Book extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const newBook = {
-      bookDate: this.state.book_date,
-      timeIn: this.state.book_start,
-      timeOut: this.state.book_end,
-      phone: this.state.book_phone,
-      idCar: this.state.book_plate,
-      note: this.state.book_description,
-      payment: this.state.book_payment,
-      idPost: this.state.postid,
-      idUser: this.state.userid,
-      renter: this.state.renterid,
-      hours: this.state.book_hours.toString(),
-      price: this.state.book_price.toString(),
+      Date: this.state.book_date,
+      detail: {
+        timein: this.state.book_start,
+        timeout: this.state.book_end,
+        phone: this.state.book_phone,
+        idCar: this.state.book_plate,
+        note: this.state.book_description,
+        payment: this.state.book_payment,
+        post: this.state.postid,
+        user: this.state.userid,
+        renter: this.state.renterid,
+        hours: this.state.book_hours.toString(),
+        price: this.state.book_price.toString(),
+      },
     };
     await this.props.addBook(newBook, this.state.postid);
     this.props.history.push("/mypost");
@@ -814,51 +822,10 @@ class Book extends Component {
                           return null;
                         }
                       });
-                    } 
-                  })()}
-                </Comment.Group>
-              </Grid.Column>
-
-              {/* <Grid.Column
-                className="pt-0"
-                textAlign="left"
-                mobile={16}
-                tablet={12}
-                computer={12}
-              >
-                <Comment.Group minimal>
-                  <Header as="h3">
-                    <div>ความคิดเห็น</div>
-                  </Header>
-                  {(() => {
-                    if (this.state.comments.length === 0) {
-                      return <div>ไม่มีความคิดเห็นสำหรับที่จอดรถนี้</div>;
-                    } else if (this.state.comments.length > 0) {
-                      return this.state.comments.map((comment, index) => {
-                        if (comment.comment !== "")
-                          return (
-                            <Comment key={index}>
-                              <Comment.Avatar as="a" src={comment.photoUser} />
-                              <Comment.Content>
-                                <Comment.Author as="a">
-                                  {comment.name.firstname}
-                                </Comment.Author>
-                                <Comment.Metadata>
-                                  <span>
-                                    {moment(
-                                      new Date(comment.created)
-                                    ).fromNow()}
-                                  </span>
-                                </Comment.Metadata>
-                                <Comment.Text>{comment.comment}</Comment.Text>
-                              </Comment.Content>
-                            </Comment>
-                          );
-                      });
                     }
                   })()}
                 </Comment.Group>
-              </Grid.Column> */}
+              </Grid.Column>
             </Grid>
           </Container>
           <Footer />
@@ -875,6 +842,9 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getPost, getBookPost, addBook })(
-  withRouter(Book)
-);
+export default connect(mapStateToProps, {
+  getPost,
+  getBookPost,
+  getBookUser,
+  addBook,
+})(withRouter(Book));

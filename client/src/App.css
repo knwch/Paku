@@ -162,6 +162,16 @@
   color: #ffce20 !important;
 }
 
+.btn-paku-delete {
+  background-color: #f44236 !important;
+  color: #ffffff !important;
+}
+
+.btn-paku-delete:hover {
+  background-color: #de3c31 !important;
+  color: #ffffff !important;
+}
+
 .logo-paku {
   width: 2rem;
 }

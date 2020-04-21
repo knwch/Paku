@@ -817,7 +817,7 @@ class MyPost extends Component {
               <text>กลับ</text>
             </Button>
             <Button
-              className="btn-paku"
+              className="btn-paku-delete"
               onClick={this.handleDeletePost.bind(
                 this,
                 this.state.temp_postdata._id
