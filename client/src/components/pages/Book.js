@@ -184,7 +184,7 @@ class Book extends Component {
     }
 
     if (bookpost.Book !== "No have booking") {
-      let bookArray = bookpost.filter((val) => val.post === post._id);
+      let bookArray = bookpost.filter((val) => val.detail.post === post._id);
 
       if (bookuser.Book !== "No have booking") {
         bookArray = bookArray.concat(bookuser);
@@ -311,8 +311,8 @@ class Book extends Component {
       }
     });
     for (var i = 0; i < date.length; i++) {
-      var start = parseFloat(date[i].timein);
-      var end = parseFloat(date[i].timeout);
+      var start = parseFloat(date[i].detail.timein);
+      var end = parseFloat(date[i].detail.timeout);
       if (end % 1 !== 0) {
         end = end + 0.7;
       } else if (end % 1 === 0) {
@@ -348,7 +348,7 @@ class Book extends Component {
     });
     for (var i = 0; i < date.length; i++) {
       var start = parseFloat(this.state.book_start);
-      var end = parseFloat(date[i].timein);
+      var end = parseFloat(date[i].detail.timein);
 
       if (start < end) {
         while (start !== end) {
