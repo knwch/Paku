@@ -145,6 +145,13 @@ exports.getBook = async (req, res, next) => {
     }
 }
 
+exports.getBookAll = async (req, res, next) => {
+    const book = await Book.find().select({ __v:0, created: 0 }).sort({ Date: -1 })
+    res.status(200).json({
+        book: book.length !== 0 ? book : 'No have book'
+    })
+}
+
 exports.check = async (req, res, next) => {
     const bookid = req.params.id
     const userid = req.user.id
