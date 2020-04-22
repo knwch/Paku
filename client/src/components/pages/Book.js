@@ -183,16 +183,20 @@ class Book extends Component {
       window.history.back();
     }
 
-    if (bookpost.Book !== "No have booking") {
-      let bookArray = bookpost.filter((val) => val.detail.post === post._id);
+    if (bookpost !== null) {
+      if (bookpost.Book !== "No have book of post") {
+        let bookArray = bookpost.filter((val) => val.detail.post === post._id);
 
-      if (bookuser.Book !== "No have booking") {
-        bookArray = bookArray.concat(bookuser);
+        if (bookuser !== null) {
+          if (bookuser.Book !== "No have book of post") {
+            bookArray = bookArray.concat(bookuser);
+          }
+        }
+
+        this.setState({
+          bookpost: bookArray,
+        });
       }
-
-      this.setState({
-        bookpost: bookArray,
-      });
     }
 
     if (!_.isEmpty(user)) {
@@ -304,7 +308,7 @@ class Book extends Component {
   handleStartBookingDate = async () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
-      if (date.Date === this.state.book_date && date.status === 1) {
+      if (date.Date === this.state.book_date && date.detail.status === 1) {
         return date;
       } else {
         return null;
@@ -340,7 +344,7 @@ class Book extends Component {
   handleEndBookingDate = async () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
-      if (date.Date === this.state.book_date && date.status === 1) {
+      if (date.Date === this.state.book_date && date.detail.status === 1) {
         return date;
       } else {
         return null;
