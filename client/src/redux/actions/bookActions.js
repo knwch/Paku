@@ -12,11 +12,10 @@ import {
     GET_BOOKS,
     GET_ERRORS
 } from './types'
-import { set } from 'mongoose'
 
 // Add Book
 export const addBook = (bookData, idPost) => dispatch => {
-    dispatch(clearErrors())
+    // dispatch(clearErrors())
     dispatch(setBookLoading())
     axios.post(`/api/book/addBook/${idPost}`, bookData)
         .then((res) => {
