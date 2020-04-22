@@ -86,6 +86,8 @@ exports.addBooking = async (req, res, next) => {
         ]
     })
     if(book.length === 0) {
+        body.detail.in = body.detail.timein
+        body.detail.out = body.detail.timeout
         const newBook = new Book(body)
         newBook.save().then((book) => { res.status(201).json(book) })
     } else {
