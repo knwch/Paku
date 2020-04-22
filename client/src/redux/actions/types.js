@@ -23,6 +23,7 @@ export const CANCEL_BOOK = 'CANCEL_BOOK';
 export const GET_POST_BOOK = 'GET_POST_BOOK';
 export const GET_USER_BOOK = 'GET_USER_BOOK';
 export const GET_BOOK = 'GET_BOOK';
+export const GET_BOOKS = 'GET_BOOKS'
 export const BOOK_LOADING = 'BOOK_LOADING';
 export const CHECK_BOOK = 'CHECK_BOOK';
 export const GET_USERS = 'GET_USERS';
