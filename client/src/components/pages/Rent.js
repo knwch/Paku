@@ -17,6 +17,7 @@ import {
   Loader,
   Header,
 } from "semantic-ui-react";
+import {key} from '../../config/keymap'
 import SearchBox from "../SearchBox";
 
 // // Return map bounds based on list of places
@@ -136,7 +137,7 @@ class Rent extends Component {
                 <div style={{ height: "100vh", width: "100%" }}>
                   <GoogleMapReact
                     bootstrapURLKeys={{
-                      key: "AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM",
+                      key: `${key}`,
                       language: "th",
                     }}
                     // yesIWantToUseGoogleMapApiInternals
