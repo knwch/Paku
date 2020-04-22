@@ -8,7 +8,8 @@ const {
     getBookofPost,
     getBookofUser,
     getBook,
-    check
+    check,
+    getBookAll
 } = require('../../controller/book')
 
 // @route   GET api/book
@@ -40,6 +41,11 @@ router.get('/user/:id', passport.authenticate('jwt', { session: false }), getBoo
 // @desc    Get Booking  
 // @access  Private
 router.get('/:id', passport.authenticate('jwt', { session: false}), getBook)
+
+// @route   GET api/book/
+// @desc    Get Booking all 
+// @access  Pubilc
+router.get('/', getBookAll)
 
 // @route   POST api/book/check/:id
 // @desc    Post Check  
