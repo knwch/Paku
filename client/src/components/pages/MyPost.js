@@ -30,6 +30,7 @@ import {
   cancelBook,
   checkBook,
   getBookPost,
+  getBookAll,
 } from "../../redux/actions/bookActions";
 import NavMenu from "../NavMenu";
 import Footer from "../Footer";
@@ -83,6 +84,7 @@ class MyPost extends Component {
 
     this.props.getPosts();
     this.props.getProfiles();
+    this.props.getBookAll();
 
     if (this.props.auth.isAuthenticated === false) {
       this.props.history.push("/login");
@@ -101,8 +103,8 @@ class MyPost extends Component {
     const profiles = nextProps.profile.profiles;
     const posts = nextProps.post.posts;
     const user = nextProps.auth.user;
-    const bookuser = nextProps.book.bookUser;
-    const bookpost = nextProps.book.bookPost;
+    const books = nextProps.book.books;
+    let BookArray = [];
 
     if (posts !== null) {
       var postsFind = posts.filter((val) => val.user === user.id);
@@ -118,110 +120,50 @@ class MyPost extends Component {
       });
     }
 
-    if (profiles !== null) {
-      this.setState({
-        users: profiles,
-      });
-    }
-
-    if (bookuser != null) {
-      if (bookuser.Book !== "No have booking") {
-        bookuser.forEach((book) => {
-          posts.forEach((post) => {
-            if (book.idUser === this.state.userid) {
-              if (book.idPost === post._id) {
+    if (books != null) {
+      if (books.length !== 0) {
+        books.forEach((book) => {
+          if (book.detail.user === this.state.userid) {
+            posts.forEach((post) => {
+              if (book.detail.post === post._id) {
                 book.title = post.title;
                 book.photos = post.photos;
                 book.address = post.location.address;
                 this.state.bookuser.push(book);
               }
-            }
-          });
-        });
+            });
+          }
 
-        bookuser.forEach((book) => {
-          this.state.bookuser_temp.push(book);
-        });
-
-        // for (var i = 0; i < posts.length; i++) {
-        //   var bookFilter = bookuser.filter((val) => {
-        //     if (val.idPost === posts[i]._id) {
-        //       val.title = posts[i].title
-        //       val.photos = posts[i].photos
-        //       val.address = posts[i].location.address
-        //       return val
-        //     }
-        //   })
-        //   if (bookFilter.length !== 0) {
-        //     bookFilter.map((book) => {
-        //       booksArray.push(book)
-        //     });
-        //   }
-        // }
-
-        // this.setState({
-        //   bookuser: booksArray
-        // })
-      }
-    }
-
-    if (bookpost != null) {
-      if (bookpost.Book !== "No have booking") {
-        bookpost.forEach((book) => {
-          this.state.posts.forEach((post) => {
-            if (post._id === book.idPost) {
-              book.title = post.title;
-              book.address = post.location.address;
-              return book;
-            }
-          });
-          this.state.users.forEach((profile) => {
-            if (profile._id === book.idUser) {
-              book.name = profile.name;
-              book.photo = profile.photo_user;
-              return book;
-            }
-          });
-        });
-
-        // // if (bookuser.length !== 0) {
-        // //   if (bookuser.Book !== 'No have booking') {
-        // bookpost.forEach(book => {
-        //   // bookuser.forEach(user => {
-        //   // if (user.id === book.id) {
-        //   console.log(book)
-        //   // book.check = user.timeIn
-        //   // return book
-        //   // }
-        //   // })
-        // })
-        // //   }
-        // // }
-
-        bookpost.map((book) => {
-          return this.state.bookpost.push(book);
+          if (postsFind.length !== null) {
+            postsFind.forEach((post) => {
+              if (post._id === book.detail.post) {
+                book.title = post.title;
+                book.address = post.location.address;
+                if (profiles !== null) {
+                  profiles.forEach((profile) => {
+                    if (profile._id === book.detail.user) {
+                      book.name = profile.name;
+                      book.photo = profile.photo_user;
+                      BookArray.push(book);
+                    }
+                  });
+                }
+              }
+            });
+          }
         });
       }
     }
 
-    var uniqueBookPost = [...new Set(this.state.bookpost)];
+    var uniqueBookPost = [...new Set(BookArray)];
     this.setState({
       bookpost: uniqueBookPost,
     });
-  }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.posts.length !== this.state.posts.length) {
-      this.state.posts.forEach((post) => {
-        this.props.getBookPost(post._id);
-      });
-    }
-
-    if (prevState.users.length !== this.state.users.length) {
-      this.state.users.forEach((user) => {
-        this.props.getBookUser(user._id);
-      });
-    }
+    var uniqueBookUser = [...new Set(this.state.bookuser)];
+    this.setState({
+      bookuser: uniqueBookUser,
+    });
   }
 
   handleDeletePost = (id) => {
@@ -407,7 +349,7 @@ class MyPost extends Component {
   showBookList = () => {
     if (
       this.state.bookuser.filter(
-        (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+        (val) => val.detail.status === 1 && val.check.checkout.status === false
       ).length === 0
     ) {
       return (
@@ -415,7 +357,7 @@ class MyPost extends Component {
       );
     } else {
       return this.state.bookuser.map((book, index) => {
-        if (book.statusBook === 1 && book.check.checkOutStatus === false) {
+        if (book.detail.status === 1 && book.check.checkout.status === false) {
           return (
             <Card key={index} className="mb-4" fluid>
               <Card.Content>
@@ -426,7 +368,7 @@ class MyPost extends Component {
                     </div>
 
                     <Item.Content>
-                      <Item.Header href={`/post/${book.idPost}`}>
+                      <Item.Header href={`/post/${book.detail.post}`}>
                         {book.title}
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
@@ -436,25 +378,23 @@ class MyPost extends Component {
                       <Item.Description>
                         <p>
                           วันที่จอง{" "}
-                          {moment(new Date(book.bookDate)).format(
-                            "D MMMM YYYY"
-                          )}
+                          {moment(new Date(book.Date)).format("D MMMM YYYY")}
                         </p>
                         <p>
-                          ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                          ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}
                         </p>
                       </Item.Description>
 
                       <Item.Extra>
                         {(() => {
-                          if (book.check.checkInUser === false) {
+                          if (book.check.checkin.user === false) {
                             return (
                               <Button
                                 compact
                                 className="btn-paku"
                                 onClick={this.handleCheckInOut.bind(
                                   this,
-                                  book.check.id,
+                                  book._id,
                                   true
                                 )}
                               >
@@ -466,9 +406,9 @@ class MyPost extends Component {
 
                         {(() => {
                           if (
-                            book.check.checkInUser === true &&
-                            book.check.checkInRenter === true &&
-                            book.check.checkOutUser === false
+                            book.check.checkin.user === true &&
+                            book.check.checkin.renter === true &&
+                            book.check.checkout.user === false
                           ) {
                             return (
                               <Button
@@ -487,8 +427,8 @@ class MyPost extends Component {
                               </Button>
                             );
                           } else if (
-                            book.check.checkInUser === true &&
-                            book.check.checkInRenter === false
+                            book.check.checkin.user === true &&
+                            book.check.checkin.renter === false
                           ) {
                             return (
                               <Button compact disabled>
@@ -498,8 +438,8 @@ class MyPost extends Component {
                               </Button>
                             );
                           } else if (
-                            book.check.checkOutUser === true &&
-                            book.check.checkOutRenter === false
+                            book.check.checkout.user === true &&
+                            book.check.checkout.renter === false
                           ) {
                             return (
                               <Button basic compact disabled>
@@ -512,7 +452,7 @@ class MyPost extends Component {
                         })()}
 
                         {(() => {
-                          if (book.check.checkInUser === false) {
+                          if (book.check.checkin.user === false) {
                             return (
                               <Button
                                 compact
@@ -544,19 +484,19 @@ class MyPost extends Component {
   };
 
   showWaitList = () => {
-    const { bookpost, bookuser_temp } = this.state;
+    const { bookpost } = this.state;
 
-    bookpost.forEach((book) => {
-      bookuser_temp.forEach((user) => {
-        if (book.id === user.id) {
-          book.check = user.check;
-        }
-      });
-    });
+    // bookpost.forEach((book) => {
+    //   bookuser_temp.forEach((user) => {
+    //     if (book._id === user._id) {
+    //       book.check = user.check;
+    //     }
+    //   });
+    // });
 
     if (
       bookpost.filter(
-        (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+        (val) => val.detail.status === 1 && val.check.checkout.status === false
       ).length === 0
     ) {
       return (
@@ -567,7 +507,8 @@ class MyPost extends Component {
     } else {
       return bookpost
         .filter(
-          (val) => val.statusBook === 1 && val.check.checkOutStatus === false
+          (val) =>
+            val.detail.status === 1 && val.check.checkout.status === false
         )
         .map((book, index) => {
           if (book.check == null) {
@@ -597,20 +538,18 @@ class MyPost extends Component {
                         <Item.Description>
                           <p>
                             วันที่จอง{" "}
-                            {moment(new Date(book.bookDate)).format(
-                              "D MMMM YYYY"
-                            )}
+                            {moment(new Date(book.Date)).format("D MMMM YYYY")}
                           </p>
                           <p>
-                            ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                            ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}
                           </p>
                         </Item.Description>
 
                         <Item.Extra>
                           {(() => {
                             if (
-                              book.check.checkInUser === true &&
-                              book.check.checkInRenter === false
+                              book.check.checkin.user === true &&
+                              book.check.checkin.renter === false
                             ) {
                               return (
                                 <Button
@@ -618,7 +557,7 @@ class MyPost extends Component {
                                   className="btn-paku"
                                   onClick={this.handleCheckInOut.bind(
                                     this,
-                                    book.check.id,
+                                    book._id,
                                     true
                                   )}
                                 >
@@ -628,8 +567,8 @@ class MyPost extends Component {
                                 </Button>
                               );
                             } else if (
-                              book.check.checkInRenter === true &&
-                              book.check.checkOutUser === false
+                              book.check.checkin.renter === true &&
+                              book.check.checkout.user === false
                             ) {
                               return (
                                 <Button compact basic disabled>
@@ -639,8 +578,8 @@ class MyPost extends Component {
                                 </Button>
                               );
                             } else if (
-                              book.check.checkOutUser === true &&
-                              book.check.checkOutRenter === false
+                              book.check.checkout.user === true &&
+                              book.check.checkout.renter === false
                             ) {
                               return (
                                 <Button
@@ -648,7 +587,7 @@ class MyPost extends Component {
                                   className="btn-paku-light"
                                   onClick={this.handleCheckInOut.bind(
                                     this,
-                                    book.check.id,
+                                    book._id,
                                     false
                                   )}
                                 >
@@ -674,13 +613,13 @@ class MyPost extends Component {
   showCompleteList = () => {
     if (
       this.state.bookuser.filter(
-        (val) => val.statusBook === 0 || val.check.checkOutStatus === true
+        (val) => val.detail.status === 0 || val.check.checkout.status === true
       ).length === 0
     ) {
       return <div className="text-center">คุณยังไม่มีการจองที่เสร็จสิ้น</div>;
     } else {
       return this.state.bookuser.map((book, index) => {
-        if (book.statusBook === 0 || book.check.checkOutStatus === true) {
+        if (book.status === 0 || book.check.checkout.status === true) {
           return (
             <Card key={index} className="mb-4" fluid>
               <Card.Content>
@@ -691,7 +630,7 @@ class MyPost extends Component {
                     </div>
 
                     <Item.Content>
-                      <Item.Header href={`/post/${book.idPost}`}>
+                      <Item.Header href={`/post/${book.detail.post}`}>
                         {book.title}
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
@@ -701,19 +640,17 @@ class MyPost extends Component {
                       <Item.Description>
                         <p>
                           วันที่จองเมื่อ{" "}
-                          {moment(new Date(book.bookDate)).format(
-                            "D MMMM YYYY"
-                          )}
+                          {moment(new Date(book.Date)).format("D MMMM YYYY")}
                         </p>
                         <p>
-                          ตั้งแต่เวลา {book.timeIn} จนถึง {book.timeOut}
+                          ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}
                         </p>
                       </Item.Description>
 
                       {(() => {
-                        if (book.statusBook === 0) {
+                        if (book.detail.status === 0) {
                           return <Item.Meta>ยกเลิกแล้ว</Item.Meta>;
-                        } else if (book.check.checkOutStatus === true) {
+                        } else if (book.check.checkout.status === true) {
                           return <Item.Meta>ทำรายการสำเร็จ</Item.Meta>;
                         }
                       })()}
@@ -763,13 +700,13 @@ class MyPost extends Component {
             <Modal.Description>
               <p>
                 วันที่จอง{" "}
-                {moment(new Date(this.state.temp_bookdata.bookDate)).format(
+                {moment(new Date(this.state.temp_bookdata.Date)).format(
                   "D MMMM YYYY"
                 )}
               </p>
               <p>
-                ตั้งแต่เวลา {this.state.temp_bookdata.timeIn} จนถึง{" "}
-                {this.state.temp_bookdata.timeOut}
+                ตั้งแต่เวลา {this.state.temp_bookdata.detail.timein} จนถึง{" "}
+                {this.state.temp_bookdata.detail.timeout}
               </p>
             </Modal.Description>
           </Modal.Content>
@@ -786,8 +723,8 @@ class MyPost extends Component {
               className="btn-paku"
               onClick={this.cancelBooking.bind(
                 this,
-                this.state.temp_bookdata.idPost,
-                this.state.temp_bookdata.id
+                this.state.temp_bookdata.detail.post,
+                this.state.temp_bookdata._id
               )}
             >
               <text>ยืนยัน</text>
@@ -876,8 +813,8 @@ class MyPost extends Component {
               className="btn-paku"
               onClick={(e) => {
                 this.onSubmitCheckOut(e, {
-                  postid: this.state.temp_checkoutdata.idPost,
-                  checkid: this.state.temp_checkoutdata.check.id,
+                  postid: this.state.temp_checkoutdata.detail.post,
+                  checkid: this.state.temp_checkoutdata._id,
                 });
               }}
             >
@@ -936,7 +873,9 @@ class MyPost extends Component {
                 {rendererList}
               </Grid.Column>
             </Grid>
-
+            {console.log("posts", this.state.posts)}
+            {console.log("bookuser", this.state.bookuser)}
+            {console.log("bookpost", this.state.bookpost)}
             {modalPopup}
           </Container>
           <Footer />
@@ -959,6 +898,7 @@ export default connect(mapStateToProps, {
   getPosts,
   deletePost,
   getBookUser,
+  getBookAll,
   cancelBook,
   availablePost,
   checkBook,
