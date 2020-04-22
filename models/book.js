@@ -42,6 +42,14 @@ const bookSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        in: {
+            type: String,
+            required: true
+        },
+        out: {
+            type: String,
+            required: true
+        },
         hours: {
             type: Number,
             required: true
