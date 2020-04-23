@@ -9,6 +9,7 @@ import {
   Label,
   Modal,
   Loader,
+  Icon,
   Transition,
 } from "semantic-ui-react";
 import { recommendPost } from "../../redux/actions/postActions";
@@ -192,6 +193,17 @@ class Home extends Component {
                           </List.Header>
                         </List.Content>
                       </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
@@ -204,6 +216,17 @@ class Home extends Component {
                           </List.Header>
                         </List.Content>
                       </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
@@ -216,6 +239,17 @@ class Home extends Component {
                           </List.Header>
                         </List.Content>
                       </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
@@ -228,6 +262,17 @@ class Home extends Component {
                           </List.Header>
                         </List.Content>
                       </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
@@ -240,6 +285,17 @@ class Home extends Component {
                           </List.Header>
                         </List.Content>
                       </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
