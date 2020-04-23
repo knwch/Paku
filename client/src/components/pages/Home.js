@@ -173,14 +173,36 @@ class Home extends Component {
                 })}
               </Grid.Row>
 
-              <Grid.Row columns={1} centered>
-                <Grid.Column mobile={16} tablet={12} computer={12}>
+              <Header textAlign="center" as="h2" className="mb-3">
+                <div>วิธีการใช้งาน PAKU</div>
+              </Header>
+
+              <Grid.Row columns={2} centered>
+                <Grid.Column
+                  mobile={8}
+                  tablet={6}
+                  computer={6}
+                  textAlign="right"
+                >
+                  <Image
+                    spaced="right"
+                    size="medium"
+                    className="mb-2"
+                    src={require("../imgs/phone.png")}
+                  />
+                </Grid.Column>
+                <Grid.Column
+                  mobile={8}
+                  tablet={6}
+                  computer={6}
+                  textAlign="left"
+                >
                   <Transition
                     animation="scale"
                     duration={2500}
                     transitionOnMount={true}
                   >
-                    <List animated verticalAlign="middle">
+                    <List className="mt-5" animated verticalAlign="middle">
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
