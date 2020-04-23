@@ -97,7 +97,7 @@ class SearchBox extends Component {
   render() {
     return (
       <Grid centered>
-        <Grid.Column mobile={13} tablet={8} computer={8}>
+        <Grid.Column mobile={13} tablet={8} computer={7} widescreen={5}>
           <Search
             id="searchBar"
             open={this.state.searchStatus}
