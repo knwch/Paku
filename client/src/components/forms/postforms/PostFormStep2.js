@@ -101,7 +101,8 @@ class PostFormStep2 extends Component {
               className="text-left pr-auto"
               mobile={16}
               tablet={8}
-              computer={8}
+              computer={6}
+              widescreen={5}
             >
               <Button onClick={this.back} className="btn-paku" color="yellow">
                 <Button.Content>
