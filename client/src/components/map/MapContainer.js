@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import styles from "./mapStyles";
 import Marker from "./Marker";
+import { key } from "../../config/keymap";
 
 class MapContainer extends Component {
   // constructor(props) {
@@ -113,7 +114,7 @@ class MapContainer extends Component {
       <div style={{ height: this.props.height, width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
-            key: "AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM",
+            key: `${key}`,
             language: "th",
           }}
           center={this.props.center}
