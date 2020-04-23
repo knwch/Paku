@@ -14,25 +14,36 @@ import {
 } from './types'
 
 // Add Book
-export const addBook = (bookData, idPost) => dispatch => {
-    // dispatch(clearErrors())
+export const addBook = (bookData, idPost) => async dispatch => {
+    dispatch(clearErrors())
     dispatch(setBookLoading())
-    axios.post(`/api/book/addBook/${idPost}`, bookData)
-        .then((res) => {
-            dispatch({
-                type: ADD_BOOK,
-                payload: res.data
-            })
+    try {
+        const book = await axios.post(`/api/book/addBook/${idPost}`, bookData)
+        dispatch({
+            type: ADD_BOOK,
+            payload: book.data
         })
-        .catch((err) => {
-            dispatch({
-                type: CANCEL_BOOK  
-            })
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response.data
-            })
+    } catch(err) {
+        console.log(err)
+        dispatch({
+            type: GET_ERRORS,
+            payload: err.response.data
         })
+    }
+    // axios.post(`/api/book/addBook/${idPost}`, bookData)
+    //     .then((res) => {
+    //         dispatch({
+    //             type: ADD_BOOK,
+    //             payload: res.data
+    //         })
+    //     })
+    //     .catch(function(err) {
+    //         console.log(err)
+    //         // dispatch({
+    //         //     type: GET_ERRORS,
+    //         //     payload: err.response.data
+    //         // })
+    //     })
 }
 
 // Cancel Book 
@@ -65,7 +76,7 @@ export const getBookAll = () => dispatch => {
         .catch((err) => {
             dispatch({
                 type: GET_BOOKS,
-                payload: null
+                payload: {}
             })
         })
 }
@@ -83,7 +94,7 @@ export const getBookPost = (idPost) => dispatch => {
         .catch((err) => {
             dispatch({
                 type: GET_POST_BOOK,
-                payload: null
+                payload: {}
             })
         })
 }
@@ -101,7 +112,7 @@ export const getBookUser = (idUser) => dispatch => {
         .catch((err) => {
             dispatch({
                 type: GET_USER_BOOK,
-                payload: null
+                payload: {}
             })
         })
 }
@@ -119,7 +130,7 @@ export const getBook = (idBook) => dispatch => {
         .catch((err) => {
             dispatch({
                 type: GET_BOOK,
-                payload: null
+                payload: {}
             })
         })
 }
