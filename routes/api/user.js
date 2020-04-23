@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const key = require('../../config/db.mongodb');
+const key = require('../../config/key');
 const passport = require('passport');
 
 // import input validation
