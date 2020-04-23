@@ -99,7 +99,7 @@ class SearchBox extends Component {
       document.getElementById("searchBar").blur();
       this.onSubmit();
     }
-  }
+  };
 
   render() {
     return (

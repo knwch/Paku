@@ -120,7 +120,7 @@ class MyPost extends Component {
       });
     }
 
-    console.log(books)
+    console.log(books);
 
     if (books != null) {
       if (books !== "No have book") {
