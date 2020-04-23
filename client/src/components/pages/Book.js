@@ -305,7 +305,7 @@ class Book extends Component {
     }
   };
 
-  handleStartBookingDate = async () => {
+  handleStartBookingDate = () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
       if (date.Date === this.state.book_date && date.detail.status === 1) {
@@ -341,7 +341,7 @@ class Book extends Component {
     });
   };
 
-  handleEndBookingDate = async () => {
+  handleEndBookingDate = () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
       if (date.Date === this.state.book_date && date.detail.status === 1) {
@@ -409,7 +409,9 @@ class Book extends Component {
       },
     };
     await this.props.addBook(newBook, this.state.postid);
-    this.props.history.push("/mypost");
+    if (this.props.book.loading === false) {
+      this.props.history.push("/mypost");
+    }
   };
 
   handleOpenModal = (e) => {
@@ -455,8 +457,15 @@ class Book extends Component {
         return this.state.book_end_disabled.includes(parseFloat(time.value));
       });
 
-    const { post, loading } = this.props.post;
-    if (post === null || loading) {
+    if (this.props.post.post === null || this.props.post.loading) {
+      return (
+        <Modal open={true} className="modal-paku" size="mini" basic>
+          <Loader size="large" active inline="centered">
+            <p>โปรดรอสักครู่</p>
+          </Loader>
+        </Modal>
+      );
+    } else if (this.props.book.book === null || this.props.book.loading) {
       return (
         <Modal open={true} className="modal-paku" size="mini" basic>
           <Loader size="large" active inline="centered">
