@@ -141,7 +141,7 @@ class PostDetail extends Component {
                   );
                 })}
               </Grid.Row>
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Item.Group>
                   <Item>
                     <Item.Content>
@@ -295,7 +295,7 @@ class PostDetail extends Component {
                   <Divider />
                 </Item.Group>
               </Grid.Column>
-              <Grid.Column mobile={16} tablet={5} computer={5}>
+              <Grid.Column mobile={16} tablet={5} computer={5} widescreen={4}>
                 <Item.Group>
                   <Header>
                     <div>
