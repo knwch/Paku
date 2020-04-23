@@ -219,7 +219,7 @@ class ConfirmCard extends Component {
         <NavMenu />
         <Container fluid>
           <Grid centered className="mb-4">
-            <Grid.Column mobile={16} tablet={9} computer={9}>
+            <Grid.Column mobile={16} tablet={8} computer={6} widescreen={5}>
               <Header className="mb-5 text-center" as="h3">
                 <div>ยืนยันตัวตนของคุณก่อนที่จะเริ่มลงประกาศ</div>
               </Header>
