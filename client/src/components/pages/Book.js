@@ -488,7 +488,7 @@ class Book extends Component {
                   );
                 })}
               </Grid.Row>
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Card fluid>
                   <Card.Content>
                     <Form>
@@ -662,7 +662,7 @@ class Book extends Component {
                 </Modal.Actions>
               </Modal>
 
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Item.Group>
                   <Item>
                     <Item.Content>
