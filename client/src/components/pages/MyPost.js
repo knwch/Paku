@@ -871,7 +871,7 @@ class MyPost extends Component {
                 </Menu>
               </Grid.Row>
 
-              <Grid.Column mobile={16} tablet={9} computer={9}>
+              <Grid.Column mobile={15} tablet={9} computer={8} widescreen={6}>
                 {rendererList}
               </Grid.Column>
             </Grid>
