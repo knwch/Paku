@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const key = require('../../config/db.mongodb');
 const passport = require('passport');
-const formidable = require('formidable');
-const fs = require('fs');
 
 // import input validation
 const validateRegisterInput = require('../../validator/register');
@@ -32,7 +30,7 @@ router.post('/register', (req, res) => {
 
     // Check Validation
     if (!isValid) {
-        // console.log(errors);
+        // console.log(ลชบ);
         return res.status(400).json(errors);
     }
 
@@ -75,13 +73,13 @@ router.post('/register', (req, res) => {
                             // console.log(user);
                         })
                         .catch((err) => {
-                            console.log(err);
+                            res.sendStatus(500)
                         });
                 })
             })
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         })
 });
 
@@ -116,7 +114,7 @@ router.post('/login', (req, res) => {
                 if (isMath) {
                     // User Matched
                     // const payload = { id:user.id, name: user.name, photo_user: user.photo_user }; // Create JWT Payload
-                    const payload = { id:user.id, name: user.name, email: user.email, idCard: user.Card };
+                    const payload = { id:user.id, name: user.name, email: user.email, status: user.status };
                     // console.log('succeess');
                     // Sign Token
                     jwt.sign(payload, key.secretOrKey, { expiresIn: 3600}, (err, token) => {
@@ -133,33 +131,42 @@ router.post('/login', (req, res) => {
             });
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         });
 });
 
 // @route   POST api/users/confirmIdCard
 // @desc    Confirm IdCard of user
 // @access  Private
-router.post('/confirm', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/confirm', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { errors, isValid } = validateIDCradInput(req.body); 
 
     if (!isValid) {
         return res.status(400).json(errors);
     }
-    // console.log(req.body)
-    User.findById(req.user.id)
-        .then((user) => {
-            user.Card.idCard = req.body.idCard
-            user.photo_card.photoCard = req.body.idCardURL
-            user.photo_card.photoPerson = req.body.idCardPerson
+    const idCard = req.body.idCard
+    const laser = req.body.laser
 
-            user.save().then((user) => {
-                res.json({ Card: user.Card });
-            })
+    const users = await User.find({ $or: [{ 'Card.idCard': idCard }, { 'Card.laser': laser }] })
+
+    if (users.length !== 0) {
+        return res.status(400).json({ user: 'IDCARD Error'})
+    }
+
+    const user = await User.findById({ _id: req.user.id })
+    
+    try {
+        user.Card.idCard = idCard
+        user.Card.laser = laser
+        user.photo_card.photoCard = req.body.idCardURL
+        user.photo_card.photoPerson = req.body.idCardPerson
+
+        user.save().then((user) => {
+            res.json({ Card: user.Card });
         })
-        .catch((err) => {
-            res.status(400).json({ idCard: 'User not found'})
-        });
+    } catch {
+        return res.status(404).json({ idCard: 'User not found'})
+    }
 });
 
 // @route   GET api/users/infoCard
@@ -171,7 +178,7 @@ router.get('/infoCard', passport.authenticate('jwt', { session: false }), (req, 
             res.json({ Card: user.Card });
         })
         .catch((err) => {
-            res.json({ idCard: 'User not found'})
+            res.status(404).json({ idCard: 'User not found'})
         })
 });
 

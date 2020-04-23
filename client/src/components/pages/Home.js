@@ -1,18 +1,28 @@
-import React, { Component } from 'react';
-import RecommendCard from '../cards/RecommendCard';
-import { Grid } from 'semantic-ui-react';
-import SearchBox from '../SearchBox';
+import React, { Component } from "react";
+import RecommendCard from "../cards/RecommendCard";
+import { Grid, Responsive, Header } from "semantic-ui-react";
+import { recommendPost } from "../../redux/actions/postActions";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
+import SearchBox from "../SearchBox";
 
 class Home extends Component {
-
-  componentDidMount() {
-    document.title = "Paku - Home"
-    document.body.classList.add('Background-Yellow');
+  constructor() {
+    super();
+    this.state = { recommendset: [] };
   }
 
-  // state = {
-  //   modalLogout: false
-  // }
+  componentWillMount() {
+    document.title = "Paku - Home";
+    document.body.classList.add("Background-Yellow");
+    this.props.recommendPost();
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Yellow");
+  }
 
   // handleLogoutModal = () => {
   //   this.setState({ modalLogout: true })
@@ -46,35 +56,61 @@ class Home extends Component {
   //     </Modal>
   //   );
   // }
-  
+
+  componentWillReceiveProps(nextProps) {
+    const posts = nextProps.post.post_recommend;
+
+    if (posts != null) {
+      if (posts.length !== 0) {
+        this.setState({
+          recommendset: posts,
+        });
+      }
+    }
+  }
+
   render() {
     return (
-      <div>
+      <Responsive>
+        <NavMenu />
         <SearchBox />
-        <div className="container-fluid mt-5">
-          <div className="text-left mb-4">
-            <h4><div>ที่จอดรถแนะนำ</div></h4>
-          </div>
-          <Grid textAlign='center' columns={4}>
-            <Grid.Row>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-              <Grid.Column mobile={16} tablet={4} computer={4}>
-                <RecommendCard />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </div>
-      </div>
+        <Grid
+          style={{
+            "margin-left": "2rem",
+            "margin-right": "2rem",
+          }}
+          className="mt-5 mb-5"
+        >
+          <Header textAlign="left" as="h2" className="mb-3">
+            <div>ที่จอดรถแนะนำ</div>
+          </Header>
+          <Grid.Row columns={4} centered>
+            {this.state.recommendset.map((post, index) => {
+              return (
+                <Grid.Column key={index} mobile={16} tablet={4} computer={4}>
+                  <RecommendCard
+                    photo={post.photos}
+                    title={post.title}
+                    rate={post.rate.rating}
+                    price={post.price}
+                    url={`/book/${post._id}`}
+                  />
+                </Grid.Column>
+              );
+            })}
+          </Grid.Row>
+        </Grid>
+        <Footer />
+      </Responsive>
     );
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  post: state.post,
+});
+
+export default connect(mapStateToProps, {
+  recommendPost,
+})(withRouter(Home));

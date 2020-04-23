@@ -33,7 +33,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 // @desc    Get All users 
 // @access  Public
 router.get('/alluser', (req, res) => {
-    User.find()
+    User.find({ status: 0 }).sort({ created: -1 })
         .then((profile) => {
             if (profile.length === 0) {
                 return res.status(200).json({ msg : 'User not found' });
@@ -41,7 +41,7 @@ router.get('/alluser', (req, res) => {
             res.json(profile);
         })
         .catch((err) => {
-            console.log(err);
+            res.sendStatus(500)
         })
 });
 
@@ -62,10 +62,9 @@ router.post('/edit', passport.authenticate('jwt', { session: false }), (req, res
             userData.phone = req.body.phone;
             userData.aboutMe = req.body.about;
             
-            userData.save()
-                .then((user) => {
-                    res.json(user);
-                })
+            userData.save().then((user) => {
+                res.json(user);
+            })
         })
         .catch((err) => {
             res.status(404).json({ error: 'No Post found with that ID'});
@@ -81,7 +80,7 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
             res.json({ success: true })
         )
         .catch((err) => {
-            console.log(err)
+            res.status(404).json({ profile: 'No User found with that ID'})
         })
     )
 });
@@ -92,7 +91,7 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), (req,
 router.get('/handle/:id', (req, res) => {
     let errors = {};
 
-    User.findOne({ username: req.parms.id })
+    User.findOne({ username: req.parms.id }).select({ state: 0, terms: 0, Card: 0})
         .then((profile) => {
             if (!profile) {
                 errors.msg = 'User not found';
@@ -101,7 +100,6 @@ router.get('/handle/:id', (req, res) => {
             res.json(profile)
         })
         .catch((err) => {
-            console.log(err);
             res.state(404).json({ profile: 'No User found with that ID'});
         });
 });
@@ -125,7 +123,7 @@ router.post('/upload', passport.authenticate('jwt', { session: false }), (req, r
                     res.json(user)
                 })
                 .catch((err) => {
-                    res.json({ image : "Upload fail" })
+                    res.status(400).json({ image : "Upload fail" })
                 })
         })
         .catch((err) => {

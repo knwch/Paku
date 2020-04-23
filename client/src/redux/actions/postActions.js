@@ -10,7 +10,9 @@ import {
   DELETE_POST,
   AVAILABLE_POST,
   SET_POST_LOADING,
-  SET_POST_SUCCESS
+  SET_POST_SUCCESS,
+  SEARCH_POST,
+  GET_RECOMMEND
 } from './types';
 
 // Add Post
@@ -184,6 +186,42 @@ export const availablePost = (availableData, idPost) => dispatch => {
       })
       dispatch({
         type: AVAILABLE_POST,
+        payload: res.data
+      })
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    })
+}
+
+// Search post 
+export const searchPost = (search) => dispatch => {
+  // dispatch(setPostLoading())
+  axios.get(`/api/posts/search?q=${search}`)  
+    .then((res) => {
+      dispatch({
+        type: SEARCH_POST,
+        payload: res.data
+      })
+    })
+    .catch((err) => {
+      dispatch({
+        type: SEARCH_POST,
+        payload: null
+      })
+    })
+}
+
+// Get recommend
+export const recommendPost = () => dispatch => {
+  dispatch(setPostLoading())
+  axios.get('/api/posts/recommend')
+    .then((res) => {
+      dispatch({
+        type: GET_RECOMMEND,
         payload: res.data
       })
     })

@@ -1,71 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const key = require('../../config/db.mongodb');
 const passport = require('passport');
-
-// import input validation
-const validateLoginInput = require('../../validator/login');
-
-// import User Model
-const Admin = require('../../models/admin');
+const {
+    userall,
+    userConfirm,
+    userById,
+    confirmUser,
+    unConfirmUser,
+    delUser
+} = require('../../controller/admin')
 
 // @route       GET api/admin
 // @desc        Default Route
 // @access      Public
 router.get('/test', (req, res) => res.json({ msg : 'Tests admin system' }));
 
-// @route       GET api/admin/login
-// @desc        Login Admin / Returning JWT Token
-// @access      Public
-router.post('/admin_login', (req, res) => {
-    const { errors, isValid } = validateLoginInput(req.body);
-
-    // Check Validation 
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
-
-    const username = req.body.username;
-    const password = req.body.password;
-
-    Admin.findOne({ username }).then((admin) => {
-        // Check for admin
-        if (!admin) {
-            errors.username = `Username not found`;
-            return res.status(404).json(errors);
-        }
-
-        // Check Password
-        bcrypt.compare(password, admin.password).then(isMatch => {
-            // Admin Matched
-            if (isMatch) {
-                const payload = { id: admin.id, name: admin.name }; // Create JWT Payload
-
-                // Sign Token
-                jwt.sign(payload, key.secretOrKey, { expiresIn: 3600 }, (err, token) => {
-                    res.json({
-                        success: true,
-                        token: 'Bearer ' + token
-                    });
-                });
-            } else {
-                errors.password = `Password Incorret`;
-                return res.status(404).json(errors)
-            }
-        });
-    })
-});
-
-// @route       GET api/admin/current
-// @desc        Return current admin
+// @route       GET api/admin/user
+// @desc        Get All user
 // @access      Private
-router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.json({
-        id: req.admin.id,
-        username: req.admin.username,
-    });
-});
+router.get('/user', passport.authenticate('jwt', { session: false }), userall)
 
-module.exports = router;
+// @route       GET api/admin/confirm
+// @desc        Get user require confirm
+// @access      Private
+router.get('/confirm', passport.authenticate('jwt', { session: false }), userConfirm)
+
+// @route       GET api/admin/user/:id
+// @desc        Get user by id
+// @access      Private
+router.get('/user/:id', passport.authenticate('jwt', { session: false }), userById)
+
+// @route       GET api/admin/confirmUser/:id
+// @desc        Confirm user
+// @access      Private
+router.get('/confirmUser/:id', passport.authenticate('jwt', { session: false }), confirmUser)
+
+// @route       GET api/admin/unConfirm/:id
+// @desc        UnConfirm user
+// @access      Private
+router.get('/unConfirm/:id', passport.authenticate('jwt', { session: false }), unConfirmUser)
+
+// @route       DELETE api/admin/del/:id
+// @desc        Delete user, post by id
+// @access      Private
+router.delete('/del/:id', passport.authenticate('jwt', { session: false }), delUser)
+
+module.exports = router

@@ -9,6 +9,11 @@ const Post = require('../../models/post');
 // import input validation
 const validatePostInput = require('../../validator/post');
 
+const { 
+    search,
+    recommend
+} = require('../../controller/post')
+
 // @route   GET api/post
 // @desc    Default Route
 // @access  Public
@@ -18,15 +23,15 @@ router.get('/test', (req, res) => res.json({ msg : 'Tests post system' }));
 // @desc    Get All posts 
 // @access  Public
 router.get('/allPost', (req, res) => {
-    Post.find()
+    Post.find({ available: true }).sort({ created: -1 })
         .then((post) => {
             if (post.length === 0) {
                 return res.status(200).json({ post: 'No have post' });
             }
-            res.json(post);
+            res.status(200).json(post);
         })
         .catch((err) => {
-            res.status(404).json(err);
+            res.sendStatus(500)
         })
 });
 
@@ -36,7 +41,7 @@ router.get('/allPost', (req, res) => {
 router.get('/handle/:id', (req, res) => {
     Post.findById(req.params.id)
         .then((post) => {
-            res.json(post);
+            res.status(200).json(post);
         })
         .catch((err) => {
             res.status(404).json({ post: 'No Post found with that ID'});
@@ -89,7 +94,7 @@ router.post('/addPost', passport.authenticate('jwt', { session: false }), (req, 
             // res.json(newPost)
             newPost.save()
                 .then((post) => {
-                    res.json(post);
+                    res.status(201).json(post);
                 })
         })
         .catch((err) => {
@@ -108,7 +113,7 @@ router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), (
             }
 
             post.remove().then((post) => {
-                res.json({ success: true});
+                res.status(200).json({ success: true});
             })
         })
         .catch((err) => {
@@ -155,7 +160,7 @@ router.post('/edit/:id', passport.authenticate('jwt', { session: false }), (req,
             post.price = req.body.price;
 
             post.save().then((post) => {
-                res.json(post);
+                res.status(200).json(post);
             })
         })
         .catch((err) => {
@@ -175,6 +180,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             const newComment = {
                 user: req.user.id,
+                name: req.user.name,
                 comment: req.body.comment,
                 photoUser: req.user.photo_user,
                 rate: req.body.rate
@@ -193,7 +199,7 @@ router.post('/comment/:id', passport.authenticate('jwt', { session: false }), (r
 
             // res.json(post)
             post.save().then((post) => {
-                res.json(post);
+                res.status(200).json(post);
             })
         })
         .catch((err) => {
@@ -253,13 +259,13 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
 
     Post.findById(req.params.id)
         .then((post) => {
-            if (req.user.id != post.user) {
-                return res.status(400).json({ post: 'User not authorized'})
+            if (req.user.id !== post.user.toString()) {
+                return res.status(401).json({ post: 'User not authorized'})
             }
 
             if (req.body.available === post.available) {
                 post.available = !post.available
-                post.save().then((post) => res.json(post))
+                post.save().then((post) => res.status(200).json(post))
             } else {
                 return res.status(400).json({ post: 'Input isn t reqiured  '})
             }
@@ -268,5 +274,15 @@ router.post('/available/:id', passport.authenticate('jwt', { session: false }), 
             res.status(404).json({ post: 'No Post found with that ID'})
         })
 })
+
+// @route   GET api/post/search?search=?
+// @desc    Get post by search 
+// @access  Pubilc
+router.get('/search?', search)
+
+// @route   GET api/post/recommend
+// @desc    Get post recommend 
+// @access  Pubilc
+router.get('/recommend', recommend)
 
 module.exports = router

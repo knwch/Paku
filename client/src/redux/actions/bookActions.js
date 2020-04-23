@@ -9,12 +9,13 @@ import {
     CLEAR_ERRORS,
     BOOK_LOADING,
     CHECK_BOOK,
+    GET_BOOKS,
     GET_ERRORS
 } from './types'
 
 // Add Book
 export const addBook = (bookData, idPost) => dispatch => {
-    dispatch(clearErrors())
+    // dispatch(clearErrors())
     dispatch(setBookLoading())
     axios.post(`/api/book/addBook/${idPost}`, bookData)
         .then((res) => {
@@ -47,6 +48,24 @@ export const cancelBook = (idPost, idBook) => dispatch => {
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
+            })
+        })
+}
+
+// Get Book All
+export const getBookAll = () => dispatch => {
+    dispatch(setBookLoading())
+    axios.get(`/api/book/`)
+        .then((res) => {
+            dispatch({
+                type: GET_BOOKS,
+                payload: res.data.book
+            })
+        })
+        .catch((err) => {
+            dispatch({
+                type: GET_BOOKS,
+                payload: null
             })
         })
 }

@@ -1,11 +1,24 @@
-import React, { Component } from 'react';
-import GoogleMapReact from 'google-map-react';
-import styles from '../map/mapStyles';
-import NearbyCard from '../cards/NearbyCard';
-import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
-import { getPosts } from '../../redux/actions/postActions';
-import { Grid, Responsive, Container, Icon, Popup } from 'semantic-ui-react';
+import React, { Component } from "react";
+import GoogleMapReact from "google-map-react";
+import styles from "../map/mapStyles";
+import NearbyCard from "../cards/NearbyCard";
+import NavMenu from "../NavMenu";
+import Footer from "../Footer";
+import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
+import { getPosts, recommendPost } from "../../redux/actions/postActions";
+import {
+  Grid,
+  Responsive,
+  Container,
+  Icon,
+  Popup,
+  Modal,
+  Loader,
+  Header,
+} from "semantic-ui-react";
+import {key} from '../../config/keymap'
+import SearchBox from "../SearchBox";
 
 // // Return map bounds based on list of places
 // const getMapBounds = (map, maps, places) => {
@@ -40,149 +53,171 @@ import { Grid, Responsive, Container, Icon, Popup } from 'semantic-ui-react';
 // };
 
 class Rent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      places: [],
+      recommendset: [],
+      location: {
+        lat: 13.7563,
+        lng: 100.5018,
+      },
+      zoom: 17,
+      show: false,
+      errors: {},
+    };
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            places: [],
-            location: {
-                lat: 13.7563,
-                lng: 100.5018
-            },
-            zoom: 17,
-            show: false,
-            errors: {}
-        }
+  currentLocationRequest = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState((prevState) => ({
+          location: {
+            ...prevState.currentLatLng,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+          zoom: 17,
+          show: true,
+        }));
+      });
+    }
+  };
+
+  componentWillMount() {
+    this.props.getPosts();
+    this.props.recommendPost();
+    this.currentLocationRequest();
+  }
+
+  componentDidMount() {
+    document.title = "Paku - Rent";
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const posts = nextProps.post.posts;
+    const recommendposts = nextProps.post.post_recommend;
+
+    if (posts != null) {
+      if (posts.length !== 0) {
+        this.setState({
+          places: posts,
+        });
+      }
     }
 
-    componentWillMount() {
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    this.setState(prevState => ({
-                        location: {
-                            ...prevState.currentLatLng,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        },
-                        zoom: 17,
-                        show: true
-                    }))
-                }
-            )
-        }
-
+    if (recommendposts != null) {
+      if (recommendposts.length !== 0) {
+        this.setState({
+          recommendset: recommendposts,
+        });
+      }
     }
+  }
 
-    componentDidMount() {
-        document.title = "Paku - Rent"
+  render() {
+    const { places } = this.state;
+    const { post, loading } = this.props.post;
+    if (post === null || loading) {
+      return (
+        <Modal open={true} className="modal-paku" size="mini" basic>
+          <Loader size="large" active inline="centered">
+            <p>โปรดรอสักครู่</p>
+          </Loader>
+        </Modal>
+      );
+    } else {
+      return (
+        <Responsive>
+          <NavMenu />
+          <SearchBox />
+          <Container className="mt-4" fluid>
+            <Grid centered>
+              <Grid.Column mobile={16} tablet={10} computer={10}>
+                <div style={{ height: "100vh", width: "100%" }}>
+                  <GoogleMapReact
+                    bootstrapURLKeys={{
+                      key: `${key}`,
+                      language: "th",
+                    }}
+                    // yesIWantToUseGoogleMapApiInternals
+                    // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, places)}
+                    center={this.state.location}
+                    zoom={this.state.zoom}
+                    options={{ styles }}
+                  >
+                    {places.map((place, index) => {
+                      return (
+                        <Popup
+                          content={place.location.address}
+                          key={index}
+                          header={place.title}
+                          lat={place.location.latitude}
+                          lng={place.location.longitude}
+                          trigger={
+                            <Link to={`/book/${place._id}`}>
+                              <Icon
+                                className="text-decoration-none"
+                                circular
+                                inverted
+                                link
+                                size="large"
+                                name="home"
+                                color="teal"
+                                fitted
+                              />
+                            </Link>
+                          }
+                        />
+                      );
+                    })}
 
-        this.props.getPosts();
+                    {this.state.show && (
+                      <Popup
+                        header={"คุณอยู่ที่นี่"}
+                        lat={this.state.location.lat}
+                        lng={this.state.location.lng}
+                        trigger={
+                          <Icon size="big" name="user" color="blue" fitted />
+                        }
+                      />
+                    )}
+                  </GoogleMapReact>
+                </div>
+              </Grid.Column>
+
+              <Grid.Column mobile={16} tablet={5} computer={5}>
+                <Header textAlign="left">
+                  <div>ที่จอดรถแนะนำ</div>
+                </Header>
+                {this.state.recommendset.map((post, index) => {
+                  return (
+                    <Grid.Row key={index}>
+                      <NearbyCard
+                        photo={post.photos}
+                        title={post.title}
+                        rate={post.rate.rating}
+                        price={post.price}
+                        url={`/book/${post._id}`}
+                      />
+                    </Grid.Row>
+                  );
+                })}
+              </Grid.Column>
+            </Grid>
+          </Container>
+          <Footer />
+        </Responsive>
+      );
     }
-
-    componentWillReceiveProps(nextProps) {
-
-        const posts = nextProps.post.posts;
-
-        if (posts.length !== 0) {
-            this.setState({
-                places: posts
-            })
-        }
-
-    }
-
-    render() {
-        const { places } = this.state;
-        return (
-            <Responsive>
-                <Container fluid>
-                    <Grid>
-
-                        <Grid.Column mobile={16} tablet={10} computer={11}>
-                            <div style={{ height: '100vh', width: '100%' }}>
-                                <GoogleMapReact
-                                    bootstrapURLKeys={{
-                                        key: 'AIzaSyCf6-elScNOgfdze15ermTJF5EynmGudZM',
-                                        language: 'th'
-                                    }}
-                                    // yesIWantToUseGoogleMapApiInternals
-                                    // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, places)}
-                                    center={this.state.location}
-                                    zoom={this.state.zoom}
-                                    options={{ styles }}
-                                >
-
-                                    {places.map((place, index) => {
-                                        return (
-                                            <Popup
-                                                content={place.location.address}
-                                                key={index}
-                                                header={place.title}
-                                                lat={place.location.latitude}
-                                                lng={place.location.longitude}
-                                                trigger={
-                                                    <Link to={`/book/${place._id}`}>
-                                                        <Icon
-                                                            circular
-                                                            inverted
-                                                            link
-                                                            size='large'
-                                                            name='home'
-                                                            color='teal'
-                                                            fitted
-                                                        />
-                                                    </Link>
-                                                }
-                                            />
-                                        )
-                                    })}
-
-                                    {this.state.show &&
-                                        <Popup
-                                            header={'คุณอยู่ที่นี่'}
-                                            lat={this.state.location.lat}
-                                            lng={this.state.location.lng}
-                                            trigger={
-                                                <Icon
-                                                    size='big'
-                                                    name='user'
-                                                    color='blue'
-                                                    fitted
-                                                />
-                                            }
-                                        />
-                                    }
-
-                                </GoogleMapReact>
-                            </div>
-                        </Grid.Column>
-
-                        {console.log(this.state.places)}
-
-                        <Grid.Column mobile={16} tablet={6} computer={5}>
-                            <Grid.Row>
-                                <NearbyCard />
-                            </Grid.Row>
-                            <Grid.Row>
-                                <NearbyCard />
-                            </Grid.Row>
-                            <Grid.Row>
-                                <NearbyCard />
-                            </Grid.Row>
-                        </Grid.Column>
-
-                    </Grid>
-                </Container>
-            </Responsive>
-        );
-    }
+  }
 }
 
-const mapStateToProps = state => ({
-    errors: state.errors,
-    post: state.post
-})
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  post: state.post,
+});
 
-export default connect(mapStateToProps, { getPosts })(withRouter(Rent));
+export default connect(mapStateToProps, { getPosts, recommendPost })(
+  withRouter(Rent)
+);

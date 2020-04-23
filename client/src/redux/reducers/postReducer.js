@@ -6,12 +6,16 @@ import {
   AVAILABLE_POST,
   POST_LOADING,
   SET_POST_SUCCESS,
-  SET_POST_LOADING
+  SET_POST_LOADING,
+  SEARCH_POST,
+  GET_RECOMMEND
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   post: {},
+  post_search: [],
+  post_recommend: [],
   issuccess: false,
   loading: false
 };
@@ -35,6 +39,18 @@ export default function(state = initialState, action) {
         post: action.payload,
         loading: false
       };
+    case GET_RECOMMEND:
+      return {
+        ...state,
+        post_recommend: action.payload,
+        loading: false
+      }
+    case SEARCH_POST: 
+      return {
+        ...state,
+        post_search: action.payload,
+        loading: false
+      }
     case ADD_POST:
       return {
         ...state,

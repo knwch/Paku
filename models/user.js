@@ -51,6 +51,10 @@ let userSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
+        laser: {
+            type: String,
+            default: ""
+        },
         confirm: {
             type: Boolean,
             default: 'false'
@@ -68,6 +72,10 @@ let userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    status: {
+        type: Number,
+        default: 0
+    },
     updated: Date,
     resetPasswordLink: {
         data: String,
@@ -78,6 +86,11 @@ let userSchema = new mongoose.Schema({
         default: Date.now
     },
 });
+
+userSchema.pre('remove', async function(next) {
+    await this.model('post').deleteMany({ user: this._id })
+    next()
+})
 
 // create the model for users and expose it to our app
 module.exports = User = mongoose.model('users', userSchema);

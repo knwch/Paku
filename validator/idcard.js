@@ -5,6 +5,7 @@ module.exports = validateIDCradInput = (data) => {
     let errors = {};
 
     data.idCard = !isEmpty(data.idCard) ? data.idCard : '';
+    data.laser = !isEmpty(data.laser) ? data.laser : '';
     data.idCardURL = !isEmpty(data.idCardURL) ? data.idCardURL : '';
     data.idCardPerson = !isEmpty(data.idCardPerson) ? data.idCardPerson : '';
 
@@ -16,6 +17,9 @@ module.exports = validateIDCradInput = (data) => {
     }
     if (!Validator.isNumeric(data.idCard)) {
         errors.idCard = `IDCard must be Integer`;
+    }
+    if (Validator.isEmpty(data.laser)) {
+        errors.laser = `laser field is required`;
     }
     if (Validator.isEmpty(data.idCardURL)) {
         errors.idCardImage = `Please upload IDCard image`; 

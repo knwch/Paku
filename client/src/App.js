@@ -1,15 +1,21 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./redux/actions/authActions";
-import { clearCurrentProfile } from './redux/actions/profileActions';
+import { clearCurrentProfile } from "./redux/actions/profileActions";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import PrivateRoute from './components/common/PrivateRoute';
+import PrivateRoute from "./components/common/PrivateRoute";
+import AdminRoute from "./components/common/AdminRoute";
 
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
@@ -24,8 +30,8 @@ import ConfirmCard from "./components/pages/ConfirmCard";
 import MyPost from "./components/pages/MyPost";
 import PostDetail from "./components/pages/PostDetail";
 import EditPost from "./components/pages/EditPost";
-import NavMenu from "./components/NavMenu";
-import Footer from "./components/Footer";
+import Admin from "./components/admin/Admin";
+import VerifyUser from "./components/admin/VerifyUser";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -50,12 +56,9 @@ if (localStorage.jwtToken) {
 
 class App extends Component {
   render() {
-    // const login = "http://localhost:3000/login";
-    // const register = "http://localhost:3000/register";
     return (
       <Provider store={store}>
         <Router>
-          <NavMenu />
           <div className="App">
             <Switch>
               <Route exact path="/" component={Home} />
@@ -71,13 +74,12 @@ class App extends Component {
               <PrivateRoute exact path="/mypost" component={MyPost} />
               <PrivateRoute exact path="/post/:id" component={PostDetail} />
               <PrivateRoute exact path="/editpost/:id" component={EditPost} />
-              <Route exact path="*">
+              <AdminRoute exact path="/admin" component={Admin} />
+              <AdminRoute exact path="/verifyuser" component={VerifyUser} />
+              <Route path="*">
                 <Redirect to="/" />
               </Route>
             </Switch>
-            {/* {window.location.href === login || window.location.href === register ?  null :  } */}
-            <Footer />
-            {/* {console.log(window.location.href)} */}
           </div>
         </Router>
       </Provider>
