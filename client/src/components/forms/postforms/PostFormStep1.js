@@ -157,7 +157,8 @@ class PostFormStep1 extends Component {
               className="text-left pr-auto"
               mobile={16}
               tablet={8}
-              computer={8}
+              computer={6}
+              widescreen={5}
             >
               <Header as="h3">
                 <div>มาเริ่มลงประกาศที่จอดรถกันเถอะ</div>
