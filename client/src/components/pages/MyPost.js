@@ -120,8 +120,10 @@ class MyPost extends Component {
       });
     }
 
+    console.log(books)
+
     if (books != null) {
-      if (books.length !== 0) {
+      if (books !== "No have book") {
         books.forEach((book) => {
           if (book.detail.user === this.state.userid) {
             posts.forEach((post) => {
