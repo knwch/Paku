@@ -66,7 +66,7 @@ class Book extends Component {
       open: "",
       close: "",
       address: "",
-      rate: "",
+      rate: 0,
       comments: [],
       location: {
         lat: null,
@@ -669,6 +669,34 @@ class Book extends Component {
                       <Header size="huge">
                         <div>{this.state.title}</div>
                       </Header>
+
+                      {(() => {
+                        if (this.state.rate !== 0) {
+                          if (this.state.rate <= 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star half" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          } else if (this.state.rate > 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          }
+                        } else {
+                          return (
+                            <Item.Description>
+                              <Icon fitted name="yellow star outline" />{" "}
+                              ไม่มีคะแนน
+                            </Item.Description>
+                          );
+                        }
+                      })()}
+
                       <Item.Description>
                         <Icon name="map pin" /> {this.state.address}
                       </Item.Description>
