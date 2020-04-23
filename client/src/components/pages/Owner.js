@@ -12,7 +12,7 @@ class Owner extends Component {
     return (
       <div className="container-fluid">
         <NavMenu />
-        <div>
+        <div className="mb-5">
           <h4 className="mb-4">วิธีเริ่มให้เช่าที่จอดรถ</h4>
           <p>การลงประกาศที่จอดรถบน PAKU ไม่ใช่เรื่องยาก...</p>
           <Link className="nav-link" to="/login">
