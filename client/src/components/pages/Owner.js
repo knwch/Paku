@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import NavMenu from "../NavMenu";
 import Footer from "../Footer";
 import {
@@ -53,8 +52,11 @@ class Owner extends Component {
                     </List.Icon>
                     <List.Content>
                       <List.Header>
-                        <div>เพิ่ม Location ที่คุณต้องการจะให้เช่า</div>
+                        <div>เพิ่มตำแหน่งที่ตั้ง ที่คุณต้องการจะให้เช่า</div>
                       </List.Header>
+                      <List.Description className="pt-1">
+                        <div>ระบุสถานที่ตั้งของที่จอดรถของคุณ</div>
+                      </List.Description>
                     </List.Content>
                   </List.Item>
 
@@ -77,9 +79,13 @@ class Owner extends Component {
                     <List.Content>
                       <List.Header>
                         <div>
-                          ส่รายละเอียดของที่พื้นที่ที่ต้องการเปิดให้เช่า
+                          ใส่รายละเอียดของสิ่งอำนวยความสะดวก
+                          และรายละเอียดเกี่ยวกับที่ตั้ง
                         </div>
                       </List.Header>
+                      <List.Description className="pt-1">
+                        <div>เพื่อช่วยให้ผู้ที่ต้องการมาเช่าใช้บริการของคุณ และหากคุณต้องการแก้ไข คุณสามารถกลับมาแก้ไขใหม่ได้</div>
+                      </List.Description>
                     </List.Content>
                   </List.Item>
 
@@ -101,8 +107,11 @@ class Owner extends Component {
                     </List.Icon>
                     <List.Content>
                       <List.Header>
-                        <div>ตั้งราคา</div>
+                        <div>ตั้งราคาที่คุณพอใจ</div>
                       </List.Header>
+                      <List.Description className="pt-1">
+                        <div>เราไม่มีนโยบายกำหนดราคาค่าเช่าขั้นต่ำ คุณสามารถตั้งราคาค่าเช่าตามทีคุณเห็นสมควรตรวจสอบ</div>
+                      </List.Description>
                     </List.Content>
                   </List.Item>
 
