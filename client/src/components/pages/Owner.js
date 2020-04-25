@@ -39,7 +39,7 @@ class Owner extends Component {
                   spaced="right"
                   size="medium"
                   className="mb-2"
-                  src={require("../imgs/phone.png")}
+                  src={require("../imgs/newpost.png")}
                 />
               </Grid.Column>
               <Grid.Column mobile={8} tablet={6} computer={6} textAlign="left">
