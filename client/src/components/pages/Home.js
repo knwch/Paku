@@ -177,7 +177,7 @@ class Home extends Component {
                 <div>วิธีการใช้งาน PAKU</div>
               </Header>
 
-              <Grid.Row columns={2} centered>
+              <Grid.Row columns={2} only="computer tablet" centered>
                 <Grid.Column
                   mobile={8}
                   tablet={6}
@@ -203,6 +203,149 @@ class Home extends Component {
                     transitionOnMount={true}
                   >
                     <List className="mt-5" animated verticalAlign="middle">
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            1
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>เลือกจุดหมายที่คุณต้องการจอดรถ</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            2
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>เลือกที่จอดรถที่คุณต้องการ</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            3
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>กรอกข้อมูลการจอง</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            4
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>ยืนยันการจอง</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            5
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>เช็คอิน - เช็คเอาท์</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+
+                      <List.Icon>
+                        <Label className="border-0 " basic circular>
+                          <Icon
+                            name="long arrow alternate down"
+                            color="grey"
+                            fitted
+                          />
+                        </Label>
+                      </List.Icon>
+
+                      <List.Item>
+                        <List.Icon>
+                          <Label circular className="btn-paku-light">
+                            6
+                          </Label>
+                        </List.Icon>
+                        <List.Content>
+                          <List.Header>
+                            <div>ให้คะแนนความพึงพอใจ และความคิดเห็น</div>
+                          </List.Header>
+                        </List.Content>
+                      </List.Item>
+                    </List>
+                  </Transition>
+                </Grid.Column>
+              </Grid.Row>
+
+              <Grid.Row columns={1} only="mobile" centered>
+                <Grid.Column
+                  mobile={14}
+                  textAlign="left"
+                >
+                  <Transition
+                    animation="scale"
+                    duration={2500}
+                    transitionOnMount={true}
+                  >
+                    <List className="mt-1" animated verticalAlign="middle">
                       <List.Item>
                         <List.Icon>
                           <Label circular className="btn-paku-light">
