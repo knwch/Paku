@@ -56,6 +56,7 @@ class Post extends Component {
 
   componentWillMount = () => {
     document.title = "Paku - Posting";
+    document.body.classList.add("Background-Brown");
     this.props.getIDcard();
   };
 
@@ -68,6 +69,10 @@ class Post extends Component {
       this.props.history.push("/confirmcard");
     }
   };
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Brown");
+  }
 
   requestCurrentLocation = () => {
     if (navigator.geolocation) {

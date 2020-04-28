@@ -119,7 +119,7 @@ exports.getBookofPost = async (req, res, next) => {
     const book = await Book.find({ 
         'detail.post': postid 
     }).select({ __v: 0, created: 0 }).sort({ Date: -1 })
-    if (book.length === 0) return res.status(200).json({ Book: 'No have book of post'})
+    // if (book.length === 0) return res.status(200).json({ Book: 'No have book of post'})
     
     res.status(200).json(book)
 }

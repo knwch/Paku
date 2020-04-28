@@ -10,7 +10,7 @@ import {
   Header,
   Label,
   Image,
-  Transition
+  Transition,
 } from "semantic-ui-react";
 import NavMenu from "../../NavMenu";
 import Footer from "../../Footer";
@@ -26,10 +26,10 @@ class PostFormStep3 extends Component {
           message: ":attribute ภาษาไทย",
           rule: (val, params, validator) => {
             return validator.helpers.testRegex(val, /^[ก-์]*$/i);
-          }
-        }
+          },
+        },
       },
-      element: message => (
+      element: (message) => (
         <div className="mb-2">
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -43,34 +43,34 @@ class PostFormStep3 extends Component {
         required: "โปรดระบุ:attribute",
         alpha_num: "โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น",
         integer: "โปรดระบุเฉพาะตัวเลขเท่านั้น",
-        string: "โปรดระบุเฉพาะตัวอักษรเท่านั้น"
-      }
+        string: "โปรดระบุเฉพาะตัวอักษรเท่านั้น",
+      },
     });
   }
 
   fileInputRef = React.createRef();
 
-  continue = e => {
+  continue = (e) => {
     e.preventDefault();
     this.props.nextStep(e);
   };
 
-  back = e => {
+  back = (e) => {
     e.preventDefault();
     this.props.prevStep();
   };
 
-  setPrice = input => e => {
+  setPrice = (input) => (e) => {
     e.preventDefault();
     this.props.setPrice(input);
   };
 
-  fileChange = e => {
+  fileChange = (e) => {
     e.preventDefault();
     this.props.fileChange(e);
   };
 
-  removeFile = index => e => {
+  removeFile = (index) => (e) => {
     e.preventDefault();
     this.props.removeFile(index);
   };
@@ -107,7 +107,8 @@ class PostFormStep3 extends Component {
               className="text-left pr-auto"
               mobile={16}
               tablet={8}
-              computer={8}
+              computer={6}
+              widescreen={5}
             >
               <Button onClick={this.back} className="btn-paku" color="yellow">
                 <Button.Content>

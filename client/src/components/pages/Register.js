@@ -164,7 +164,7 @@ class Register extends Component {
                 only="computer tablet"
               />
 
-              <Grid.Column mobile={16} tablet={7} computer={6}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <h4 className="text-center mb-4">
                   <div>ลงทะเบียน</div>
                 </h4>
@@ -335,7 +335,10 @@ class Register extends Component {
                     </Checkbox>
                     <span className="align-middle">
                       &nbsp;ฉันยอมรับ
-                      <text className="ButtonLink" onClick={this.handleOpenModal}>
+                      <text
+                        className="ButtonLink"
+                        onClick={this.handleOpenModal}
+                      >
                         ข้อกำหนดและเงื่อนไขในการใช้งาน
                       </text>
                     </span>

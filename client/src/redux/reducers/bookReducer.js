@@ -40,7 +40,7 @@ export default (state = initialState, action)  => {
         case ADD_BOOK:
             return {
                 ...state,
-                bookPost: [action.payload, ...state.bookPost],
+                bookPost: [...state.bookPost, action.payload],
                 loading: false
             }
         case GET_POST_BOOK:

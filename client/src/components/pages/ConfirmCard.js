@@ -42,8 +42,8 @@ class ConfirmCard extends Component {
           message: ":values",
           rule: (val, params, validator) => params === null,
           messageReplace: (message, params) =>
-            message.replace(":values", params) // optional
-        }
+            message.replace(":values", params), // optional
+        },
       },
       element: (message) => (
         <div className="mb-2">
@@ -168,7 +168,10 @@ class ConfirmCard extends Component {
   };
 
   onSubmit = (e) => {
-    if (this.validator.fieldValid("เลขบัตรประชาชน") && this.validator.fieldValid("เลขหลังบัตรประชาชน")) {
+    if (
+      this.validator.fieldValid("เลขบัตรประชาชน") &&
+      this.validator.fieldValid("เลขหลังบัตรประชาชน")
+    ) {
       e.preventDefault();
       const cardUser = {
         idCard: this.state.idCard,
@@ -219,7 +222,7 @@ class ConfirmCard extends Component {
         <NavMenu />
         <Container fluid>
           <Grid centered className="mb-4">
-            <Grid.Column mobile={16} tablet={9} computer={9}>
+            <Grid.Column mobile={16} tablet={8} computer={6} widescreen={5}>
               <Header className="mb-5 text-center" as="h3">
                 <div>ยืนยันตัวตนของคุณก่อนที่จะเริ่มลงประกาศ</div>
               </Header>
@@ -228,8 +231,8 @@ class ConfirmCard extends Component {
                   <div>บัตรประชาชน</div>
                 </Header>
                 <div className="mb-2">
-                  เพื่อทำการยืนยันตัวตนของคุณ
-                  คุณสามารถดูตัวอย่างการอัปโหลดได้<text className="ButtonLink">ที่นี่</text>
+                  เพื่อทำการยืนยันตัวตนของคุณ คุณสามารถดูตัวอย่างการอัปโหลดได้
+                  <text className="ButtonLink">ที่นี่</text>
                 </div>
 
                 <Form.Field className="text-left mt-3 mb-0">

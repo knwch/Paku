@@ -9,7 +9,7 @@ import {
   Icon,
   Header,
   Transition,
-  Label
+  Label,
 } from "semantic-ui-react";
 import NavMenu from "../../NavMenu";
 import Footer from "../../Footer";
@@ -25,10 +25,10 @@ class PostFormStep2 extends Component {
           message: ":attribute ภาษาไทย",
           rule: (val, params, validator) => {
             return validator.helpers.testRegex(val, /^[ก-์]*$/i);
-          }
-        }
+          },
+        },
       },
-      element: message => (
+      element: (message) => (
         <div className="mb-2">
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -42,37 +42,37 @@ class PostFormStep2 extends Component {
         required: "โปรดระบุ:attribute",
         alpha_num: "โปรดระบุเฉพาะตัวอักษรหรือตัวเลขเท่านั้น",
         integer: "โปรดระบุเฉพาะตัวเลขเท่านั้น",
-        string: "โปรดระบุเฉพาะตัวอักษรเท่านั้น"
-      }
+        string: "โปรดระบุเฉพาะตัวอักษรเท่านั้น",
+      },
     });
   }
 
-  addRule = e => {
+  addRule = (e) => {
     e.preventDefault();
     this.props.handleAddRule();
   };
 
-  addNearby = e => {
+  addNearby = (e) => {
     e.preventDefault();
     this.props.handleAddNearby();
   };
 
-  deleteRuleItem = index => e => {
+  deleteRuleItem = (index) => (e) => {
     e.preventDefault();
     this.props.deleteRuleItem(index);
   };
 
-  deleteNearbyItem = index => e => {
+  deleteNearbyItem = (index) => (e) => {
     e.preventDefault();
     this.props.deleteNearbyItem(index);
   };
 
-  handleFacility = facility => e => {
+  handleFacility = (facility) => (e) => {
     e.preventDefault();
     this.props.handleFacility(facility);
   };
 
-  continue = e => {
+  continue = (e) => {
     if (this.validator.allValid()) {
       e.preventDefault();
       this.props.nextStep();
@@ -84,7 +84,7 @@ class PostFormStep2 extends Component {
     }
   };
 
-  back = e => {
+  back = (e) => {
     e.preventDefault();
     this.props.prevStep();
   };
@@ -101,7 +101,8 @@ class PostFormStep2 extends Component {
               className="text-left pr-auto"
               mobile={16}
               tablet={8}
-              computer={8}
+              computer={6}
+              widescreen={5}
             >
               <Button onClick={this.back} className="btn-paku" color="yellow">
                 <Button.Content>
@@ -209,7 +210,7 @@ class PostFormStep2 extends Component {
                   <div>สิ่งอำนวยความสะดวก</div>
                 </Header>
                 <Form.Group inline>
-                  {values.addfacility.map(facility => {
+                  {values.addfacility.map((facility) => {
                     return (
                       <Form.Checkbox
                         key={facility.key}

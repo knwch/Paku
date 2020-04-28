@@ -94,10 +94,17 @@ class SearchBox extends Component {
     });
   };
 
+  keyPressed = (e) => {
+    if (e.which === 13) {
+      document.getElementById("searchBar").blur();
+      this.onSubmit();
+    }
+  };
+
   render() {
     return (
       <Grid centered>
-        <Grid.Column mobile={13} tablet={8} computer={8}>
+        <Grid.Column mobile={13} tablet={8} computer={7} widescreen={5}>
           <Search
             id="searchBar"
             open={this.state.searchStatus}
@@ -120,6 +127,7 @@ class SearchBox extends Component {
             results={this.state.post_search}
             resultRenderer={this.resultRenderer}
             noResultsMessage={<div>ไม่พบที่จอดรถ</div>}
+            onKeyPress={this.keyPressed}
           />
           {/* <Input className="my-3" icon placeholder="ค้นหาที่จอดรถ..." fluid>
             <input

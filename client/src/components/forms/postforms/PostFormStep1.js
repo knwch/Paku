@@ -10,7 +10,7 @@ import {
   Header,
   Modal,
   Transition,
-  Label
+  Label,
 } from "semantic-ui-react";
 import MapContainer from "../../map/MapContainer";
 import NavMenu from "../../NavMenu";
@@ -20,7 +20,7 @@ class PostFormStep1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false
+      modalOpen: false,
     };
 
     this.validator = new SimpleReactValidator({
@@ -30,10 +30,10 @@ class PostFormStep1 extends Component {
           message: ":attribute ภาษาไทย",
           rule: (val, params, validator) => {
             return validator.helpers.testRegex(val, /^[ก-์]*$/i);
-          }
-        }
+          },
+        },
       },
-      element: message => (
+      element: (message) => (
         <div className="mb-2">
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -49,11 +49,11 @@ class PostFormStep1 extends Component {
         integer: "โปรดระบุเฉพาะตัวเลขเท่านั้น",
         string: "โปรดระบุเฉพาะตัวอักษรเท่านั้น",
         min: ":attributeต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
-      }
+      },
     });
   }
 
-  continue = e => {
+  continue = (e) => {
     if (this.validator.allValid()) {
       e.preventDefault();
       this.props.nextStep();
@@ -65,10 +65,10 @@ class PostFormStep1 extends Component {
     }
   };
 
-  handleCancelLocation = e => {
+  handleCancelLocation = (e) => {
     e.preventDefault();
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
     this.props.handleCancelLocation();
   };
@@ -80,7 +80,7 @@ class PostFormStep1 extends Component {
 
   handleConfirmLocation = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
     });
   };
 
@@ -88,7 +88,7 @@ class PostFormStep1 extends Component {
     const options = [
       { key: "h", text: "บ้าน", value: "บ้าน" },
       { key: "f", text: "ลานกว้าง", value: "ลานกว้าง" },
-      { key: "o", text: "อื่นๆ", value: "อื่นๆ" }
+      { key: "o", text: "อื่นๆ", value: "อื่นๆ" },
     ];
 
     const times = [
@@ -139,14 +139,16 @@ class PostFormStep1 extends Component {
       { text: "22.00", value: "22.00" },
       { text: "22.30", value: "22.30" },
       { text: "23.00", value: "23.00" },
-      { text: "23.30", value: "23.30" }
+      { text: "23.30", value: "23.30" },
     ];
 
     const { values, handleChange, handleMarker } = this.props;
 
-    const timeStartOptions = times.filter(time => time.value !== values.close);
+    const timeStartOptions = times.filter(
+      (time) => time.value !== values.close
+    );
 
-    const timeEndOptions = times.filter(time => time.value !== values.open);
+    const timeEndOptions = times.filter((time) => time.value !== values.open);
 
     return (
       <Responsive>
@@ -157,7 +159,8 @@ class PostFormStep1 extends Component {
               className="text-left pr-auto"
               mobile={16}
               tablet={8}
-              computer={8}
+              computer={6}
+              widescreen={5}
             >
               <Header as="h3">
                 <div>มาเริ่มลงประกาศที่จอดรถกันเถอะ</div>

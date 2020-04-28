@@ -177,13 +177,22 @@
 }
 
 .ButtonLink {
-  color: #3366BB !important;
+  color: #3366bb !important;
   cursor: pointer;
 }
 
-.ButtonLink:hover, .ButtonLink:focus {
-  color: #0645AD !important;
+.ButtonLink:hover,
+.ButtonLink:focus {
+  color: #0645ad !important;
   text-decoration: underline !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .App {
+    text-align: center;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
 }
 
 .App {
