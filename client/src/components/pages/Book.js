@@ -66,7 +66,7 @@ class Book extends Component {
       open: "",
       close: "",
       address: "",
-      rate: "",
+      rate: 0,
       comments: [],
       location: {
         lat: null,
@@ -305,7 +305,7 @@ class Book extends Component {
     }
   };
 
-  handleStartBookingDate = async () => {
+  handleStartBookingDate = () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
       if (date.Date === this.state.book_date && date.detail.status === 1) {
@@ -341,7 +341,7 @@ class Book extends Component {
     });
   };
 
-  handleEndBookingDate = async () => {
+  handleEndBookingDate = () => {
     var Array = [];
     const date = this.state.bookpost.filter((date) => {
       if (date.Date === this.state.book_date && date.detail.status === 1) {
@@ -409,7 +409,9 @@ class Book extends Component {
       },
     };
     await this.props.addBook(newBook, this.state.postid);
-    this.props.history.push("/mypost");
+    if (this.props.book.loading === false) {
+      this.props.history.push("/mypost");
+    }
   };
 
   handleOpenModal = (e) => {
@@ -455,8 +457,15 @@ class Book extends Component {
         return this.state.book_end_disabled.includes(parseFloat(time.value));
       });
 
-    const { post, loading } = this.props.post;
-    if (post === null || loading) {
+    if (this.props.post.post === null || this.props.post.loading) {
+      return (
+        <Modal open={true} className="modal-paku" size="mini" basic>
+          <Loader size="large" active inline="centered">
+            <p>โปรดรอสักครู่</p>
+          </Loader>
+        </Modal>
+      );
+    } else if (this.props.book.book === null || this.props.book.loading) {
       return (
         <Modal open={true} className="modal-paku" size="mini" basic>
           <Loader size="large" active inline="centered">
@@ -479,7 +488,7 @@ class Book extends Component {
                   );
                 })}
               </Grid.Row>
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Card fluid>
                   <Card.Content>
                     <Form>
@@ -653,13 +662,41 @@ class Book extends Component {
                 </Modal.Actions>
               </Modal>
 
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Item.Group>
                   <Item>
                     <Item.Content>
                       <Header size="huge">
                         <div>{this.state.title}</div>
                       </Header>
+
+                      {(() => {
+                        if (this.state.rate !== 0) {
+                          if (this.state.rate <= 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star half" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          } else if (this.state.rate > 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          }
+                        } else {
+                          return (
+                            <Item.Description>
+                              <Icon fitted name="yellow star outline" />{" "}
+                              ไม่มีคะแนน
+                            </Item.Description>
+                          );
+                        }
+                      })()}
+
                       <Item.Description>
                         <Icon name="map pin" /> {this.state.address}
                       </Item.Description>

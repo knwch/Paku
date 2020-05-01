@@ -376,7 +376,7 @@ class Profile extends Component {
           <NavMenu />
           <Container fluid>
             <Grid className="mb-4" centered>
-              <Grid.Column mobile={15} tablet={5} computer={5}>
+              <Grid.Column mobile={15} tablet={5} computer={4} widescreen={3}>
                 <Card fluid>
                   <Card.Content className="card-color" textAlign="center">
                     <div class="button-floated">
@@ -435,7 +435,7 @@ class Profile extends Component {
                   {this.ProfileForm(this.state.formOpen)}
                 </Card>
               </Grid.Column>
-              <Grid.Column mobile={15} tablet={11} computer={11}>
+              <Grid.Column mobile={15} tablet={11} computer={9} widescreen={7}>
                 <Card fluid>
                   <Card.Content>
                     <Card.Header textAlign="left" className="py-3">

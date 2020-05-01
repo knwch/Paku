@@ -1,11 +1,11 @@
 {
   "name": "paku",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000P\u0000a\u0000k\u0000u\u0000_\u0000s\u0000e\u0000r\u0000v\u0000e\u0000r\u0000\r\u0000 \u0000",
+  "description": "Paku-official service",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=producution && node app.js",
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "repository": {

@@ -41,7 +41,7 @@ class PostDetail extends Component {
       nearby: [],
       addnearby: "",
       facility: [],
-      rate: "",
+      rate: 0,
       comments: [],
       addfacility: [
         { key: "0", text: "CCTV", value: "CCTV", checked: false },
@@ -141,13 +141,41 @@ class PostDetail extends Component {
                   );
                 })}
               </Grid.Row>
-              <Grid.Column mobile={16} tablet={7} computer={7}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <Item.Group>
                   <Item>
                     <Item.Content>
                       <Header size="huge">
                         <div>{this.state.title}</div>
                       </Header>
+
+                      {(() => {
+                        if (this.state.rate !== 0) {
+                          if (this.state.rate <= 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star half" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          } else if (this.state.rate > 2.5) {
+                            return (
+                              <Item.Description>
+                                <Icon fitted name="yellow star" />{" "}
+                                {this.state.rate.toFixed(1)}
+                              </Item.Description>
+                            );
+                          }
+                        } else {
+                          return (
+                            <Item.Description>
+                              <Icon fitted name="yellow star outline" />{" "}
+                              ไม่มีคะแนน
+                            </Item.Description>
+                          );
+                        }
+                      })()}
+
                       <Item.Description>
                         <Icon name="map pin" /> {this.state.address}
                       </Item.Description>
@@ -267,7 +295,7 @@ class PostDetail extends Component {
                   <Divider />
                 </Item.Group>
               </Grid.Column>
-              <Grid.Column mobile={16} tablet={5} computer={5}>
+              <Grid.Column mobile={16} tablet={5} computer={5} widescreen={4}>
                 <Item.Group>
                   <Header>
                     <div>

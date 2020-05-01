@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
 
-const Marker = props => {
+const Marker = (props) => {
   return (
     <Icon circular inverted link size="large" name="home" color="teal" fitted />
   );

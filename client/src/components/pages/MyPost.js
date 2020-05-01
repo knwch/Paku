@@ -120,7 +120,7 @@ class MyPost extends Component {
       });
     }
 
-    console.log(books)
+    // console.log(books);
 
     if (books != null) {
       if (books !== "No have book") {
@@ -399,6 +399,17 @@ class MyPost extends Component {
                                   book._id,
                                   true
                                 )}
+                                disabled={(() => {
+                                  if (
+                                    this.state.bookuser.filter(
+                                      (val) =>
+                                        val.detail.status === 1 &&
+                                        val.check.checkin.user === true
+                                    ).length > 0
+                                  ) {
+                                    return true;
+                                  } else return false;
+                                })()}
                               >
                                 <Button.Content visible>เช็คอิน</Button.Content>
                               </Button>
@@ -871,13 +882,13 @@ class MyPost extends Component {
                 </Menu>
               </Grid.Row>
 
-              <Grid.Column mobile={16} tablet={9} computer={9}>
+              <Grid.Column mobile={15} tablet={9} computer={8} widescreen={6}>
                 {rendererList}
               </Grid.Column>
             </Grid>
-            {console.log("posts", this.state.posts)}
+            {/* {console.log("posts", this.state.posts)}
             {console.log("bookuser", this.state.bookuser)}
-            {console.log("bookpost", this.state.bookpost)}
+            {console.log("bookpost", this.state.bookpost)} */}
             {modalPopup}
           </Container>
           <Footer />
