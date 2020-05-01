@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Responsive,
-  Menu,
-  Card,
-  Button,
-  Image,
-  Grid,
-} from "semantic-ui-react";
+import { Responsive, Menu, Card, Button, Image, Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { confirmUser, UnConfirmUser } from "../../redux/actions/adminActions";
 import { logoutUser } from "../../redux/actions/authActions";
@@ -114,7 +107,7 @@ class VerifyUser extends Component {
                 src={this.state.user.photo_card.photoPerson}
                 wrapped
                 ui={false}
-              /> 
+              />
             </Card>
           </Grid.Column>
           <Grid.Column textAlign="left" mobile={16} tablet={6} computer={6}>

@@ -1,7 +1,7 @@
 {
   "name": "paku",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000P\u0000a\u0000k\u0000u\u0000_\u0000s\u0000e\u0000r\u0000v\u0000e\u0000r\u0000\r\u0000 \u0000",
+  "description": "Paku-official service",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -26,9 +26,11 @@
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.7",
-    "nodemon": "^2.0.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "validator": "^12.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }

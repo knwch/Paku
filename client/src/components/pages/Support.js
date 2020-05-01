@@ -1312,7 +1312,7 @@ class Support extends Component {
             "margin-top": "1.5rem",
           }}
         >
-          <Container fluid textAlign="left">
+          <Container className="pt-3 pb-5" fluid textAlign="left">
             {rendererList}
           </Container>
         </Responsive>

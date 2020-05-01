@@ -168,7 +168,7 @@ class Login extends Component {
                 only="computer tablet"
               />
 
-              <Grid.Column mobile={16} tablet={7} computer={6}>
+              <Grid.Column mobile={16} tablet={7} computer={6} widescreen={5}>
                 <h4 className="text-center mb-4">
                   <div>เข้าสู่ระบบ</div>
                 </h4>
