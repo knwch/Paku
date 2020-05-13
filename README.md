@@ -1,5 +1,8 @@
-﻿# How to run Paku
+﻿# PAKU
+## web site
+> Our web site : [PAKU](http://www.google.com)
 
+<!---
 ## 1. Run Paku server
 1. Clone the repository
 ```
@@ -25,6 +28,6 @@
 ```
     npm start
 ```
-
+-->
 
 

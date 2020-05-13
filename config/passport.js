@@ -2,7 +2,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const User = mongoose.model('users');
-const keys =require('../config/db.mongodb');
+const keys =require('./key');
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -22,3 +22,18 @@ module.exports = (passport) => {
         })
     }))
 }
+
+// module.exports = (passportAdmin) => {
+//     passportAdmin.use(new JwtStrategy(opts, (jwt_payload, done) => {
+//         Admin.findById(jwt_payload.id)
+//         .then((admin) => {
+//             if (admin) {
+//                 return done(null, admin);
+//             }
+//             return done(null, false);
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+//     }))
+// }
