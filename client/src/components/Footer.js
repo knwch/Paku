@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Image } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 class Footer extends Component {
   render() {
@@ -23,24 +24,36 @@ class Footer extends Component {
               </h5>
               <ul className="list-unstyled text-small">
                 <li>
-                  <text className="text-muted" href="#">
-                    ข่าวสาร
-                  </text>
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "terms" }}
+                  >
+                    ข้อกำหนดและเงื่อนไข
+                  </Link>
                 </li>
                 <li>
-                  <text className="text-muted" href="#">
-                    นโยบาย
-                  </text>
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "privacy" }}
+                  >
+                    ความเป็นส่วนตัว
+                  </Link>
                 </li>
                 <li>
-                  <text className="text-muted" href="#">
-                    ความหลากหลายและการเป็นส่วนหนึ่ง
-                  </text>
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "security" }}
+                  >
+                    ความปลอดภัย
+                  </Link>
                 </li>
                 <li>
-                  <text className="text-muted" href="#">
-                    ความสะดวกในการเข้าถึง
-                  </text>
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "finance" }}
+                  >
+                    การเงิน
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -50,30 +63,31 @@ class Footer extends Component {
               </h5>
               <ul className="list-unstyled text-small">
                 <li>
-                  <text className="text-muted" href="#">
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "faq" }}
+                  >
+                    คำถามที่พบบ่อย
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-muted" to={{ pathname: "/rent" }}>
                     การจองที่จอดรถ
-                  </text>
+                  </Link>
                 </li>
                 <li>
-                  <text className="text-muted" href="#">
+                  <Link
+                    className="text-muted"
+                    to={{ pathname: "/support", query: "rent" }}
+                  >
                     การให้เช่าที่จอดรถ
-                  </text>
-                </li>
-                <li>
-                  <text className="text-muted" href="#">
-                    Another resource
-                  </text>
-                </li>
-                <li>
-                  <text className="text-muted" href="#">
-                    Final resource
-                  </text>
+                  </Link>
                 </li>
               </ul>
             </div>
             <div className="col-6 col-md">
               <h5>
-                <div>About</div>
+                <div>ติดต่อ</div>
               </h5>
               <ul className="list-unstyled text-small">
                 <li>
@@ -81,10 +95,10 @@ class Footer extends Component {
                     className="text-muted"
                     href="https://www.facebook.com/GarfieldKp311"
                   >
-                    Facebook
+                    official.pakuforpark@gmail.com
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <text className="text-muted" href="#">
                     Google+
                   </text>
@@ -93,7 +107,7 @@ class Footer extends Component {
                   <text className="text-muted" href="#">
                     Twitter
                   </text>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
