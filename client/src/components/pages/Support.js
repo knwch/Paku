@@ -14,6 +14,12 @@ class Support extends Component {
 
   componentWillMount() {
     document.title = "Paku - Support";
+
+    const query = this.props.location.query;
+    if (query != null) {
+      this.setState({ activeItem: query });
+      document.documentElement.scrollTop = 0;
+    }
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
