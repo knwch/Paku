@@ -10,7 +10,7 @@ const post = require('./routes/api/post');
 const profile = require('./routes/api/profile');
 const user = require('./routes/api/user');
 const book = require('./routes/api/book');
-
+const cors = require('cors');
 //init app
 const app = express();
 
@@ -27,7 +27,7 @@ mongoose
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
-        useUnifiedTopology: true,
+        useUnifiedTopology: true
     })
     .then(() => console.log('MongoDB Connected'))
     .catch((err) => console.log(err));
@@ -38,6 +38,7 @@ app.use(passport.initialize());
 // Passport Config
 require('./config/passport')(passport);
 
+app.use(cors());
 // Use Routes
 app.use('/api/admin', admin);
 app.use('/api/posts', post);
