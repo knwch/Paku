@@ -43,6 +43,11 @@ class VerifyUser extends Component {
             this.setState({ errors: nextProps.errors });
         }
     }
+    componentDidUpdate(prevProps) {
+        if (this.props.admin.user !== prevProps.admin.user) {
+            window.location.href = '/admin';
+        }
+    }
 
     onLogout(e) {
         e.preventDefault();
@@ -55,12 +60,12 @@ class VerifyUser extends Component {
 
     approveUser = (userid) => {
         this.props.confirmUser(userid);
-        // window.location.href = "/admin";
+        // window.location.href = '/admin';
     };
 
     declineUser = (userid) => {
         this.props.UnConfirmUser(userid);
-        // window.location.href = "/admin";
+        // window.location.href = '/admin';
     };
 
     render() {
