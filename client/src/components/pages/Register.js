@@ -81,7 +81,7 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    document.title = "🐤 register";
+    document.title = "PAKU - Register";
     document.body.classList.add("Background-Brown");
     if (this.props.auth.isAuthenticated) {
       if (this.props.auth.user.status === 0) {
