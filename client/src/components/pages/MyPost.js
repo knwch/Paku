@@ -188,8 +188,6 @@ class MyPost extends Component {
       await this.props.availablePost(newAvailable, id);
     } catch (e) {
       console.error(e);
-    } finally {
-      window.location.reload(false);
     }
   };
 
