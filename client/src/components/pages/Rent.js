@@ -181,29 +181,32 @@ class Rent extends Component {
                       options={{ styles }}
                     >
                       {places.map((place, index) => {
-                        return (
-                          <Popup
-                            content={place.location.address}
-                            key={index}
-                            header={place.title}
-                            lat={place.location.latitude}
-                            lng={place.location.longitude}
-                            trigger={
-                              <Link to={`/book/${place._id}`}>
-                                <Icon
-                                  className="text-decoration-none"
-                                  circular
-                                  inverted
-                                  link
-                                  size="large"
-                                  name="home"
-                                  color="teal"
-                                  fitted
-                                />
-                              </Link>
-                            }
-                          />
-                        );
+                        if (place.available === true) {
+                          console.log(place);
+                          return (
+                            <Popup
+                              content={place.location.address}
+                              key={index}
+                              header={place.title}
+                              lat={place.location.latitude}
+                              lng={place.location.longitude}
+                              trigger={
+                                <Link to={`/book/${place._id}`}>
+                                  <Icon
+                                    className="text-decoration-none"
+                                    circular
+                                    inverted
+                                    link
+                                    size="large"
+                                    name="home"
+                                    color="teal"
+                                    fitted
+                                  />
+                                </Link>
+                              }
+                            />
+                          );
+                        }
                       })}
 
                       {this.state.show && (
