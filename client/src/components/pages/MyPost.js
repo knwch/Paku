@@ -324,12 +324,9 @@ class MyPost extends Component {
     });
   };
 
-  onSubmitCheckOut = (e, { postid, checkid }) => {
+  onSubmitCheckOut = async (e, { postid, checkid }) => {
     if (this.validator.allValid()) {
       e.preventDefault();
-      this.setState({
-        modalCheckOutOpen: false,
-      });
       const checkData = {
         check: false,
       };
@@ -337,9 +334,14 @@ class MyPost extends Component {
         comment: this.state.comment,
         rate: this.state.rating,
       };
-      this.props.checkBook(checkid, checkData);
-      this.props.addComment(postid, newComment);
-      window.location.reload(false);
+      try {
+        await this.props.checkBook(checkid, checkData);
+        this.props.addComment(postid, newComment);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        window.location.reload(false);
+      }
     } else {
       this.validator.showMessages();
       // rerender to show messages for the first time

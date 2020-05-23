@@ -72,10 +72,12 @@ class Home extends Component {
     const posts = nextProps.post.post_recommend;
 
     if (posts != null) {
-      if (posts.length !== 0) {
-        this.setState({
-          recommendset: posts,
-        });
+      if (posts.post !== "No have post") {
+        if (posts.length !== 0) {
+          this.setState({
+            recommendset: posts,
+          });
+        }
       }
     }
   }
@@ -336,10 +338,7 @@ class Home extends Component {
               </Grid.Row>
 
               <Grid.Row columns={1} only="mobile" centered>
-                <Grid.Column
-                  mobile={14}
-                  textAlign="left"
-                >
+                <Grid.Column mobile={14} textAlign="left">
                   <Transition
                     animation="scale"
                     duration={2500}

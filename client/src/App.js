@@ -3,7 +3,7 @@ import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Redirect,
+    Redirect
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -59,53 +59,53 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <Router>
-                    <div className="App">
+                    <div className='App'>
                         <Switch>
-                            <Route exact path="/" component={Home} />
-                            <Route exact path="/login" component={Login} />
+                            <Route exact path='/' component={Home} />
+                            <Route exact path='/login' component={Login} />
                             <Route
                                 exact
-                                path="/register"
+                                path='/register'
                                 component={Register}
                             />
-                            <PrivateRoute exact path="/post" component={Post} />
-                            <Route exact path="/rent" component={Rent} />
-                            <Route exact path="/book/:id" component={Book} />
-                            <Route exact path="/owner" component={Owner} />
+                            <PrivateRoute exact path='/post' component={Post} />
+                            <Route exact path='/rent' component={Rent} />
+                            <Route exact path='/book/:id' component={Book} />
+                            <Route exact path='/owner' component={Owner} />
                             <PrivateRoute
                                 exact
-                                path="/profile"
+                                path='/profile'
                                 component={Profile}
                             />
-                            <Route exact path="/support" component={Support} />
+                            <Route exact path='/support' component={Support} />
                             <PrivateRoute
                                 exact
-                                path="/confirmcard"
+                                path='/confirmcard'
                                 component={ConfirmCard}
                             />
                             <PrivateRoute
                                 exact
-                                path="/mypost"
+                                path='/mypost'
                                 component={MyPost}
                             />
                             <PrivateRoute
                                 exact
-                                path="/post/:id"
+                                path='/post/:id'
                                 component={PostDetail}
                             />
                             <PrivateRoute
                                 exact
-                                path="/editpost/:id"
+                                path='/editpost/:id'
                                 component={EditPost}
                             />
-                            <AdminRoute exact path="/admin" component={Admin} />
+                            <AdminRoute exact path='/admin' component={Admin} />
                             <AdminRoute
                                 exact
-                                path="/verifyuser"
+                                path='/verifyuser'
                                 component={VerifyUser}
                             />
-                            <Route path="*">
-                                <Redirect to="/" />
+                            <Route path='*'>
+                                <Redirect to='/' />
                             </Route>
                         </Switch>
                     </div>

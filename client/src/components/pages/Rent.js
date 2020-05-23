@@ -100,18 +100,22 @@ class Rent extends Component {
     const recommendposts = nextProps.post.post_recommend;
 
     if (posts != null) {
-      if (posts.length !== 0) {
-        this.setState({
-          places: posts,
-        });
+      if (posts.post !== "No have post") {
+        if (posts.length !== 0) {
+          this.setState({
+            places: posts,
+          });
+        }
       }
     }
 
     if (recommendposts != null) {
-      if (recommendposts.length !== 0) {
-        this.setState({
-          recommendset: recommendposts,
-        });
+      if (recommendposts.post !== "No have post") {
+        if (recommendposts.length !== 0) {
+          this.setState({
+            recommendset: recommendposts,
+          });
+        }
       }
     }
   }
