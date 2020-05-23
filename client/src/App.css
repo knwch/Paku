@@ -49,13 +49,14 @@
 }
 
 .Background-Brown {
-  background-image: url(./components/imgs/background/Brown.png);
+  background-image: url(./components/imgs/background/paku-yellow.png);
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .Background-Brown .nav-color {
-  color: white !important;
+  /* color: white !important; */
+  color: black !important;
 }
 
 .Background-Brown .nav-color:hover {
