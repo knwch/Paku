@@ -32,6 +32,8 @@ import PostDetail from './components/pages/PostDetail';
 import EditPost from './components/pages/EditPost';
 import Admin from './components/admin/Admin';
 import VerifyUser from './components/admin/VerifyUser';
+let axiosDefaults = require('axios/lib/defaults');
+axiosDefaults.baseURL = 'https://paku-official.herokuapp.com/';
 
 // Check for token
 if (localStorage.jwtToken) {
