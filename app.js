@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
+const cors = require('cors');
 
 const admin = require('./routes/api/admin');
 const post = require('./routes/api/post');
 const profile = require('./routes/api/profile');
 const user = require('./routes/api/user');
 const book = require('./routes/api/book');
-const cors = require('cors');
 //init app
 const app = express();
 
