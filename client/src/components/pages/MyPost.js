@@ -171,16 +171,26 @@ class MyPost extends Component {
     });
   }
 
-  handleDeletePost = (id) => {
+  handleDeletePost = async (id) => {
     this.setState({ temp_postdata: null, modalPostOpen: false });
-    this.props.deletePost(id);
+    try {
+      await this.props.deletePost(id);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  handlePausePost = (bool, id) => {
+  handlePausePost = async (bool, id) => {
     const newAvailable = {
       available: bool,
     };
-    this.props.availablePost(newAvailable, id);
+    try {
+      await this.props.availablePost(newAvailable, id);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      window.location.reload(false);
+    }
   };
 
   handleOpenModal = () => {
@@ -305,20 +315,30 @@ class MyPost extends Component {
     }
   };
 
-  cancelBooking = (postid, bookid) => {
-    this.props.cancelBook(postid, bookid.toString());
-    window.location.reload(false);
+  cancelBooking = async (postid, bookid) => {
+    try {
+      await this.props.cancelBook(postid, bookid.toString());
+    } catch (e) {
+      console.error(e);
+    } finally {
+      window.location.reload(false);
+    }
   };
 
   handleRate = (e, { rating, maxRating }) =>
     this.setState({ rating, maxRating });
 
-  handleCheckInOut = (bookid, bool) => {
+  handleCheckInOut = async (bookid, bool) => {
     const checkData = {
       check: bool,
     };
-    this.props.checkBook(bookid, checkData);
-    window.location.reload(false);
+    try {
+      await this.props.checkBook(bookid, checkData);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      window.location.reload(false);
+    }
   };
 
   handleCommentChange = (e) => {
@@ -339,7 +359,7 @@ class MyPost extends Component {
       };
       try {
         await this.props.checkBook(checkid, checkData);
-        this.props.addComment(postid, newComment);
+        await this.props.addComment(postid, newComment);
       } catch (e) {
         console.error(e);
       } finally {
