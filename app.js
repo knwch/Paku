@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
-const cors = require('cors');
 
 const admin = require('./routes/api/admin');
 const post = require('./routes/api/post');
