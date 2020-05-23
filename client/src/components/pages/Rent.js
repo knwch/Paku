@@ -89,10 +89,15 @@ class Rent extends Component {
     this.props.getPosts();
     this.props.recommendPost();
     this.currentLocationRequest();
+    document.body.classList.add("Background-Yellow");
   }
 
   componentDidMount() {
     document.title = "Paku - Rent";
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Yellow");
   }
 
   componentWillReceiveProps(nextProps) {

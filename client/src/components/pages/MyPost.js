@@ -104,10 +104,13 @@ class MyPost extends Component {
     const posts = nextProps.post.posts;
     const user = nextProps.auth.user;
     const books = nextProps.book.books;
+    var postsFind = null;
     let BookArray = [];
 
     if (posts !== null) {
-      var postsFind = posts.filter((val) => val.user === user.id);
+      if (posts.post !== "No have post") {
+        var postsFind = posts.filter((val) => val.user === user.id);
+      }
     }
 
     if (nextProps.errors) {
