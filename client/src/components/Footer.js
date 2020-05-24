@@ -93,7 +93,6 @@ class Footer extends Component {
                 <li>
                   <a
                     className="text-muted"
-                    href="https://www.facebook.com/GarfieldKp311"
                   >
                     official.pakuforpark@gmail.com
                   </a>
