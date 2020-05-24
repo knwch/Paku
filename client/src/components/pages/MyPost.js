@@ -684,9 +684,9 @@ class MyPost extends Component {
                       </Item.Description>
 
                       {(() => {
-                        if (book.detail.status === 0) {
+                        if (book.detail.status === 0 && book.check.checkout.status === false) {
                           return <Item.Meta>ยกเลิกแล้ว</Item.Meta>;
-                        } else if (book.check.checkout.status === true) {
+                        } else if (book.detail.status === 0 && book.check.checkout.status === true) {
                           return <Item.Meta>ทำรายการสำเร็จ</Item.Meta>;
                         }
                       })()}
