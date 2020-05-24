@@ -72,10 +72,12 @@ class Home extends Component {
     const posts = nextProps.post.post_recommend;
 
     if (posts != null) {
-      if (posts.length !== 0) {
-        this.setState({
-          recommendset: posts,
-        });
+      if (posts.post !== "No have post") {
+        if (posts.length !== 0) {
+          this.setState({
+            recommendset: posts,
+          });
+        }
       }
     }
   }
@@ -153,23 +155,25 @@ class Home extends Component {
 
               <Grid.Row columns={4} centered>
                 {this.state.recommendset.map((post, index) => {
-                  return (
-                    <Grid.Column
-                      key={index}
-                      mobile={16}
-                      tablet={4}
-                      computer={3}
-                      widescreen={2}
-                    >
-                      <RecommendCard
-                        photo={post.photos}
-                        title={post.title}
-                        rate={post.rate.rating}
-                        price={post.price}
-                        url={`/book/${post._id}`}
-                      />
-                    </Grid.Column>
-                  );
+                  if (index < 4) {
+                    return (
+                      <Grid.Column
+                        key={index}
+                        mobile={16}
+                        tablet={4}
+                        computer={3}
+                        widescreen={2}
+                      >
+                        <RecommendCard
+                          photo={post.photos}
+                          title={post.title}
+                          rate={post.rate.rating}
+                          price={post.price}
+                          url={`/book/${post._id}`}
+                        />
+                      </Grid.Column>
+                    );
+                  }
                 })}
               </Grid.Row>
 
@@ -336,10 +340,7 @@ class Home extends Component {
               </Grid.Row>
 
               <Grid.Row columns={1} only="mobile" centered>
-                <Grid.Column
-                  mobile={14}
-                  textAlign="left"
-                >
+                <Grid.Column mobile={14} textAlign="left">
                   <Transition
                     animation="scale"
                     duration={2500}
