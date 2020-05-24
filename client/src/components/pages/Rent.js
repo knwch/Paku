@@ -236,19 +236,23 @@ class Rent extends Component {
                       ที่จอดรถแนะนำ
                     </div>
                   </Header>
-                  {this.state.recommendset.map((post, index) => {
-                    return (
-                      <Grid.Row key={index}>
-                        <NearbyCard
-                          photo={post.photos}
-                          title={post.title}
-                          rate={post.rate.rating}
-                          price={post.price}
-                          url={`/book/${post._id}`}
-                        />
-                      </Grid.Row>
-                    );
-                  })}
+                  {this.state.recommendset
+                    .sort(() => Math.random() - 0.5)
+                    .map((post, index) => {
+                      if (index < 4) {
+                        return (
+                          <Grid.Row key={index}>
+                            <NearbyCard
+                              photo={post.photos}
+                              title={post.title}
+                              rate={post.rate.rating}
+                              price={post.price}
+                              url={`/book/${post._id}`}
+                            />
+                          </Grid.Row>
+                        );
+                      }
+                    })}
                 </Grid.Column>
               </Grid>
             </Container>
