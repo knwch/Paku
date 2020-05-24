@@ -155,23 +155,25 @@ class Home extends Component {
 
               <Grid.Row columns={4} centered>
                 {this.state.recommendset.map((post, index) => {
-                  return (
-                    <Grid.Column
-                      key={index}
-                      mobile={16}
-                      tablet={4}
-                      computer={3}
-                      widescreen={2}
-                    >
-                      <RecommendCard
-                        photo={post.photos}
-                        title={post.title}
-                        rate={post.rate.rating}
-                        price={post.price}
-                        url={`/book/${post._id}`}
-                      />
-                    </Grid.Column>
-                  );
+                  if (index < 4) {
+                    return (
+                      <Grid.Column
+                        key={index}
+                        mobile={16}
+                        tablet={4}
+                        computer={3}
+                        widescreen={2}
+                      >
+                        <RecommendCard
+                          photo={post.photos}
+                          title={post.title}
+                          rate={post.rate.rating}
+                          price={post.price}
+                          url={`/book/${post._id}`}
+                        />
+                      </Grid.Column>
+                    );
+                  }
                 })}
               </Grid.Row>
 

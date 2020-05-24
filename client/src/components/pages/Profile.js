@@ -256,7 +256,7 @@ class Profile extends Component {
         return (
           <Card.Content>
             <Card.Header className="pb-1" textAlign="left">
-              {this.state.firstname + " " + this.state.lastname}
+              <div>{this.state.firstname + " " + this.state.lastname}</div>
             </Card.Header>
 
             <Card.Meta className="pb-1" textAlign="left">
