@@ -92,10 +92,17 @@
   object-fit: cover;
 }
 
-.img-center-180 img {
+.img-center-180-x img {
   width: 100%;
-  height: 135px;
-  border-radius: 5%;
+  height: 140px;
+  border-radius: 2%;
+  object-fit: cover;
+}
+
+.img-center-180-y img {
+  width: 100%;
+  height: 200px;
+  border-radius: 2%;
   object-fit: cover;
 }
 
