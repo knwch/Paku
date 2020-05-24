@@ -123,7 +123,7 @@ class MyPost extends Component {
       });
     }
 
-    // console.log(books);
+    console.log(books);
 
     if (books != null) {
       if (books !== "No have book") {
@@ -219,7 +219,7 @@ class MyPost extends Component {
 
                   <Item.Content>
                     <Item.Header href={`/post/${post._id}`}>
-                      {post.title}
+                      <div>{post.title}</div>
                     </Item.Header>
 
                     {(() => {
@@ -397,7 +397,7 @@ class MyPost extends Component {
 
                     <Item.Content>
                       <Item.Header href={`/post/${book.detail.post}`}>
-                        {book.title}
+                        <div>{book.title}</div>
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
 
@@ -556,6 +556,7 @@ class MyPost extends Component {
             });
             return 0;
           } else {
+            console.log(book);
             return (
               <Card key={index} className="mb-4" fluid>
                 <Card.Content>
@@ -567,7 +568,9 @@ class MyPost extends Component {
 
                       <Item.Content>
                         <Item.Header>
-                          {book.name.firstname} {book.name.lastname}
+                          <div>
+                            {book.name.firstname} {book.name.lastname}
+                          </div>
                         </Item.Header>
                         <Item.Description>{book.title}</Item.Description>
                         <Item.Extra>{book.address}</Item.Extra>
@@ -580,9 +583,28 @@ class MyPost extends Component {
                             {moment(new Date(book.Date)).format("D MMMM YYYY")}
                           </p>
                           <p>
-                            ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}
+                            ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}{" "}
+                            ({book.detail.hours} ชั่วโมง)
                           </p>
                         </Item.Description>
+
+                        <Item.Description>
+                          เลขทะเบียน {book.detail.idCar}
+                        </Item.Description>
+
+                        <Item.Description>
+                          เบอร์ติดต่อ {book.detail.phone}
+                        </Item.Description>
+
+                        {(() => {
+                          if (book.detail.note !== "") {
+                            return (
+                              <Item.Description>
+                                ข้อความเพิ่มเติม {book.detail.note}
+                              </Item.Description>
+                            );
+                          }
+                        })()}
 
                         <Item.Extra>
                           {(() => {
@@ -670,7 +692,7 @@ class MyPost extends Component {
 
                     <Item.Content>
                       <Item.Header href={`/post/${book.detail.post}`}>
-                        {book.title}
+                        <div>{book.title}</div>
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
 
