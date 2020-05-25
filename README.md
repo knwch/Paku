@@ -14,10 +14,10 @@
 
 ## Paku User document
 > End User Manual : 
->> [ผู้เช่าที่จอดรถ (Renter)](User_doc.md#ผู้เช่าที่จอดรถ-(Renter)), <br>[เจ้าของที่จอดรถ (Lessor)](User_doc.md#เจ้าของที่จอดรถ-(Lessor)) 
+>> [ผู้เช่าที่จอดรถ (Renter)](User_doc.md#ผู้เช่าที่จอดรถ-Renter), <br>[เจ้าของที่จอดรถ (Lessor)](User_doc.md#เจ้าของที่จอดรถ-Lessor) 
 
 > System Administrators Manual : 
->> [System Administrators](User_doc.md#System-Administrators), <br>[การอนุมัติผู้ใช้งาน (Approve user)](User_doc.md#การอนุมัติผู้ใช้งาน-(Approve-user)), <br>[การลบผู้ใช้งาน (Delete user)](User_doc.md#การลบผู้ใช้งาน-(Delete-user)) <br>
+>> [System Administrators](User_doc.md#System-Administrators), <br>[การอนุมัติผู้ใช้งาน (Approve user)](User_doc.md#การอนุมัติผู้ใช้งาน-Approve-user), <br>[การลบผู้ใช้งาน (Delete user)](User_doc.md#การลบผู้ใช้งาน-Delete-user) <br>
 <!---
 ## 1. Run Paku server
 1. Clone the repository
