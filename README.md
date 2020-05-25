@@ -7,10 +7,10 @@
 >> [หน้าที่และความรับผิดชอบ](/System_doc.md#หน้าที่และความรับผิดชอบ), <br>[เป้าหมายของทีม](System_doc.md#เป้าหมายของทีม), <br>[Pain point](System_doc.md#Pain-point), <br>[User stories](System_doc.md#User-stories), <br>[User requirement](System_doc.md#User-requirement-definition), <br>[Function](System_doc.md#Function), <br>[Not doing](System_doc.md#Not-doing) <br>
 >
 > Software architecture document : 
->> [Architecture & Design](System_doc.md#Architecture-&-Design-Principles) <br>
+>> [Architecture & Design](System_doc.md#Architecture--Design-Principles) <br>
 >
 > Quality assurance documentation : 
->> [Validation, Verification and Testing](System_doc.md#Validation,-Verification-and-Testing)
+>> [Validation, Verification and Testing](System_doc.md#Validation-Verification-and-Testing)
 
 ## Paku User document
 > End User Manual : 
