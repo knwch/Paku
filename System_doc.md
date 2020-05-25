@@ -93,6 +93,7 @@ Admin
 | Edit                   | &#10003; |          |
 | Delete                 | &#10003; |          |
 | Upload picture         | &#10003; |          |
+| Post id card           | &#10003; |          |
 | Booking                | &#10003; |          |
 | Cancel booking         | &#10003; |          |
 | Check in               | &#10003; |          |
@@ -293,8 +294,7 @@ Test Case #1
 - `Test procedure :` เปลี่ยนแปลงข้อมูลทุกขั้นตอนและกดประกาศอีกครั้ง
 - `Expected results :` ข้อมูลมีการเปลี่ยนแปลงตามที่แก้ไขทันที
 ---
-`Module (filename) : deletePost` <br>
-`Function (method) : deletePost` <br>
+#### `Module (filename) : deletePost` `Function (method) : deletePost` 
 
 Test Case #1
 - `Objective :` เพื่อทดสอบว่าสามารถลบ Post ที่จอดรถได้
@@ -310,8 +310,7 @@ Test Case #1
 - `Test procedure :` กด Booking ที่จอดรถและกรอกข้อมูลให้ครบ
 - `Expected results :` สามารถ Booking ที่จอดรถได้
 ---
-`Module (filename) : cancel booking` <br>
-`Function (method) : cancel booking` <br>
+#### `Module (filename) : cancel booking` `Function (method) : cancel booking` <br>
 
 Test Case #1
 - `Objective :` เพื่อทดสอบว่าการ booking สามารถยกเลิกภายหลังได้

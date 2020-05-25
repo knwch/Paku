@@ -1,6 +1,11 @@
 ﻿# PAKU
-## web site
+## Website
 > Our web site : [PAKU](https://paku-cef3a.web.app/)
+
+## Puku System Document
+> Requirements document : [a](/System_doc.md#Requirements-document) <br>
+> Software architecture document : [b](System_doc.md#Software-architecture-document)
+> Quality assurance documentation : [c](System_doc.md#quality-assurance-documentation)
 
 <!---
 ## 1. Run Paku server
