@@ -689,7 +689,9 @@ class Register extends Component {
                         className="btn-paku"
                         color="yellow"
                       >
-                        ปิด <Icon name="right chevron" />
+                        <div>
+                          ปิด <Icon name="right chevron" />
+                        </div>
                       </Button>
                     </Modal.Actions>
                   </Modal>

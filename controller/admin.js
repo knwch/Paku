@@ -140,6 +140,17 @@ exports.delUser = async (req, res) => {
 
     try {
         await User.findOneAndDelete({ _id: id });
+        await Post.deleteMany({ user: id });
+        await Book.deleteMany({
+            $or: [
+                {
+                    'detail.user': id
+                },
+                {
+                    'detail.renter': id
+                }
+            ]
+        });
         // await user.remove()
         res.status(200).json({ success: true });
     } catch (err) {

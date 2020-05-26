@@ -104,10 +104,13 @@ class MyPost extends Component {
     const posts = nextProps.post.posts;
     const user = nextProps.auth.user;
     const books = nextProps.book.books;
+    var postsFind = null;
     let BookArray = [];
 
     if (posts !== null) {
-      var postsFind = posts.filter((val) => val.user === user.id);
+      if (posts.post !== "No have post") {
+        var postsFind = posts.filter((val) => val.user === user.id);
+      }
     }
 
     if (nextProps.errors) {
@@ -120,7 +123,7 @@ class MyPost extends Component {
       });
     }
 
-    // console.log(books);
+    console.log(books);
 
     if (books != null) {
       if (books !== "No have book") {
@@ -168,16 +171,24 @@ class MyPost extends Component {
     });
   }
 
-  handleDeletePost = (id) => {
+  handleDeletePost = async (id) => {
     this.setState({ temp_postdata: null, modalPostOpen: false });
-    this.props.deletePost(id);
+    try {
+      await this.props.deletePost(id);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  handlePausePost = (bool, id) => {
+  handlePausePost = async (bool, id) => {
     const newAvailable = {
       available: bool,
     };
-    this.props.availablePost(newAvailable, id);
+    try {
+      await this.props.availablePost(newAvailable, id);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   handleOpenModal = () => {
@@ -208,7 +219,7 @@ class MyPost extends Component {
 
                   <Item.Content>
                     <Item.Header href={`/post/${post._id}`}>
-                      {post.title}
+                      <div>{post.title}</div>
                     </Item.Header>
 
                     {(() => {
@@ -302,20 +313,30 @@ class MyPost extends Component {
     }
   };
 
-  cancelBooking = (postid, bookid) => {
-    this.props.cancelBook(postid, bookid.toString());
-    window.location.reload(false);
+  cancelBooking = async (postid, bookid) => {
+    try {
+      await this.props.cancelBook(postid, bookid.toString());
+    } catch (e) {
+      console.error(e);
+    } finally {
+      window.location.reload(false);
+    }
   };
 
   handleRate = (e, { rating, maxRating }) =>
     this.setState({ rating, maxRating });
 
-  handleCheckInOut = (bookid, bool) => {
+  handleCheckInOut = async (bookid, bool) => {
     const checkData = {
       check: bool,
     };
-    this.props.checkBook(bookid, checkData);
-    window.location.reload(false);
+    try {
+      await this.props.checkBook(bookid, checkData);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      window.location.reload(false);
+    }
   };
 
   handleCommentChange = (e) => {
@@ -335,11 +356,14 @@ class MyPost extends Component {
         rate: this.state.rating,
       };
       try {
+        await this.props.addComment(postid, newComment);
         await this.props.checkBook(checkid, checkData);
-        this.props.addComment(postid, newComment);
       } catch (e) {
         console.error(e);
       } finally {
+        this.setState({
+          modalCheckOutOpen: false,
+        });
         window.location.reload(false);
       }
     } else {
@@ -373,7 +397,7 @@ class MyPost extends Component {
 
                     <Item.Content>
                       <Item.Header href={`/post/${book.detail.post}`}>
-                        {book.title}
+                        <div>{book.title}</div>
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
 
@@ -532,6 +556,7 @@ class MyPost extends Component {
             });
             return 0;
           } else {
+            console.log(book);
             return (
               <Card key={index} className="mb-4" fluid>
                 <Card.Content>
@@ -543,7 +568,9 @@ class MyPost extends Component {
 
                       <Item.Content>
                         <Item.Header>
-                          {book.name.firstname} {book.name.lastname}
+                          <div>
+                            {book.name.firstname} {book.name.lastname}
+                          </div>
                         </Item.Header>
                         <Item.Description>{book.title}</Item.Description>
                         <Item.Extra>{book.address}</Item.Extra>
@@ -556,9 +583,28 @@ class MyPost extends Component {
                             {moment(new Date(book.Date)).format("D MMMM YYYY")}
                           </p>
                           <p>
-                            ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}
+                            ตั้งแต่เวลา {book.detail.in} จนถึง {book.detail.out}{" "}
+                            ({book.detail.hours} ชั่วโมง)
                           </p>
                         </Item.Description>
+
+                        <Item.Description>
+                          เลขทะเบียน {book.detail.idCar}
+                        </Item.Description>
+
+                        <Item.Description>
+                          เบอร์ติดต่อ {book.detail.phone}
+                        </Item.Description>
+
+                        {(() => {
+                          if (book.detail.note !== "") {
+                            return (
+                              <Item.Description>
+                                ข้อความเพิ่มเติม {book.detail.note}
+                              </Item.Description>
+                            );
+                          }
+                        })()}
 
                         <Item.Extra>
                           {(() => {
@@ -646,7 +692,7 @@ class MyPost extends Component {
 
                     <Item.Content>
                       <Item.Header href={`/post/${book.detail.post}`}>
-                        {book.title}
+                        <div>{book.title}</div>
                       </Item.Header>
                       <Item.Description>{book.address}</Item.Description>
 
@@ -663,9 +709,15 @@ class MyPost extends Component {
                       </Item.Description>
 
                       {(() => {
-                        if (book.detail.status === 0) {
+                        if (
+                          book.detail.status === 0 &&
+                          book.check.checkout.status === false
+                        ) {
                           return <Item.Meta>ยกเลิกแล้ว</Item.Meta>;
-                        } else if (book.check.checkout.status === true) {
+                        } else if (
+                          book.detail.status === 0 &&
+                          book.check.checkout.status === true
+                        ) {
                           return <Item.Meta>ทำรายการสำเร็จ</Item.Meta>;
                         }
                       })()}
@@ -675,10 +727,8 @@ class MyPost extends Component {
               </Card.Content>
             </Card>
           );
-        } else {
-          return null;
         }
-      });
+      }, this);
     }
   };
 
@@ -720,8 +770,8 @@ class MyPost extends Component {
                 )}
               </p>
               <p>
-                ตั้งแต่เวลา {this.state.temp_bookdata.detail.timein} จนถึง{" "}
-                {this.state.temp_bookdata.detail.timeout}
+                ตั้งแต่เวลา {this.state.temp_bookdata.detail.in} จนถึง{" "}
+                {this.state.temp_bookdata.detail.out}
               </p>
             </Modal.Description>
           </Modal.Content>
@@ -729,7 +779,10 @@ class MyPost extends Component {
             <Button
               basic
               onClick={() => {
-                this.setState({ temp_bookdata: null, modalBookOpen: false });
+                this.setState({
+                  temp_bookdata: null,
+                  modalBookOpen: false,
+                });
               }}
             >
               <text>กลับ</text>
@@ -763,7 +816,10 @@ class MyPost extends Component {
             <Button
               basic
               onClick={() => {
-                this.setState({ temp_postdata: null, modalPostOpen: false });
+                this.setState({
+                  temp_postdata: null,
+                  modalPostOpen: false,
+                });
               }}
             >
               <text>กลับ</text>
@@ -888,9 +944,6 @@ class MyPost extends Component {
                 {rendererList}
               </Grid.Column>
             </Grid>
-            {/* {console.log("posts", this.state.posts)}
-            {console.log("bookuser", this.state.bookuser)}
-            {console.log("bookpost", this.state.bookpost)} */}
             {modalPopup}
           </Container>
           <Footer />

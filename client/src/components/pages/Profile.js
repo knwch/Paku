@@ -16,12 +16,12 @@ import {
   TextArea,
   Label,
   Transition,
-  Loader
+  Loader,
 } from "semantic-ui-react";
 import {
   getCurrentProfile,
   editProfile,
-  uploadImage
+  uploadImage,
 } from "../../redux/actions/profileActions";
 import { getPosts } from "../../redux/actions/postActions";
 import { connect } from "react-redux";
@@ -51,7 +51,7 @@ class Profile extends Component {
       photo: null,
       preview: null,
       close: true,
-      errors: {}
+      errors: {},
     };
 
     this.validator = new SimpleReactValidator({
@@ -61,10 +61,10 @@ class Profile extends Component {
           message: ":values",
           rule: (val, params, validator) => params === null,
           messageReplace: (message, params) =>
-            message.replace(":values", params) // optional
-        }
+            message.replace(":values", params), // optional
+        },
       },
-      element: message => (
+      element: (message) => (
         <div>
           <Transition animation="shake" duration={250} transitionOnMount={true}>
             <Label basic color="red" pointing>
@@ -76,8 +76,8 @@ class Profile extends Component {
       ),
       messages: {
         required: "โปรดระบุ:attribute",
-        phone: "โปรดระบุเบอร์โทรศัพท์ 10 หลัก"
-      }
+        phone: "โปรดระบุเบอร์โทรศัพท์ 10 หลัก",
+      },
     });
   }
 
@@ -92,9 +92,17 @@ class Profile extends Component {
   componentWillReceiveProps(nextProps) {
     const posts = nextProps.post.posts;
     const profile = nextProps.profile.profile;
-    const postsFind = posts.filter(
-      val => val.user === (profile && profile._id)
-    );
+    var postsFind = null;
+
+    if (posts != null) {
+      if (posts.post !== "No have post") {
+        if (posts.length !== 0) {
+          var postsFind = posts.filter(
+            (val) => val.user === (profile && profile._id)
+          );
+        }
+      }
+    }
 
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -111,14 +119,16 @@ class Profile extends Component {
         email: profile.email,
         phone: profile.phone,
         tempphone: profile.phone,
-        photo: profile.photo_user
+        photo: profile.photo_user,
       });
     }
 
-    if (postsFind.length !== 0) {
-      this.setState({
-        posts: postsFind
-      });
+    if (postsFind !== null) {
+      if (postsFind.length != 0) {
+        this.setState({
+          posts: postsFind,
+        });
+      }
     }
   }
 
@@ -127,7 +137,7 @@ class Profile extends Component {
       e.preventDefault();
       const newProfile = {
         about: this.state.temp,
-        phone: this.state.tempphone
+        phone: this.state.tempphone,
       };
       this.props.editProfile(newProfile, this.props.history);
       this.handleCloseForm();
@@ -141,7 +151,7 @@ class Profile extends Component {
   }
 
   // Handle fields change
-  handleChange = input => e => {
+  handleChange = (input) => (e) => {
     this.setState({ [input]: e.target.value });
   };
 
@@ -149,7 +159,7 @@ class Profile extends Component {
 
   handleCloseForm = () => {
     this.setState({
-      formOpen: false
+      formOpen: false,
     });
   };
 
@@ -159,11 +169,11 @@ class Profile extends Component {
     this.setState({
       modalOpen: false,
       preview: null,
-      temp: null
+      temp: null,
     });
   };
 
-  fileChange = e => {
+  fileChange = (e) => {
     // console.log(e.target.files[0])
     if (typeof e.target.files[0] !== "undefined") {
       let file = e.target.files[0];
@@ -171,18 +181,18 @@ class Profile extends Component {
       const types = ["image/png", "image/jpeg", "image/jpg"];
       const size = 1024000;
       // console.log(file.size);
-      if (types.every(type => file.type !== type)) {
+      if (types.every((type) => file.type !== type)) {
         err = { image: "ไฟล์ไม่รองรับ" };
         this.setState({
           ...this.state,
-          errors: err
+          errors: err,
         });
         this.validator.showMessages();
       } else {
         if (file.size <= size) {
           this.setState({
             preview: URL.createObjectURL(file),
-            temp: file
+            temp: file,
           });
           this.handleOpenModal();
         } else {
@@ -190,7 +200,7 @@ class Profile extends Component {
           // console.log(err);
           this.setState({
             ...this.state,
-            errors: err
+            errors: err,
           });
           this.validator.showMessages();
         }
@@ -210,8 +220,8 @@ class Profile extends Component {
 
     uploadImage.on(
       "state_changed",
-      snapshot => {},
-      error => {
+      (snapshot) => {},
+      (error) => {
         alert(error);
       },
       () => {
@@ -219,13 +229,13 @@ class Profile extends Component {
           .ref("images")
           .child(currentImageName)
           .getDownloadURL()
-          .then(url => {
+          .then((url) => {
             this.setState({
-              firebaseImg: url
+              firebaseImg: url,
             });
 
             imageObj = {
-              imageURL: url
+              imageURL: url,
             };
 
             this.props.uploadImage(imageObj);
@@ -233,20 +243,20 @@ class Profile extends Component {
 
             this.setState({
               preview: null,
-              temp: null
+              temp: null,
             });
           });
       }
     );
   }
 
-  ProfileForm = temp => {
+  ProfileForm = (temp) => {
     switch (temp) {
       case false:
         return (
           <Card.Content>
             <Card.Header className="pb-1" textAlign="left">
-              {this.state.firstname + " " + this.state.lastname}
+              <div>{this.state.firstname + " " + this.state.lastname}</div>
             </Card.Header>
 
             <Card.Meta className="pb-1" textAlign="left">
@@ -348,7 +358,7 @@ class Profile extends Component {
                 <Button basic onClick={this.handleCloseForm}>
                   <text>ยกเลิก</text>
                 </Button>
-                <Button className="btn-paku" onClick={e => this.onSubmit(e)}>
+                <Button className="btn-paku" onClick={(e) => this.onSubmit(e)}>
                   <Icon name="checkmark" /> <text>แก้ไข</text>
                 </Button>
               </div>
@@ -424,7 +434,7 @@ class Profile extends Component {
                         </Button>
                         <Button
                           className="btn-paku"
-                          onClick={e => this.handleUpload(e)}
+                          onClick={(e) => this.handleUpload(e)}
                         >
                           <Icon name="checkmark" /> <text>อัพโหลด</text>
                         </Button>
@@ -470,15 +480,15 @@ class Profile extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
   post: state.post,
-  errors: state.errors
+  errors: state.errors,
 });
 
 export default connect(mapStateToProps, {
   getCurrentProfile,
   editProfile,
   uploadImage,
-  getPosts
+  getPosts,
 })(withRouter(Profile));

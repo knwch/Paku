@@ -89,10 +89,15 @@ class Rent extends Component {
     this.props.getPosts();
     this.props.recommendPost();
     this.currentLocationRequest();
+    document.body.classList.add("Background-Yellow");
   }
 
   componentDidMount() {
     document.title = "Paku - Rent";
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove("Background-Yellow");
   }
 
   componentWillReceiveProps(nextProps) {
@@ -176,29 +181,32 @@ class Rent extends Component {
                       options={{ styles }}
                     >
                       {places.map((place, index) => {
-                        return (
-                          <Popup
-                            content={place.location.address}
-                            key={index}
-                            header={place.title}
-                            lat={place.location.latitude}
-                            lng={place.location.longitude}
-                            trigger={
-                              <Link to={`/book/${place._id}`}>
-                                <Icon
-                                  className="text-decoration-none"
-                                  circular
-                                  inverted
-                                  link
-                                  size="large"
-                                  name="home"
-                                  color="teal"
-                                  fitted
-                                />
-                              </Link>
-                            }
-                          />
-                        );
+                        if (place.available === true) {
+                          console.log(place);
+                          return (
+                            <Popup
+                              content={place.location.address}
+                              key={index}
+                              header={place.title}
+                              lat={place.location.latitude}
+                              lng={place.location.longitude}
+                              trigger={
+                                <Link to={`/book/${place._id}`}>
+                                  <Icon
+                                    className="text-decoration-none"
+                                    circular
+                                    inverted
+                                    link
+                                    size="large"
+                                    name="home"
+                                    color="teal"
+                                    fitted
+                                  />
+                                </Link>
+                              }
+                            />
+                          );
+                        }
                       })}
 
                       {this.state.show && (
@@ -228,19 +236,23 @@ class Rent extends Component {
                       ที่จอดรถแนะนำ
                     </div>
                   </Header>
-                  {this.state.recommendset.map((post, index) => {
-                    return (
-                      <Grid.Row key={index}>
-                        <NearbyCard
-                          photo={post.photos}
-                          title={post.title}
-                          rate={post.rate.rating}
-                          price={post.price}
-                          url={`/book/${post._id}`}
-                        />
-                      </Grid.Row>
-                    );
-                  })}
+                  {this.state.recommendset
+                    .sort(() => Math.random() - 0.5)
+                    .map((post, index) => {
+                      if (index < 4) {
+                        return (
+                          <Grid.Row key={index}>
+                            <NearbyCard
+                              photo={post.photos}
+                              title={post.title}
+                              rate={post.rate.rating}
+                              price={post.price}
+                              url={`/book/${post._id}`}
+                            />
+                          </Grid.Row>
+                        );
+                      }
+                    })}
                 </Grid.Column>
               </Grid>
             </Container>
