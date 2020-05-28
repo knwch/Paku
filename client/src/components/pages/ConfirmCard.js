@@ -9,6 +9,8 @@ import {
   Header,
   Modal,
   Input,
+  List,
+  Image,
   Transition,
   Label,
 } from "semantic-ui-react";
@@ -31,6 +33,7 @@ class ConfirmCard extends Component {
       userphoto: null,
       userfiletemp: "",
       modalOpen: false,
+      modalExampleOpen: false,
       statusTemp: true,
       errors: {},
     };
@@ -190,6 +193,10 @@ class ConfirmCard extends Component {
 
   handleOpenModal = () => this.setState({ modalOpen: true });
 
+  handleOpenExampleModal = () => this.setState({ modalExampleOpen: true });
+
+  handleCloseExampleModal = () => this.setState({ modalExampleOpen: false });
+
   render() {
     let errors = this.state.errors;
     let cardfield;
@@ -230,10 +237,15 @@ class ConfirmCard extends Component {
                 <Header as="h4">
                   <div>บัตรประชาชน</div>
                 </Header>
-                <div className="mb-2">
+                <span className="mb-2">
                   เพื่อทำการยืนยันตัวตนของคุณ คุณสามารถดูตัวอย่างการอัปโหลดได้
-                  <text className="ButtonLink">ที่นี่</text>
-                </div>
+                  <text
+                    className="ButtonLink"
+                    onClick={this.handleOpenExampleModal}
+                  >
+                    ที่นี่
+                  </text>
+                </span>
 
                 <Form.Field className="text-left mt-3 mb-0">
                   <Input
@@ -363,6 +375,90 @@ class ConfirmCard extends Component {
             </Grid.Column>
           </Grid>
         </Container>
+
+        <Modal
+          open={this.state.modalExampleOpen}
+          onClose={this.handleCloseExampleModal}
+          className="modal-paku"
+        >
+          <Header icon="photo" content="ตัวอย่างการอัปโหลด" />
+          <Modal.Content>
+            <Modal.Description>
+              <List
+                as="ol"
+                style={{
+                  "margin-left": "1.5rem",
+                  "margin-right": "1.5rem",
+                }}
+              >
+                <List.Item>
+                  <List.Content>
+                    <List.Header>
+                      <div>ให้เช่าที่จอดรถยามต้องการ</div>
+                    </List.Header>
+                    <List.Description
+                      className="mt-2"
+                      style={{
+                        "line-height": "normal",
+                      }}
+                    >
+                      &nbsp;&nbsp;การยืนยันตัวตน
+                      จะต้องใช้รูปจากบัตรประจำตัวที่รัฐบาลออกให้เท่านั้น เช่น
+                      บัตรประชาชน ใบขับขี่ หนังสือเดินทาง
+                      <br />
+                      &nbsp;&nbsp;รูปภาพที่อัพโหลด สามารถถ่ายด้วยกล้องโทรศัพท์
+                      แท็บเล็ต คอมพิวเตอร์
+                      หรือจะเป็นไฟล์ที่มีอยู่ในคอมพิวเตอร์ก็ได้
+                      <br />
+                      &nbsp;&nbsp;โดยคุณจะต้องยืนยันตัวตนด้วยรูปภาพ ดังนี้
+                      <br />
+                      &nbsp;&nbsp;&nbsp;&nbsp;1.
+                      คุณจะต้องถ่ายรูปบัตรประจำตัวด้านหน้า แล้วกดอัปโหลดไฟล์
+                      <Image
+                        className="mt-3"
+                        centered
+                        as="img"
+                        src={require("../imgs/example-front.png")}
+                        size="medium"
+                      />
+                      <br />
+                      &nbsp;&nbsp;&nbsp;&nbsp;2.
+                      คุณจะต้องถ่ายรูปคุณคู่กับบัตรประจำตัว แล้วกดอัปโหลดไฟล์
+                      <Image
+                        className="mt-3"
+                        centered
+                        as="img"
+                        src={require("../imgs/example-card.png")}
+                        size="medium"
+                      />
+                      <br />
+                      &nbsp;&nbsp;&nbsp;&nbsp;การดำเนินการด้วยขั้นตอนเหล่านี้ไม่ใช่การรับรอง
+                      เจ้าของที่จอดรถ หรือ ผู้เช่าที่จอดรถ
+                      ไม่ใช่การรับประกันตัวบุคคล
+                      ว่าการติดต่อสื่อสารกับบุคคลนั้นจะปลอดภัย
+                      โปรดใช้วิจารณญาณอย่างดีที่สุด
+                      และปฏิบัติตามเคล็ดลับความปลอดภัยสำหรับเจ้าของที่จอดรถ
+                      และผู้เช่าที่จอดรถเสมอ
+                      <br /> ด้วยความปราถนาดีจาก PAKU
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              onClick={this.handleCloseExampleModal}
+              className="btn-paku"
+              color="yellow"
+            >
+              <div>
+                ปิด <Icon name="right chevron" />
+              </div>
+            </Button>
+          </Modal.Actions>
+        </Modal>
+
         <Footer />
       </Responsive>
     );

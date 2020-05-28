@@ -11,9 +11,9 @@ class NearbyCard extends Component {
           className="mb-0 text-decoration-none"
           fluid
         >
-          {/* <div className="img-center-180"> */}
-          <Image src={this.props.photo} wrapped ui={false} />
-          {/* </div> */}
+          <div className="img-center-180-y">
+            <Image src={this.props.photo} wrapped ui={false} />
+          </div>
           <Card.Content>
             <Card.Description
               textAlign="left"

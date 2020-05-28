@@ -49,13 +49,14 @@
 }
 
 .Background-Brown {
-  background-image: url(./components/imgs/background/Brown.png);
+  background-image: url(./components/imgs/background/paku-yellow.png);
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .Background-Brown .nav-color {
-  color: white !important;
+  /* color: white !important; */
+  color: black !important;
 }
 
 .Background-Brown .nav-color:hover {
@@ -91,10 +92,17 @@
   object-fit: cover;
 }
 
-.img-center-180 img {
+.img-center-180-x img {
   width: 100%;
-  height: 135px;
-  border-radius: 5%;
+  height: 140px;
+  border-radius: 1%;
+  object-fit: cover;
+}
+
+.img-center-180-y img {
+  width: 100%;
+  height: 200px;
+  border-radius: 1%;
   object-fit: cover;
 }
 
